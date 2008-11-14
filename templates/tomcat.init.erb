@@ -1,0 +1,26 @@
+#!/bin/sh
+# chkconfig: 2345 20 80
+# description: Handle tomcat instance <%= name %>
+
+. <%= basedir %>/bin/setenv.sh
+
+case "$1" in
+  start)
+    su tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start"
+    RETVAL=$?
+    ;;
+
+  stop)
+    su tomcat -c "$CATALINA_HOME/bin/catalina.sh stop"
+    RETVAL=$?
+  ;;
+
+  restart)
+    su tomcat -c "$CATALINA_HOME/bin/catalina.sh stop"
+    su tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start"
+    RETVAL=$?
+  ;;
+
+esac
+
+exit $RETVAL
