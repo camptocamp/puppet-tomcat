@@ -17,6 +17,7 @@ case "$1" in
 
   restart)
     su tomcat -c "$CATALINA_HOME/bin/catalina.sh stop"
+    sleep 5
     su tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start"
     RETVAL=$?
   ;;
