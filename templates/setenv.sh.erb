@@ -1,2 +1,11 @@
 export CATALINA_HOME=/opt/apache-tomcat
 export CATALINA_BASE=<%= basedir %>
+
+# 
+# JVM tuning parameters
+#
+
+export JAVA_OPTS="-Dsun.java2d.opengl=false -Djava.awt.headless=true"
+
+# For debugging purposes only
+# export JAVA_OPTS="-Xrunjdwp:transport=dt_socket,address=36364,suspend=n,server=y"
