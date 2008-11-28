@@ -93,6 +93,9 @@ define tomcat::instance($ensure, $group="adm", $server_port="8005", $http_port="
     ensure  => $ensure,
     replace => false,
     content => template("tomcat/setenv.sh.erb")
+    owner  => tomcat,
+    group  => $group,
+    mode   => 570,
   }
 
   file {"/etc/init.d/tomcat-${name}":
