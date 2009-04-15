@@ -88,16 +88,27 @@ define tomcat::instance($ensure, $group="adm", $server_port="8005", $http_port="
     }
   }
 
-  # Init and env scripts
+  # Default JVM options
   file {"${basedir}/bin/setenv.sh":
     ensure  => $ensure,
-    replace => false,
     content => template("tomcat/setenv.sh.erb"),
+    owner  => "root",
+    group  => "root",
+    mode   => 570,
+  }
+
+  # User customized JVM options
+  file {"${basedir}/bin/setenv-local.sh":
+    ensure  => $ensure,
+    replace => false,
+    content => template("tomcat/setenv-local.sh.erb"),
     owner  => tomcat,
     group  => $group,
     mode   => 570,
   }
 
+
+  # Init and env scripts
   file {"/etc/init.d/tomcat-${name}":
     ensure  => $ensure,
     content => template("tomcat/tomcat.init.erb"),
