@@ -19,20 +19,23 @@ define tomcat::instance($ensure, $group="adm", $server_port="8005", $http_port="
           owner  => tomcat,
           group  => $group,
           mode   => 550,
+          before => Service["tomcat-${name}"],
           require => Group[$group];
     
         "${basedir}/bin":
           ensure => directory,
           owner  => root,
           group  => $group,
-          mode   => 755;
+          mode   => 755,
+          before => Service["tomcat-${name}"];
     
         # Developpers usually write there
         "${basedir}/conf":
           ensure => directory,
           owner  => tomcat,
           group  => $group,
-          mode   => 2570;
+          mode   => 2570,
+          before => Service["tomcat-${name}"];
 
         "${basedir}/conf/server.xml":
           ensure => present,
@@ -40,7 +43,8 @@ define tomcat::instance($ensure, $group="adm", $server_port="8005", $http_port="
           group  => $group,
           mode   => 460,
           content => template("tomcat/server.xml.erb"),
-          replace => false;
+          replace => false,
+          before => Service["tomcat-${name}"];
 
         "${basedir}/conf/web.xml":
           ensure => present,
@@ -48,35 +52,41 @@ define tomcat::instance($ensure, $group="adm", $server_port="8005", $http_port="
           group  => $group,
           mode   => 460,
           content => template("tomcat/web.xml.erb"),
-          replace => false;
+          replace => false,
+          before => Service["tomcat-${name}"];
 
         "${basedir}/webapps":
           ensure => directory,
           owner  => tomcat,
           group  => $group,
-          mode   => 2770;
+          mode   => 2770,
+          before => Service["tomcat-${name}"];
     
         # Tomcat usually write there
         "${basedir}/logs":
           ensure => directory,
           owner  => tomcat,
           group  => $group,
-          mode   => 2770;
+          mode   => 2770,
+          before => Service["tomcat-${name}"];
         "${basedir}/work":
           ensure => directory,
           owner  => tomcat,
           group  => $group,
-          mode   => 2770;
+          mode   => 2770,
+          before => Service["tomcat-${name}"];
         "${basedir}/temp":
           ensure => directory,
           owner  => tomcat,
           group  => $group,
-          mode   => 2770;
+          mode   => 2770,
+          before => Service["tomcat-${name}"];
         "${basedir}/private":
           ensure => directory,
           owner  => tomcat,
           group  => $group,
-          mode   => 2770;
+          mode   => 2770,
+          before => Service["tomcat-${name}"];
       }
     }
     absent: {
