@@ -21,9 +21,9 @@ Defaults
 By default a new tomcat instance create by a tomcat::instance resource will
 listen on the following ports:
 
-  * 8080 HTTP
-  * 8005 Control
-  * 8009 AJP
+* 8080 HTTP
+* 8005 Control
+* 8009 AJP
 
 You should override these defaults by setting attributes server_port,
 http_port and ajp_port.
