@@ -1,14 +1,22 @@
-= Tomcat Puppet module =
+====================
+Tomcat Puppet module
+====================
 
-This module is provided to you by Camptocamp <http://camptocamp.com>.
+This module is provided to you by Camptocamp_.
 
-== Dependencies ==
+.. _Camptocamp: http://camptocamp.com/
+
+------------
+Dependencies
+------------
 
 The Apache puppet module available at
 http://github.com/camptocamp/puppet-apache is required if you want to make use
 of Apache integration.
 
-== Defaults ==
+--------
+Defaults
+--------
 
 By default a new tomcat instance create by a tomcat::instance resource will
 listen on the following ports:
@@ -20,20 +28,24 @@ listen on the following ports:
 You should override these defaults by setting attributes server_port,
 http_port and ajp_port.
 
-== Examples ==
+--------
+Examples
+--------
 
-=== Simple standalone instance ===
+Simple standalone instance
+--------------------------
 
-Create a standalone tomcat instance whose HTTP server listen on port 8080.
+Create a standalone tomcat instance whose HTTP server listen on port 8080::
 
   tomcat::instance {"myapp":
     ensure    => present,
     http_port => "8080",
   }
 
-=== Apache integration ===
+Apache integration
+------------------
 
-Pre-requisites.
+Pre-requisites::
 
   apache::module {"proxy_ajp":
     ensure  => present,
@@ -44,7 +56,7 @@ Pre-requisites.
   }
 
 Create a tomcat instance which is accessible via Apache using AJP on a given
-virtualhost.
+virtualhost::
 
   tomcat::instance {"myapp":
     ensure      => present,
@@ -59,10 +71,11 @@ virtualhost.
     url      => "ajp://localhost:8000",
   }
 
-=== Multiple instances ===
+Multiple instances
+------------------
 
 If you create multiple Tomcat instances, you must avoid port clash by setting
-distinct ports for each instance.
+distinct ports for each instance::
 
   tomcat::instance {"tomcat1":
     ensure      => present,
