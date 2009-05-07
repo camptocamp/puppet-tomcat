@@ -14,6 +14,10 @@ The Apache puppet module available at
 http://github.com/camptocamp/puppet-apache is required if you want to make use
 of Apache integration.
 
+The Common puppet module available at
+http://github.com/camptocamp/puppet-common  is required for tomcat installation
+(it uses common::archive::tar-gz)
+
 --------
 Defaults
 --------
