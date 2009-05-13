@@ -2,6 +2,8 @@
 # chkconfig: 2345 20 80
 # description: Handle tomcat instance <%= name %>
 
+# file managed by puppet
+
 . <%= basedir %>/bin/setenv.sh
 
 case "$1" in
