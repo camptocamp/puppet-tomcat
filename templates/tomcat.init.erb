@@ -10,6 +10,7 @@ NAME="$(basename $0)"
 RETVAL="0"
 TOMCAT_USER="tomcat"
 TOMCAT_SCRIPT="$CATALINA_HOME/bin/catalina.sh"
+TOMCAT_LOG="$CATALINA_BASE/logs/catalina.out"
 SHUTDOWN_WAIT=20
 
 function checkpid() {
@@ -43,7 +44,7 @@ function start() {
   touch $CATALINA_PID
   chown $TOMCAT_USER:$TOMCAT_USER $CATALINA_PID
 
-  $SU -c "$TOMCAT_SCRIPT start" $TOMCAT_USER
+  $SU -c "$TOMCAT_SCRIPT start" $TOMCAT_USER >> $TOMCAT_LOG 2>&1
   RETVAL="$?"
   if [ "$RETVAL" -eq 0 ]; then 
     echo -n "OK"
@@ -61,7 +62,7 @@ function start() {
 
 function stop() {
   echo -n "Stopping $NAME: "
-  $SU -c "$TOMCAT_SCRIPT stop" $TOMCAT_USER
+  $SU -c "$TOMCAT_SCRIPT stop" $TOMCAT_USER >> $TOMCAT_LOG 2>&1
   RETVAL="$?"
 
   if [ "$RETVAL" -eq "0" ]; then
