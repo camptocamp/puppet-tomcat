@@ -13,12 +13,12 @@ case "$1" in
     ;;
 
   stop)
-    su tomcat -c "$CATALINA_HOME/bin/catalina.sh stop"
+    su tomcat -c "$CATALINA_HOME/bin/catalina.sh stop -force"
     RETVAL=$?
   ;;
 
   restart)
-    su tomcat -c "$CATALINA_HOME/bin/catalina.sh stop"
+    su tomcat -c "$CATALINA_HOME/bin/catalina.sh stop -force"
     sleep 5
     su tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start"
     RETVAL=$?
