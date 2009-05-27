@@ -6,106 +6,24 @@
 
 . <%= basedir %>/bin/setenv.sh
 
-NAME="$(basename $0)"
-RETVAL="0"
-TOMCAT_USER="tomcat"
-TOMCAT_SCRIPT="$CATALINA_HOME/bin/catalina.sh"
-TOMCAT_LOG="$CATALINA_BASE/logs/catalina.out"
-SHUTDOWN_WAIT=20
-
-function checkpid() {
-    local i
-    for i in $* ; do
-        if [ -d "/proc/${i}" ]; then
-            return 0
-        fi
-    done
-    return 1
-}
-
-# For SELinux we need to use 'runuser' not 'su'
-if [ -x "/sbin/runuser" ]; then
-    SU="/sbin/runuser"
-else
-    SU="su"
-fi
-
-function start() {
-  echo -n "Starting $NAME: "
-  if [ -f "/var/run/${NAME}.pid" ]; then
-    read kpid < /var/run/${NAME}.pid
-    if checkpid $kpid 2>&1; then
-      echo "$NAME process already running"
-      return -1
-    fi
-  fi
-
-  export CATALINA_PID="/var/run/${NAME}.pid"
-  touch $CATALINA_PID
-  chown $TOMCAT_USER:$TOMCAT_USER $CATALINA_PID
-
-  $SU -c "$TOMCAT_SCRIPT start" $TOMCAT_USER >> $TOMCAT_LOG 2>&1
-  RETVAL="$?"
-  if [ "$RETVAL" -eq 0 ]; then 
-    echo -n "OK"
-    echo
-    return 0
-  else
-    echo -n "FAILED"
-    echo
-    return 1
-  fi
-  
-  echo
-  return $RETVAL
-}
-
-function stop() {
-  echo -n "Stopping $NAME: "
-  $SU -c "$TOMCAT_SCRIPT stop" $TOMCAT_USER >> $TOMCAT_LOG 2>&1
-  RETVAL="$?"
-
-  if [ "$RETVAL" -eq "0" ]; then
-    count="0"
-    if [ -f "/var/run/${NAME}.pid" ]; then
-      read kpid < /var/run/${NAME}.pid
-      until [ "$(ps --pid $kpid | grep -c $kpid)" -eq "0" ] || \
-            [ "$count" -gt "$SHUTDOWN_WAIT" ]; do
-        echo -n "."
-        sleep 1
-        let count="${count}+1"
-      done
-     
-      if [ "$count" -gt "$SHUTDOWN_WAIT" ]; then
-        kill -9 $kpid
-      fi
-      rm -f /var/run/$NAME.pid
-      echo -n " OK"
-      echo
-      return 0
-    else
-      echo -n "NOT RUNNING"
-      echo
-    fi
-  else
-    echo -n "FAILED"
-    echo
-    return 1
-  fi
-}
-
 case "$1" in
   start)
-    start
+    su tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start"
+    RETVAL=$?
     ;;
+
   stop)
-    stop
-    ;;
-  restart)
-    stop 
-    sleep 2
-    start
+    su tomcat -c "$CATALINA_HOME/bin/catalina.sh stop"
+    RETVAL=$?
   ;;
+
+  restart)
+    su tomcat -c "$CATALINA_HOME/bin/catalina.sh stop"
+    sleep 5
+    su tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start"
+    RETVAL=$?
+  ;;
+
 esac
 
 exit $RETVAL
