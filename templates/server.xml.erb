@@ -68,6 +68,9 @@
 
     <% if http_port %>
     <Connector port="<%= http_port %>" protocol="HTTP/1.1" 
+               <% if http_address %>
+                  address="<%= http_address %>"
+               <% end %>
                connectionTimeout="20000" 
                redirectPort="8443" />
     <% end %>
