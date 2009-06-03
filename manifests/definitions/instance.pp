@@ -1,4 +1,4 @@
-define tomcat::instance($ensure, $group="adm", $server_port="8005", $http_port="8080", $http_address="", $ajp_port="8009") {
+define tomcat::instance($ensure, $group="adm", $server_port="8005", $http_port="8080", $http_address="", $ajp_port="8009", $ajp_address="") {
   $basedir = "/srv/tomcat/${name}"
 
   if defined(File["/srv/tomcat"]) {
