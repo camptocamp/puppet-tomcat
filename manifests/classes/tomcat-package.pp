@@ -10,6 +10,11 @@ class tomcat::package inherits tomcat {
         target => "/usr/bin/dtomcat5",
       }
 
+      # prevent default init-script from running
+      service { "tomcat5":
+        enable => false,
+      }
+
       User["tomcat"] {
         require => Package["tomcat5"],
       }
