@@ -1,4 +1,11 @@
-define tomcat::instance($ensure="present", $group="adm", $server_port="8005", $http_port="8080", $http_address="", $ajp_port="8009", $ajp_address="") {
+define tomcat::instance($ensure="present",
+                        $group="adm",
+                        $server_port="8005",
+                        $http_port="8080",
+                        $http_address="",
+                        $ajp_port="8009",
+                        $ajp_address="",
+                        $java_home="") {
   $basedir = "/srv/tomcat/${name}"
 
   if defined(File["/srv/tomcat"]) {
@@ -7,7 +14,7 @@ define tomcat::instance($ensure="present", $group="adm", $server_port="8005", $h
     file {"/srv/tomcat":
       ensure => directory,
     }
-  } 
+  }
 
   # default server.xml is slightly different when using packages
   if defined(Class["Tomcat::Package"]) {
@@ -25,6 +32,22 @@ define tomcat::instance($ensure="present", $group="adm", $server_port="8005", $h
   } else {
     $serverdotxml = "server.xml.default.erb"
     $catalinahome = "/opt/apache-tomcat"
+  }
+
+  if $java_home == "" {
+    case $operatingsystem {
+      RedHat: {
+        $javahome = "/usr/lib/jvm/java"
+      }
+      Debian,Ubuntu: {
+        $javahome = "/usr"
+      }
+      default: {
+        err("java_home not defined for '${operatingsystem}'.")
+      }
+    }
+  } else {
+    $javahome = $java_home
   }
 
   # Instance directories
