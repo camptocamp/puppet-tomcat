@@ -15,6 +15,7 @@ define tomcat::instance($ensure="present", $group="adm", $server_port="8005", $h
 
       RedHat: {
         $serverdotxml = "server.xml.redhat.erb"
+        $catalinahome = "/usr/share/tomcat5"
       }
       default: {
         err("operating system '${operatingsystem}' not defined.")
@@ -23,6 +24,7 @@ define tomcat::instance($ensure="present", $group="adm", $server_port="8005", $h
 
   } else {
     $serverdotxml = "server.xml.default.erb"
+    $catalinahome = "/opt/apache-tomcat"
   }
 
   # Instance directories
