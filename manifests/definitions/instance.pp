@@ -9,6 +9,22 @@ define tomcat::instance($ensure="present", $group="adm", $server_port="8005", $h
     }
   } 
 
+  # default server.xml is slightly different when using packages
+  if defined(Class["Tomcat::Package"]) {
+    case $operatingsystem {
+
+      RedHat: {
+        $serverdotxml = "server.xml.redhat.erb"
+      }
+      default: {
+        err("operating system '${operatingsystem}' not defined.")
+      }
+    }
+
+  } else {
+    $serverdotxml = "server.xml.default.erb"
+  }
+
   # Instance directories
   case $ensure {
     present: {
@@ -42,7 +58,7 @@ define tomcat::instance($ensure="present", $group="adm", $server_port="8005", $h
           owner  => "tomcat",
           group  => $group,
           mode   => 460,
-          content => template("tomcat/server.xml.erb"),
+          content => template("tomcat/${serverdotxml}"),
           replace => false,
           before => Service["tomcat-${name}"];
 
