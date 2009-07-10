@@ -6,21 +6,28 @@
 
 . <%= basedir %>/bin/setenv.sh
 
+# For SELinux we need to use 'runuser' not 'su'
+if [ -x "/sbin/runuser" ]; then
+    SU="/sbin/runuser"
+else
+    SU="su"
+fi
+
 case "$1" in
   start)
-    su tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start"
+    $SU tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start"
     RETVAL=$?
     ;;
 
   stop)
-    su tomcat -c "$CATALINA_HOME/bin/catalina.sh stop -force"
+    $SU tomcat -c "$CATALINA_HOME/bin/catalina.sh stop -force"
     RETVAL=$?
   ;;
 
   restart)
-    su tomcat -c "$CATALINA_HOME/bin/catalina.sh stop -force"
+    $SU tomcat -c "$CATALINA_HOME/bin/catalina.sh stop -force"
     sleep 5
-    su tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start"
+    $SU tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start"
     RETVAL=$?
   ;;
 
