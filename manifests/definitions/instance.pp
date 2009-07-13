@@ -2,9 +2,9 @@ define tomcat::instance($ensure="present",
                         $group="adm",
                         $server_port="8005",
                         $http_port="8080",
-                        $http_address="",
+                        $http_address=false,
                         $ajp_port="8009",
-                        $ajp_address="",
+                        $ajp_address=false,
                         $java_home="") {
   $basedir = "/srv/tomcat/${name}"
 
