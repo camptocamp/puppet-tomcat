@@ -4,6 +4,10 @@
 
 # file managed by puppet
 
+. /lib/lsb/init-functions
+
+SHUTDOWN_WAIT="30"
+
 . <%= basedir %>/bin/setenv.sh
 
 # For SELinux we need to use 'runuser' not 'su'
@@ -14,22 +18,90 @@ else
 fi
 
 function start() {
-  $SU tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start"
+  isrunning
+
+  if [ "$?" == 0 ]; then
+    echo "tomcat-<%= name %> already running"
+    return 1
+  fi
+
+  $SU tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start" > /dev/null
 }
 
 function stop() {
-  $SU tomcat -c "$CATALINA_HOME/bin/catalina.sh stop -force"
+  isrunning
+
+  if [ "$?" == 1 ]; then
+    echo "tomcat-<%= name %> already stopped"
+    rm -f $CATALINA_PID # remove pidfile if still around
+    return 1
+  fi
+
+  echo -n "Waiting for tomcat-<%= name %> to exit (${SHUTDOWN_WAIT} sec.): "
+
+  count="0"
+  until [ "$pid" == "" ] || [ "$count" -gt "$SHUTDOWN_WAIT" ]; do
+    $SU tomcat -c "$CATALINA_HOME/bin/catalina.sh stop -force" > /dev/null
+    findpid
+
+    echo -n "."
+    sleep 3
+    let count="${count}+3"
+  done
+
+  echo ""
+
+  if [ "$count" -gt "$SHUTDOWN_WAIT" ]; then
+    echo "Forcing tomcat-<%= name %> to stop"
+    kill -9 $pid && sleep 5
+  fi
+
+  # check if tomcat is still around, this will be our exit status
+  ! isrunning
+}
+
+function findpid() {
+  pid=""
+  pid=$(pgrep -U tomcat -f "^$JAVA_HOME/bin/java.*catalina.base=<%= basedir %>")
+
+  # validate output of pgrep
+  if ! [ "$pid" == "" ] && ! [ "$pid" -gt 0 ]; then
+    log_failure_msg "Unable to determine if tomcat-<%= name %> is running"
+    exit 1
+  fi
+}
+
+function isrunning() {
+  findpid
+
+  if [ "$pid" == "" ]; then
+    return 1
+  elif [ "$pid" -gt 0 ]; then
+    return 0
+  fi
 }
 
 case "$1" in
   start)
     start
     RETVAL=$?
+
+    if [ "$RETVAL" == 0 ]; then
+      log_success_msg "Started tomcat-<%= name %>"
+    else
+      log_failure_msg "Not able to start tomcat-<%= name %>"
+    fi
     ;;
 
   stop)
     stop
     RETVAL=$?
+
+    if [ "$RETVAL" == 0 ]; then
+      log_success_msg "Stopped tomcat-<%= name %>"
+    else
+      log_failure_msg "Not able to stop tomcat-<%= name %>"
+    fi
   ;;
 
   restart)
@@ -37,6 +109,12 @@ case "$1" in
     sleep 5
     start
     RETVAL=$?
+
+    if [ "$RETVAL" == 0 ]; then
+      log_success_msg "Restarted tomcat-<%= name %>"
+    else
+      log_failure_msg "Not able to restart tomcat-<%= name %>"
+    fi
   ;;
 
 esac
