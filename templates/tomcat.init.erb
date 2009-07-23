@@ -117,8 +117,20 @@ case "$1" in
     fi
   ;;
 
+  status)
+    isrunning
+    RETVAL=$?
+
+    if [ "$RETVAL" == 0 ]; then
+      echo "tomcat-<%= name %> (pid $pid) is running..."
+    else
+      echo "tomcat-<%= name %> is stopped"
+      RETVAL=3
+    fi
+  ;;
+
   *)
-    echo "Usage: $0 {start|stop|restart}."
+    echo "Usage: $0 {start|stop|restart|status}."
   ;;
 
 esac
