@@ -169,15 +169,21 @@ define tomcat::instance($ensure="present",
   }
 
   service {"tomcat-${name}":
-    ensure  => running,
-    enable  => true,
+    ensure  => $ensure ? {
+      present => "running",
+      absent  => "stopped",
+    },
+    enable  => $ensure ? {
+      present => true,
+      absent  => false,
+    },
     require => File["/etc/init.d/tomcat-${name}"],
     pattern => "-Dcatalina.base=/srv/tomcat/${name}",
   }
 
   # Logrotate
   file {"/etc/logrotate.d/tomcat-${name}.conf":
-    ensure => present,
+    ensure => $ensure,
     content => template("tomcat/tomcat.logrotate.erb"),
   }
 }
