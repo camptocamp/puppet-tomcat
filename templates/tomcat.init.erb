@@ -8,6 +8,11 @@
 
 SHUTDOWN_WAIT="30"
 
+export JAVA_HOME=<%= javahome %>
+export CATALINA_HOME=<%= catalinahome %>
+export CATALINA_BASE=<%= basedir %>
+export CATALINA_PID=<%= basedir %>/temp/tomcat.pid
+
 . <%= basedir %>/bin/setenv.sh
 
 # For SELinux we need to use 'runuser' not 'su'
