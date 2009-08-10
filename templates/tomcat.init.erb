@@ -13,8 +13,6 @@ export CATALINA_HOME=<%= catalinahome %>
 export CATALINA_BASE=<%= basedir %>
 export CATALINA_PID=<%= basedir %>/temp/tomcat.pid
 
-. <%= basedir %>/bin/setenv.sh
-
 # For SELinux we need to use 'runuser' not 'su'
 if [ -x "/sbin/runuser" ]; then
     SU="/sbin/runuser"
@@ -29,6 +27,9 @@ function start() {
     echo "tomcat-<%= name %> already running"
     return 1
   fi
+
+  # Source JVM parameters
+  . <%= basedir %>/bin/setenv.sh
 
   $SU tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start" > /dev/null
 }
