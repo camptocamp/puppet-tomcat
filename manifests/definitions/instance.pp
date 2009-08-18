@@ -204,6 +204,12 @@ define tomcat::instance($ensure="present",
     require => File["${basedir}/bin/setenv.sh"],
   }
 
+  if defined(Class["Tomcat::Package::v5-5"]) or defined(Class["Tomcat::package::v6"]) {
+    $servicerequire = Package["tomcat"]
+  } else {
+    $servicerequire = File["/opt/apache-tomcat"]
+  }
+
   service {"tomcat-${name}":
     ensure  => $ensure ? {
       present => "running",
@@ -213,7 +219,7 @@ define tomcat::instance($ensure="present",
       present => true,
       absent  => false,
     },
-    require => File["/etc/init.d/tomcat-${name}"],
+    require => [File["/etc/init.d/tomcat-${name}"], $servicerequire],
     pattern => "-Dcatalina.base=/srv/tomcat/${name}",
   }
 
