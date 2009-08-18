@@ -14,5 +14,6 @@ class tomcat::v5-5 inherits tomcat {
   file {"/opt/apache-tomcat":
     ensure => link,
     target => "/opt/apache-tomcat-${tomcat_version}",
+    require => Common::Archive::Tar-gz["/opt/apache-tomcat-${tomcat_version}/.installed"],
   }
 }
