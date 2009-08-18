@@ -4,7 +4,11 @@ class tomcat::v6 inherits tomcat {
     $tomcat_version = "6.0.20"
   }
 
-  $url = "http://mirror.switch.ch/mirror/apache/dist/tomcat/tomcat-6/v${tomcat_version}/bin/apache-tomcat-${tomcat_version}.tar.gz"
+  if ( ! $mirror ) {
+    $mirror = "http://mirror.switch.ch/mirror/apache/dist/tomcat/"
+  }
+
+  $url = "${mirror}/tomcat-6/v${tomcat_version}/bin/apache-tomcat-${tomcat_version}.tar.gz"
 
   common::archive::tar-gz{"/opt/apache-tomcat-${tomcat_version}/.installed":
     source => $url,
