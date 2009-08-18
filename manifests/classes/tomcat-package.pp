@@ -1,23 +1,35 @@
-class tomcat::package inherits tomcat {
+class tomcat::v5-5::package inherits tomcat {
+
+  $tomcat = $operatingsystem ? {
+    RedHat => "tomcat5",
+    Debian => "tomcat5.5",
+    Ubuntu => "tomcat5.5",
+  }
+
+  package { "tomcat":
+    ensure => present,
+    name   => $tomcat,
+  }
+
+  # prevent default init-script from being used
+  service { $tomcat:
+    enable  => false,
+    require => Package["tomcat"],
+  }
+
+  file { "/etc/init.d/${tomcat}":
+    ensure => absent,
+    require => Service[$tomcat],
+  }
+
 
   case $operatingsystem {
 
     RedHat: {
-      package { "tomcat5": ensure => present }
 
       file { "/usr/share/tomcat5/bin/catalina.sh":
         ensure => link,
         target => "/usr/bin/dtomcat5",
-      }
-
-      # prevent default init-script from being used
-      service { "tomcat5":
-        enable => false,
-      }
-
-      file { "/etc/init.d/tomcat5":
-        ensure => absent,
-        require => Service["tomcat5"],
       }
 
       User["tomcat"] {

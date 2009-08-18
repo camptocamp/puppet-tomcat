@@ -17,12 +17,16 @@ define tomcat::instance($ensure="present",
   }
 
   # default server.xml is slightly different when using packages
-  if defined(Class["Tomcat::Package"]) {
+  if defined(Class["Tomcat::v5-5::Package"]) {
     case $operatingsystem {
 
       RedHat: {
-        $serverdotxml = "server.xml.redhat.erb"
+        $serverdotxml = "server.xml.pkg55.erb"
         $catalinahome = "/usr/share/tomcat5"
+      }
+      Debian,Ubuntu: {
+        $serverdotxml = "server.xml.pkg55.erb"
+        $catalinahome = "/usr/share/tomcat5.5"
       }
       default: {
         err("operating system '${operatingsystem}' not defined.")
