@@ -6,27 +6,11 @@ class tomcat::v5-5::package inherits tomcat {
     Ubuntu => "tomcat5.5",
   }
 
-  package { "tomcat":
-    ensure => present,
-    name   => $tomcat,
-  }
-
-  # prevent default init-script from being used
-  service { $tomcat:
-    enable  => false,
-    require => Package["tomcat"],
-  }
-
-  file { "/etc/init.d/${tomcat}":
-    ensure => absent,
-    require => Service[$tomcat],
-  }
-
+  include tomcat::package
 
   case $operatingsystem {
 
     RedHat: {
-
       file { "/usr/share/tomcat5/bin/catalina.sh":
         ensure => link,
         target => "/usr/bin/dtomcat5",
@@ -40,7 +24,6 @@ class tomcat::v5-5::package inherits tomcat {
     default: {
       err("operating system '${operatingsystem}' not defined.")
     }
-
   }
 
 }
