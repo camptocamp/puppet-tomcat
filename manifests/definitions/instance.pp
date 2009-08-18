@@ -72,7 +72,7 @@ define tomcat::instance($ensure="present",
         # Nobody usually write there
         "${basedir}":
           ensure => directory,
-          owner  => tomcat,
+          owner  => "tomcat",
           group  => $group,
           mode   => 550,
           before => Service["tomcat-${name}"],
@@ -83,7 +83,7 @@ define tomcat::instance($ensure="present",
     
         "${basedir}/bin":
           ensure => directory,
-          owner  => root,
+          owner  => "root",
           group  => $group,
           mode   => 755,
           before => Service["tomcat-${name}"];
@@ -91,7 +91,7 @@ define tomcat::instance($ensure="present",
         # Developpers usually write there
         "${basedir}/conf":
           ensure => directory,
-          owner  => tomcat,
+          owner  => "tomcat",
           group  => $group,
           mode   => 2570,
           before => Service["tomcat-${name}"];
@@ -116,7 +116,7 @@ define tomcat::instance($ensure="present",
 
         "${basedir}/webapps":
           ensure => directory,
-          owner  => tomcat,
+          owner  => "tomcat",
           group  => $group,
           mode   => 2770,
           before => Service["tomcat-${name}"];
@@ -124,25 +124,25 @@ define tomcat::instance($ensure="present",
         # Tomcat usually write there
         "${basedir}/logs":
           ensure => directory,
-          owner  => tomcat,
+          owner  => "tomcat",
           group  => $group,
           mode   => 2770,
           before => Service["tomcat-${name}"];
         "${basedir}/work":
           ensure => directory,
-          owner  => tomcat,
+          owner  => "tomcat",
           group  => $group,
           mode   => 2770,
           before => Service["tomcat-${name}"];
         "${basedir}/temp":
           ensure => directory,
-          owner  => tomcat,
+          owner  => "tomcat",
           group  => $group,
           mode   => 2770,
           before => Service["tomcat-${name}"];
         "${basedir}/private":
           ensure => directory,
-          owner  => tomcat,
+          owner  => "tomcat",
           group  => $group,
           mode   => 2770,
           before => Service["tomcat-${name}"];
@@ -180,6 +180,7 @@ define tomcat::instance($ensure="present",
     owner  => "root",
     group  => "root",
     mode   => 570,
+    before => Service["tomcat-${name}"],
   }
 
   # User customized JVM options
@@ -187,9 +188,10 @@ define tomcat::instance($ensure="present",
     ensure  => $ensure,
     replace => false,
     content => template("tomcat/setenv-local.sh.erb"),
-    owner  => tomcat,
+    owner  => "tomcat",
     group  => $group,
     mode   => 570,
+    before => Service["tomcat-${name}"],
   }
 
 
