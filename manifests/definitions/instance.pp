@@ -65,7 +65,10 @@ define tomcat::instance($ensure="present",
           group  => $group,
           mode   => 550,
           before => Service["tomcat-${name}"],
-          require => Group[$group];
+          require => $group ? {
+            "adm"   => undef,
+            default => Group[$group],
+          };
     
         "${basedir}/bin":
           ensure => directory,
