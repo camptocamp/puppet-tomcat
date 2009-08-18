@@ -19,15 +19,15 @@ define tomcat::instance($ensure="present",
   }
 
   # default server.xml is slightly different between tomcat5.5 and tomcat6
-  if defined(Class["Tomcat::v5-5::Package"]) or defined(Class["Tomcat::v5-5"]) {
+  if defined(Class["Tomcat::Package::v5-5"]) or defined(Class["Tomcat::v5-5"]) {
     $serverdotxml = "server.xml.tomcat55.erb"
   }
 
-  if defined(Class["Tomcat::v6::Package"]) or defined(Class["Tomcat::v6"]) {
+  if defined(Class["Tomcat::Package::v6"]) or defined(Class["Tomcat::v6"]) {
     $serverdotxml = "server.xml.tomcat6.erb"
   }
 
-  if defined(Class["Tomcat::v5-5::Package"]) {
+  if defined(Class["Tomcat::Package::v5-5"]) {
     $catalinahome = $operatingsystem ? {
       RedHat => "/usr/share/tomcat5",
       Debian => "/usr/share/tomcat5.5",
@@ -35,7 +35,7 @@ define tomcat::instance($ensure="present",
     }
   }
 
-  if defined(Class["Tomcat::v6::Package"]) {
+  if defined(Class["Tomcat::Package::v6"]) {
     $catalinahome = $operatingsystem ? {
       #TODO: RedHat => "/usr/share/tomcat6",
       Debian => "/usr/share/tomcat6",

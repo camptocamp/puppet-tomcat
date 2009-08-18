@@ -1,4 +1,4 @@
-class tomcat::v6::package inherits tomcat {
+class tomcat::package::v6 inherits tomcat {
 
   $tomcat = $operatingsystem ? {
     #TODO: RedHat => "tomcat6",

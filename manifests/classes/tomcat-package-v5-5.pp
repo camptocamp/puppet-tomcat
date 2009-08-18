@@ -1,4 +1,4 @@
-class tomcat::v5-5::package inherits tomcat {
+class tomcat::package::v5-5 inherits tomcat {
 
   $tomcat = $operatingsystem ? {
     RedHat => "tomcat5",
