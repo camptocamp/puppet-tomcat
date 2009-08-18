@@ -1,3 +1,57 @@
+/*
+
+== Definition: tomcat::instance
+
+This definition will create:
+- a CATALINA_BASE directory in /srv/tomcat/$name/, readable to tomcat,
+  writeable to members of the admin group.
+- /srv/tomcat/$name/conf/{server,web}.xml which can be modified by members of
+  the admin group.
+- a /srv/tomcat/$name/webapps/ directory where administrators can drop "*.war"
+  files.
+- an init script /etc/init.d/tomcat-$name.
+- /srv/tomcat/$name/bin/setenv.sh, which is loaded by the init script.
+- /srv/tomcat/$name/bin/setenv-local.sh, which is loaded by the setenv.sh, and
+  can be edited by members of the admin group.
+- rotation of /srv/tomcat/$name/logs/catalina.out.
+
+Parameters:
+
+- *name*: the name of the instance.
+- *ensure*: defines if the instance must be present or not. Warning: if set to
+  "absent", /srv/tomcat/$name/ will be completely erased !
+- *group*: the group which will be allowed to edit the instance's configuration
+  files and deploy webapps. Defaults to "adm".
+- *server_port*: tomcat's server port, defaults to 8005.
+- *http_port*: tomcat's HTTP server port, defaults to 8080.
+- *http_address*: define the IP address tomcat's HTTP server must listen on.
+  Defaults to all addresses.
+- *ajp_port*: tomcat's AJP port, defaults to 8009.
+- *ajp_address*: define the IP address tomcat's AJP server must listen on.
+  Defaults to all addresses.
+- *java_home*: can be used to define an alternate $JAVA_HOME, if you want the
+  instance to use another JVM.
+- *sample*: set to "true" and a basic "hello world" webapp will be deployed on
+  the instance. You can test it by loading this URL:
+  http://localhost:8080/sample (where 8080 is the port defined by the
+  "http_port" parameter).
+
+Requires:
+- one of the tomcat classes which installs tomcat binaries.
+- java to be previously installed.
+- logrotate to be installed.
+
+Example usage:
+
+  include tomcat::package::v6
+  include tomcat::administration
+
+  tomcat::instance { "foobar":
+    ensure => present,
+    group  => "tomcat-admin",
+  }
+
+*/
 define tomcat::instance($ensure="present",
                         $group="adm",
                         $server_port="8005",

@@ -1,3 +1,28 @@
+/*
+
+== Class: tomcat::v6
+
+Installs tomcat 6.0.X using the compressed archive from your favorite tomcat
+mirror. Files from the archive will be installed in /opt/apache-tomcat/.
+
+Requires:
+- java to be previously installed
+- common::archive::tar-gz definition (from puppet Common module)
+- Package["curl"]
+
+Tested on:
+- RHEL 5
+- Debian Lenny
+
+Parameters:
+  $tomcat_version: The tomcat version you wish to install. Currently defaults to "6.0.20".
+  $mirror: URL of the closest tomcat mirror. Defaults to mirror.switch.ch.
+
+Usage:
+  $tomcat_version = "6.0.18"
+  include tomcat::v6
+
+*/
 class tomcat::v6 inherits tomcat {
 
   if ( ! $tomcat_version ) {

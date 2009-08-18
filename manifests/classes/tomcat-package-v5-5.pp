@@ -1,3 +1,20 @@
+/*
+
+== Class: tomcat::package::v5-5
+
+Installs tomcat 5.5.X using your systems package manager.
+
+Requires:
+- java to be previously installed
+
+Tested on:
+- RHEL 5
+- Debian Lenny
+
+Usage:
+  include tomcat::package::v5-5
+
+*/
 class tomcat::package::v5-5 inherits tomcat {
 
   $tomcat = $operatingsystem ? {
