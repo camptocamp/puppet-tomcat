@@ -18,28 +18,37 @@ define tomcat::instance($ensure="present",
     }
   }
 
-  # default server.xml is slightly different when using packages
+  # default server.xml is slightly different between tomcat5.5 and tomcat6
+  if defined(Class["Tomcat::v5-5::Package"]) or defined(Class["Tomcat::v5-5"]) {
+    $serverdotxml = "server.xml.tomcat55.erb"
+  }
+
+  if defined(Class["Tomcat::v6::Package"]) or defined(Class["Tomcat::v6"]) {
+    $serverdotxml = "server.xml.tomcat6.erb"
+  }
+
   if defined(Class["Tomcat::v5-5::Package"]) {
-    case $operatingsystem {
-
-      RedHat: {
-        $serverdotxml = "server.xml.pkg55.erb"
-        $catalinahome = "/usr/share/tomcat5"
-      }
-      Debian,Ubuntu: {
-        $serverdotxml = "server.xml.pkg55.erb"
-        $catalinahome = "/usr/share/tomcat5.5"
-      }
-      default: {
-        err("operating system '${operatingsystem}' not defined.")
-      }
+    $catalinahome = $operatingsystem ? {
+      RedHat => "/usr/share/tomcat5",
+      Debian => "/usr/share/tomcat5.5",
+      Ubuntu => "/usr/share/tomcat5.5",
     }
+  }
 
-  } else {
-    $serverdotxml = "server.xml.default.erb"
+  if defined(Class["Tomcat::v6::Package"]) {
+    $catalinahome = $operatingsystem ? {
+      #TODO: RedHat => "/usr/share/tomcat6",
+      Debian => "/usr/share/tomcat6",
+      Ubuntu => "/usr/share/tomcat6",
+    }
+  }
+
+  # In this case, we are using a non package-based tomcat.
+  if ( ! $catalinahome ) {
     $catalinahome = "/opt/apache-tomcat"
   }
 
+  # Define default JAVA_HOME used in tomcat.init.erb
   if $java_home == "" {
     case $operatingsystem {
       RedHat: {
