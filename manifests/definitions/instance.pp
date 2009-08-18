@@ -5,7 +5,9 @@ define tomcat::instance($ensure="present",
                         $http_address=false,
                         $ajp_port="8009",
                         $ajp_address=false,
-                        $java_home="") {
+                        $java_home="",
+                        $sample=undef) {
+
   $basedir = "/srv/tomcat/${name}"
 
   if defined(File["/srv/tomcat"]) {
@@ -135,6 +137,22 @@ define tomcat::instance($ensure="present",
           group  => $group,
           mode   => 2770,
           before => Service["tomcat-${name}"];
+      }
+
+      if $sample {
+
+        # Deploy a sample "Hello World" webapp available at:
+        # http://localhost:8080/sample/
+        #
+        file { "${basedir}/webapps/sample.war":
+          ensure  => present,
+          owner   => "tomcat",
+          group   => $group,
+          mode    => 0460,
+          source  => "puppet:///tomcat/sample.war",
+          require => File["${basedir}/webapps"],
+          before => Service["tomcat-${name}"],
+        }
       }
     }
     absent: {
