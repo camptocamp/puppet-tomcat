@@ -5,15 +5,22 @@ class tomcat::package {
     name   => $tomcat,
   }
 
-  # prevent default init-script from being used
   service { $tomcat:
+    ensure  => stopped,
     enable  => false,
+    stop    => "/bin/sh /etc/init.d/${tomcat} stop",
+    pattern => $operatingsystem ? {
+      Debian => "-Dcatalina.base=/var/lib/tomcat",
+      Ubuntu => "-Dcatalina.base=/var/lib/tomcat",
+      RedHat => "-Dcatalina.base=/usr/share/tomcat",
+    },
     require => Package["tomcat"],
   }
 
+  # prevent default init-script from being accidentaly used
   file { "/etc/init.d/${tomcat}":
-    ensure => absent,
-    require => Service[$tomcat],
+    mode    => 0644,
+    require => [Service[$tomcat], Package[$tomcat]],
   }
 
 }
