@@ -22,13 +22,8 @@ class tomcat::administration {
   common::concatfilepart { "sudoers.tomcat":
     ensure => present,
     file => "/etc/sudoers",
-    content => "
-# This part comes from modules/tomcat/manifests/classes/administration.pp
-%tomcat-admin ALL=(root) /etc/init.d/tomcat-*
-%tomcat-admin ALL=(root) /bin/su tomcat, /bin/su - tomcat
-",
+    content => template("tomcat/sudoers.tomcat.erb"),
     require => Group["tomcat-admin"],
   }
-
 
 }
