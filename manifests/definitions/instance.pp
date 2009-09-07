@@ -29,6 +29,9 @@ Parameters:
 - *ajp_port*: tomcat's AJP port, defaults to 8009.
 - *ajp_address*: define the IP address tomcat's AJP server must listen on.
   Defaults to all addresses.
+- *conf_mode*: can be used to change the permissions on
+  /srv/tomcat/$name/conf/, because some webapps require the ability to write
+  their own config files. Defaults to 2570 (writeable only by $group members).
 - *java_home*: can be used to define an alternate $JAVA_HOME, if you want the
   instance to use another JVM.
 - *sample*: set to "true" and a basic "hello world" webapp will be deployed on
@@ -59,6 +62,7 @@ define tomcat::instance($ensure="present",
                         $http_address=false,
                         $ajp_port="8009",
                         $ajp_address=false,
+                        $conf_mode=2570,
                         $java_home="",
                         $sample=undef) {
 
@@ -147,7 +151,14 @@ define tomcat::instance($ensure="present",
           ensure => directory,
           owner  => "tomcat",
           group  => $group,
-          mode   => 2570,
+          mode   => $conf_mode,
+          before => Service["tomcat-${name}"];
+
+        "${basedir}/lib":
+          ensure => directory,
+          owner  => "root",
+          group  => $group,
+          mode   => 2775,
           before => Service["tomcat-${name}"];
 
         "${basedir}/conf/server.xml":
