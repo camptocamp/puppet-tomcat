@@ -232,8 +232,8 @@ define tomcat::instance($ensure="present",
     ensure  => $ensure,
     content => template("tomcat/setenv.sh.erb"),
     owner  => "root",
-    group  => "root",
-    mode   => 570,
+    group  => $group,
+    mode   => 750,
     before => Service["tomcat-${name}"],
   }
 
