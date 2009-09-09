@@ -10,6 +10,6 @@ Cmnd_Alias TOMCAT_ADMIN = <%= sudo_tomcat_admin_cmnd %>
 <% else -%>
 Cmnd_Alias TOMCAT_ADMIN = /etc/init.d/tomcat-*, /bin/su tomcat, /bin/su - tomcat
 <% end -%>
-TOMCAT_ADMIN ALL=(root) TOMCAT_ADMIN
+TOMCAT_ADMIN ALL=(tomcat) ALL : ALL=(root) TOMCAT_ADMIN
 ##
 
