@@ -18,8 +18,16 @@ This definition will create:
 Parameters:
 
 - *name*: the name of the instance.
-- *ensure*: defines if the instance must be present or not. Warning: if set to
-  "absent", /srv/tomcat/$name/ will be completely erased !
+- *ensure*: defines if the state of the instance. Possible values:
+  - present: tomcat instance will be running and enabled on boot. This is the
+    default.
+  - running: an alias to "ensure => present".
+  - stopped: tomcat instance will be forced to stop, and disabled from boot,
+    but the files won't be erased from the system.
+  - installed: tomcat instance will be disabled from boot, and puppet won't
+    care if it's running or not. Useful if tomcat is managed by heartbeat.
+  - absent: tomcat instance will be stopped, disabled and completely removed
+    from the system. Warning: /srv/tomcat/$name/ will be completely erased !
 - *group*: the group which will be allowed to edit the instance's configuration
   files and deploy webapps. Defaults to "adm".
 - *server_port*: tomcat's server port, defaults to 8005.
@@ -143,7 +151,7 @@ define tomcat::instance($ensure="present",
 
   # Instance directories
   case $ensure {
-    present: {
+    present,installed,running,stopped: {
       file {
         # Nobody usually write there
         "${basedir}":
@@ -256,9 +264,18 @@ define tomcat::instance($ensure="present",
     }
   }
 
+  $present = $ensure ? {
+    present   => "present",
+    installed => "present",
+    running   => "present",
+    stopped   => "present",
+    absent    => "absent",
+  }
+
+
   # Default JVM options
   file {"${basedir}/bin/setenv.sh":
-    ensure  => $ensure,
+    ensure  => $present,
     content => template("tomcat/setenv.sh.erb"),
     owner  => "root",
     group  => $group,
@@ -268,7 +285,7 @@ define tomcat::instance($ensure="present",
 
   # User customized JVM options
   file {"${basedir}/bin/setenv-local.sh":
-    ensure  => $ensure,
+    ensure  => $present,
     replace => false,
     content => template("tomcat/setenv-local.sh.erb"),
     owner  => "tomcat",
@@ -280,7 +297,7 @@ define tomcat::instance($ensure="present",
 
   # Init and env scripts
   file {"/etc/init.d/tomcat-${name}":
-    ensure  => $ensure,
+    ensure  => $present,
     content => template("tomcat/tomcat.init.erb"),
     owner   => "root",
     mode    => "755",
@@ -295,12 +312,18 @@ define tomcat::instance($ensure="present",
 
   service {"tomcat-${name}":
     ensure  => $ensure ? {
-      present => "running",
-      absent  => "stopped",
+      present   => "running",
+      running   => "running",
+      stopped   => "stopped",
+      installed => undef,
+      absent    => "stopped",
     },
     enable  => $ensure ? {
-      present => true,
-      absent  => false,
+      present   => true,
+      running   => true,
+      stopped   => false,
+      installed => false,
+      absent    => false,
     },
     require => [File["/etc/init.d/tomcat-${name}"], $servicerequire],
     pattern => "-Dcatalina.base=/srv/tomcat/${name}",
@@ -308,7 +331,7 @@ define tomcat::instance($ensure="present",
 
   # Logrotate
   file {"/etc/logrotate.d/tomcat-${name}.conf":
-    ensure => $ensure,
+    ensure => $present,
     content => template("tomcat/tomcat.logrotate.erb"),
   }
 }
