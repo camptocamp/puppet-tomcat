@@ -38,9 +38,6 @@ Parameters:
   the instance. You can test it by loading this URL:
   http://localhost:8080/sample (where 8080 is the port defined by the
   "http_port" parameter).
-- *setenv_content*: optional content for /srv/tomcat/$name/bin/setenv-local.sh.
-  If defined, the file will no longer be manageable by members of the
-  tomcat-admin group.
 
 Requires:
 - one of the tomcat classes which installs tomcat binaries.
@@ -52,18 +49,9 @@ Example usage:
   include tomcat::package::v6
   include tomcat::administration
 
-  tomcat::instance { "foo":
+  tomcat::instance { "foobar":
     ensure => present,
     group  => "tomcat-admin",
-  }
-
-  tomcat::instance { "bar":
-    ensure      => present,
-    server_port => 8006,
-    http_port   => 8081,
-    ajp_port    => 8010,
-    sample      => true,
-    setenv_content => 'export JAVA_XMX="1200m"'
   }
 
 */
@@ -76,8 +64,7 @@ define tomcat::instance($ensure="present",
                         $ajp_address=false,
                         $conf_mode=2570,
                         $java_home="",
-                        $sample=undef,
-                        $setenv_content=undef) {
+                        $sample=undef) {
 
   $basedir = "/srv/tomcat/${name}"
 
@@ -264,19 +251,10 @@ define tomcat::instance($ensure="present",
   # User customized JVM options
   file {"${basedir}/bin/setenv-local.sh":
     ensure  => $ensure,
-    replace => $setenv_content ? {
-      ""      => false,
-      default => true,
-    },
-    content => $setenv_content ? {
-      ""      => template("tomcat/setenv-local.sh.erb"),
-      default => "# file managed by puppet\n${setenv_content}\n",
-    },
+    replace => false,
+    content => template("tomcat/setenv-local.sh.erb"),
     owner  => "tomcat",
-    group  => $setenv_content ? {
-      ""      => $group,
-      default => "root",
-    },
+    group  => $group,
     mode   => 570,
     before => Service["tomcat-${name}"],
   }
