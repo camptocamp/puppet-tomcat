@@ -38,6 +38,10 @@ Parameters:
   the instance. You can test it by loading this URL:
   http://localhost:8080/sample (where 8080 is the port defined by the
   "http_port" parameter).
+- *setenv*: optional array of environment variable definitions, which will be
+  added to setenv.sh. It will still be possible to override these variables by
+  editing setenv-local.sh.
+
 
 Requires:
 - one of the tomcat classes which installs tomcat binaries.
@@ -49,10 +53,23 @@ Example usage:
   include tomcat::package::v6
   include tomcat::administration
 
-  tomcat::instance { "foobar":
+  tomcat::instance { "foo":
     ensure => present,
     group  => "tomcat-admin",
   }
+
+  tomcat::instance { "bar":
+    ensure         => present,
+    server_port    => 8006,
+    http_port      => 8081,
+    ajp_port       => 8010,
+    sample         => true,
+    setenv_content => [
+      'JAVA_XMX="1200m"',
+      'ADD_JAVA_OPTS="-Xms128m"'
+    ],
+  }
+
 
 */
 define tomcat::instance($ensure="present",
@@ -64,7 +81,8 @@ define tomcat::instance($ensure="present",
                         $ajp_address=false,
                         $conf_mode=2570,
                         $java_home="",
-                        $sample=undef) {
+                        $sample=undef,
+                        $setenv=[]) {
 
   $basedir = "/srv/tomcat/${name}"
 
