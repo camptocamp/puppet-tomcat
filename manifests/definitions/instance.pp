@@ -331,7 +331,6 @@ define tomcat::instance($ensure="present",
 
   # Logrotate
   file {"/etc/logrotate.d/tomcat-${name}.conf":
-    ensure => $present,
-    content => template("tomcat/tomcat.logrotate.erb"),
+    ensure => absent,
   }
 }
