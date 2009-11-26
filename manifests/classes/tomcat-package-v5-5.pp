@@ -4,6 +4,9 @@
 
 Installs tomcat 5.5.X using your systems package manager.
 
+Class variables:
+- *$log4j_conffile*: see tomcat
+
 Requires:
 - java to be previously installed
 
@@ -41,6 +44,27 @@ class tomcat::package::v5-5 inherits tomcat {
     default: {
       err("operating system '${operatingsystem}' not defined.")
     }
+  }
+
+  File["commons-logging.jar"] {
+    path => $operatingsystem ? {
+      RedHat  => "/var/lib/tomcat5/common/lib/commons-logging.jar",
+      #Debian => TODO,
+    },
+  }
+
+  File["log4j.jar"] {
+    path => $operatingsystem ? {
+      RedHat  => "/var/lib/tomcat5/common/lib/log4j.jar",
+      #Debian => TODO,
+    },
+  }
+
+  File["log4j.properties"] {
+    path => $operatingsystem ? {
+      RedHat  => "/var/lib/tomcat5/common/classes/log4j.properties",
+      #Debian => TODO,
+    },
   }
 
 }

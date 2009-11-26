@@ -4,6 +4,9 @@
 
 Installs tomcat 6.0.X using your systems package manager.
 
+Class variables:
+- *$log4j_conffile*: see tomcat
+
 Requires:
 - java to be previously installed
 
@@ -23,5 +26,26 @@ class tomcat::package::v6 inherits tomcat {
   }
 
   include tomcat::package
+
+  File["commons-logging.jar"] {
+    path => $operatingsystem ? {
+      #RedHat => TODO,
+      Debian  => "/usr/share/tomcat6/lib/commons-logging.jar",
+    },
+  }
+
+  File["log4j.jar"] {
+    path => $operatingsystem ? {
+      #RedHat => TODO,
+      Debian  => "/usr/share/tomcat6/lib/log4j.jar",
+    },
+  }
+
+  File["log4j.properties"] {
+    path => $operatingsystem ? {
+      #RedHat => TODO,
+      Debian  => "/usr/share/tomcat6/lib/log4j.properties",
+    },
+  }
 
 }

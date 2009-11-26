@@ -9,6 +9,8 @@ your system's package manager. This is done by including one of these classes:
 - tomcat::v5-5
 - tomcat::v6
 
+=== Instances:
+
 You'll then be able to define one or more tomcat instances, where you can drop
 your webapps in the ".war" format. This is done with the "tomcat::instance"
 definition.
@@ -22,6 +24,16 @@ This is implemented by having a shared $CATALINA_HOME, and each instance having
 it's own $CATALINA_BASE. More details are found in this document:
 http://tomcat.apache.org/tomcat-6.0-doc/RUNNING.txt
 
+=== Logging:
+
+To offer more flexibility and avoid having to restart tomcat each time
+catalina.out is rotated, tomcat is configured to send it's log messages to
+log4j. By default log4j is configured to send all log messages from all
+instances to /var/log/tomcat/tomcat.log.
+
+This can easily be overridden on an instance base by creating a custom
+log4j.properties file and setting the "common.loader" path to point to it, by
+editing /srv/tomcat/<name>/conf/catalina.properties.
 
 === Dependencies:
 

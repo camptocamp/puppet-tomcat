@@ -11,6 +11,7 @@ class tomcat::package {
   package { "tomcat":
     ensure => present,
     name   => $tomcat,
+    before => [File["commons-logging.jar"], File["log4j.jar"], File["log4j.properties"]],
   }
 
   service { $tomcat:
