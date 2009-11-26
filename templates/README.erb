@@ -1,0 +1,33 @@
+
+Hello, here is $CATALINA_BASE !
+
+Having $CATALINA_BASE separated from $CATALINA_HOME allows you to override all
+of tomcat's default options and behaviour without needing a privileged account.
+
+More details can be found in this document:
+http://tomcat.apache.org/tomcat-6.0-doc/RUNNING.txt
+
+A few things you should keep in mind:
+
+ - as you might expect, webapps must be placed in:
+     /srv/tomcat/<%= name %>/webapps/
+
+ - you should be able to restart tomcat by running:
+     "sudo /etc/init.d/tomcat-<%= name %> (stop|start|restart)"
+
+ - you can add/modify tomcat's environment variables by editing:
+     /srv/tomcat/<%= name %>/bin/setenv-local.sh
+   This file is a shell script which will be evaluated inside the initscript:
+     /etc/init.d/tomcat-<%= name %>
+
+ - you can edit /srv/tomcat/<%= name %>/conf/{server,web}.xml and add files
+   such as catalina.properties in /srv/tomcat/<%= name %>/conf/
+
+ - by default no logs go to /srv/tomcat/<%= name %>/logs/catalina.out, they are
+   redirected to log4j and end up in /var/log/tomcat/
+
+ - you can change this behaviour by creating your own log4j.properties and
+   setting the "common.loader" path to point to it, by editing
+   catalina.properties.
+   But please avoid leaving ever-growing logfiles on production systems !
+

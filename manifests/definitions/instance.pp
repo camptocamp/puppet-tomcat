@@ -205,6 +205,13 @@ define tomcat::instance($ensure="present",
           replace => false,
           before => Service["tomcat-${name}"];
 
+        "${basedir}/README":
+          ensure  => present,
+          owner   => "root",
+          group   => "root",
+          mode    => 644,
+          content => template("tomcat/README.erb");
+
         "${basedir}/webapps":
           ensure => directory,
           owner  => "tomcat",
