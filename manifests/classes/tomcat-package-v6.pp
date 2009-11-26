@@ -48,4 +48,47 @@ class tomcat::package::v6 inherits tomcat {
     },
   }
 
+  # Workaround while tomcat-juli.jar and tomcat-juli-adapters.jar aren't
+  # included in tomcat6-* packages. Most of what follows is a duplicate of
+  # tomcat::v6 and should be removed ASAP.
+
+  if ( ! $tomcat_version ) {
+    $tomcat_version = "6.0.20"
+  }
+
+  if ( ! $mirror ) {
+    $mirror = "http://mirror.switch.ch/mirror/apache/dist/tomcat/"
+  }
+
+  $baseurl = "${mirror}/tomcat-6/v${tomcat_version}/bin/"
+
+  file { "/usr/share/tomcat6/extras/":
+    ensure  => directory,
+    require => Class["tomcat::package"],
+  }
+
+  exec { "fetch tomcat-juli.jar":
+    command => "curl -o /usr/share/tomcat6/extras/tomcat-juli.jar ${baseurl}/extras/tomcat-juli.jar",
+    creates => "/usr/share/tomcat6/extras/tomcat-juli.jar",
+    require => File["/usr/share/tomcat6/extras/"],
+  }
+
+  exec { "fetch tomcat-juli-adapters.jar":
+    command => "curl -o /usr/share/tomcat6/extras/tomcat-juli-adapters.jar ${baseurl}/extras/tomcat-juli-adapters.jar",
+    creates => "/usr/share/tomcat6/extras/tomcat-juli-adapters.jar",
+    require => File["/usr/share/tomcat6/extras/"],
+  }
+
+  file { "/usr/share/tomcat6/bin/tomcat-juli.jar":
+    ensure  => link,
+    target  => "/usr/share/tomcat6/extras/tomcat-juli.jar",
+    require => Exec["fetch tomcat-juli.jar"],
+  }
+
+  file { "/usr/share/tomcat6/lib/tomcat-juli-adapters.jar":
+    ensure  => link,
+    target  => "/usr/share/tomcat6/extras/tomcat-juli-adapters.jar",
+    require => Exec["fetch tomcat-juli-adapters.jar"],
+  }
+
 }

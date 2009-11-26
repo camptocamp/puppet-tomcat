@@ -36,10 +36,11 @@ class tomcat::v6 inherits tomcat {
     $mirror = "http://mirror.switch.ch/mirror/apache/dist/tomcat/"
   }
 
-  $url = "${mirror}/tomcat-6/v${tomcat_version}/bin/apache-tomcat-${tomcat_version}.tar.gz"
+  $baseurl   = "${mirror}/tomcat-6/v${tomcat_version}/bin/"
+  $tomcaturl = "${baseurl}/apache-tomcat-${tomcat_version}.tar.gz"
 
   common::archive::tar-gz{"/opt/apache-tomcat-${tomcat_version}/.installed":
-    source => $url,
+    source => $tomcaturl,
     target => "/opt",
   }
 
@@ -49,6 +50,39 @@ class tomcat::v6 inherits tomcat {
     require => Common::Archive::Tar-gz["/opt/apache-tomcat-${tomcat_version}/.installed"],
     before  => [File["commons-logging.jar"], File["log4j.jar"], File["log4j.properties"]],
   }
+
+  # configuring logging on tomcat6 requires 2 files from the extra components
+  # see: http://tomcat.apache.org/tomcat-6.0-doc/logging.html
+  file { "/opt/apache-tomcat-${tomcat_version}/extras/":
+    ensure  => directory,
+    require => Common::Archive::Tar-gz["/opt/apache-tomcat-${tomcat_version}/.installed"],
+  }
+
+  exec { "fetch tomcat-juli.jar":
+    command => "curl -o /opt/apache-tomcat-${tomcat_version}/extras/tomcat-juli.jar ${baseurl}/extras/tomcat-juli.jar",
+    creates => "/opt/apache-tomcat-${tomcat_version}/extras/tomcat-juli.jar",
+    require => File["/opt/apache-tomcat-${tomcat_version}/extras/"],
+  }
+
+  exec { "fetch tomcat-juli-adapters.jar":
+    command => "curl -o /opt/apache-tomcat-${tomcat_version}/extras/tomcat-juli-adapters.jar ${baseurl}/extras/tomcat-juli-adapters.jar",
+    creates => "/opt/apache-tomcat-${tomcat_version}/extras/tomcat-juli-adapters.jar",
+    require => File["/opt/apache-tomcat-${tomcat_version}/extras/"],
+  }
+
+  # update tomcat-juli.jar with file downloaded from extras/
+  file { "/opt/apache-tomcat-${tomcat_version}/bin/tomcat-juli.jar":
+    ensure  => link,
+    target  => "/opt/apache-tomcat-${tomcat_version}/extras/tomcat-juli.jar",
+    require => Exec["fetch tomcat-juli.jar"],
+  }
+
+  file { "/opt/apache-tomcat-${tomcat_version}/lib/tomcat-juli-adapters.jar":
+    ensure  => link,
+    target  => "/opt/apache-tomcat-${tomcat_version}/extras/tomcat-juli-adapters.jar",
+    require => Exec["fetch tomcat-juli-adapters.jar"],
+  }
+
 
   File["commons-logging.jar"] {
     path => "/opt/apache-tomcat/lib/commons-logging.jar",
