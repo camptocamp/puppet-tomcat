@@ -28,6 +28,9 @@ Parameters:
     care if it's running or not. Useful if tomcat is managed by heartbeat.
   - absent: tomcat instance will be stopped, disabled and completely removed
     from the system. Warning: /srv/tomcat/$name/ will be completely erased !
+- *owner": the owner of $CATALINA_BASE/{conf,webapps}. Defaults to "tomcat".
+  Note that permissions will be different, as tomcat needs to read these
+  directories in any case.
 - *group*: the group which will be allowed to edit the instance's configuration
   files and deploy webapps. Defaults to "adm".
 - *server_port*: tomcat's server port, defaults to 8005.
@@ -81,18 +84,35 @@ Example usage:
 
 */
 define tomcat::instance($ensure="present",
+                        $owner="tomcat",
                         $group="adm",
                         $server_port="8005",
                         $http_port="8080",
                         $http_address=false,
                         $ajp_port="8009",
                         $ajp_address=false,
-                        $conf_mode=2570,
+                        $conf_mode="",
                         $java_home="",
                         $sample=undef,
                         $setenv=[]) {
 
   $basedir = "/srv/tomcat/${name}"
+
+  if $owner == "tomcat" {
+    $dirmode  = 2770
+    $filemode = 0460
+    $confmode = $conf_mode ? {
+      ""      => 2570,
+      default => $conf_mode
+    }
+  } else {
+    $dirmode  = 2775
+    $filemode = 0664
+    $confmode = $conf_mode ? {
+      ""      => $dirmode,
+      default => $conf_mode
+    }
+  }
 
   if defined(File["/srv/tomcat"]) {
     debug "File[/srv/tomcat] already defined"
@@ -156,9 +176,9 @@ define tomcat::instance($ensure="present",
         # Nobody usually write there
         "${basedir}":
           ensure => directory,
-          owner  => "tomcat",
+          owner  => $owner,
           group  => $group,
-          mode   => 550,
+          mode   => 0555,
           before => Service["tomcat-${name}"],
           require => $group ? {
             "adm"   => undef,
@@ -175,9 +195,9 @@ define tomcat::instance($ensure="present",
         # Developpers usually write there
         "${basedir}/conf":
           ensure => directory,
-          owner  => "tomcat",
+          owner  => $owner,
           group  => $group,
-          mode   => $conf_mode,
+          mode   => $confmode,
           before => Service["tomcat-${name}"];
 
         "${basedir}/lib":
@@ -189,18 +209,18 @@ define tomcat::instance($ensure="present",
 
         "${basedir}/conf/server.xml":
           ensure => present,
-          owner  => "tomcat",
+          owner  => $owner,
           group  => $group,
-          mode   => 460,
+          mode   => $filemode,
           content => template("tomcat/${serverdotxml}"),
           replace => false,
           before => Service["tomcat-${name}"];
 
         "${basedir}/conf/web.xml":
           ensure => present,
-          owner  => "tomcat",
+          owner  => $owner,
           group  => $group,
-          mode   => 460,
+          mode   => $filemode,
           content => template("tomcat/web.xml.erb"),
           replace => false,
           before => Service["tomcat-${name}"];
@@ -214,9 +234,9 @@ define tomcat::instance($ensure="present",
 
         "${basedir}/webapps":
           ensure => directory,
-          owner  => "tomcat",
+          owner  => $owner,
           group  => $group,
-          mode   => 2770,
+          mode   => $dirmode,
           before => Service["tomcat-${name}"];
     
         # Tomcat usually write there
