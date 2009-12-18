@@ -207,6 +207,13 @@ define tomcat::instance($ensure="present",
           mode   => 2775,
           before => Service["tomcat-${name}"];
 
+        "${basedir}/private":
+          ensure => directory,
+          owner  => "root",
+          group  => $group,
+          mode   => 2775,
+          before => Service["tomcat-${name}"];
+
         "${basedir}/conf/server.xml":
           ensure => present,
           owner  => $owner,
@@ -253,12 +260,6 @@ define tomcat::instance($ensure="present",
           mode   => 2770,
           before => Service["tomcat-${name}"];
         "${basedir}/temp":
-          ensure => directory,
-          owner  => "tomcat",
-          group  => $group,
-          mode   => 2770,
-          before => Service["tomcat-${name}"];
-        "${basedir}/private":
           ensure => directory,
           owner  => "tomcat",
           group  => $group,
