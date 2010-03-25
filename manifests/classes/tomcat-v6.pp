@@ -29,7 +29,7 @@ Usage:
 class tomcat::v6 inherits tomcat {
 
   if ( ! $tomcat_version ) {
-    $tomcat_version = "6.0.20"
+    $tomcat_version = "6.0.24"
   }
 
   if ( ! $mirror ) {
