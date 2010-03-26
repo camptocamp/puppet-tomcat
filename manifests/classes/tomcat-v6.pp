@@ -33,7 +33,8 @@ class tomcat::v6 inherits tomcat {
   }
 
   if ( ! $mirror ) {
-    $mirror = "http://mirror.switch.ch/mirror/apache/dist/tomcat/"
+    #$mirror = "http://mirror.switch.ch/mirror/apache/dist/tomcat/"
+    $mirror = "http://archive.apache.org/dist/tomcat/"
   }
 
   $baseurl   = "${mirror}/tomcat-6/v${tomcat_version}/bin/"
