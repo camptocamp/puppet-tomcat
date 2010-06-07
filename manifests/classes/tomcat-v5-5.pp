@@ -10,7 +10,7 @@ Class variables:
 
 Requires:
 - java to be previously installed
-- common::archive::tar-gz definition (from puppet Common module)
+- common::archive definition (from puppet camptocamp/common module)
 - Package["curl"]
 
 Tested on:
@@ -33,20 +33,23 @@ class tomcat::v5-5 inherits tomcat {
   }
 
   if ( ! $mirror ) {
-    $mirror = "http://mirror.switch.ch/mirror/apache/dist/tomcat/"
+    $mirror = "http://archive.apache.org/dist/tomcat/"
   }
 
-  $url = "${mirror}/tomcat-5/v${tomcat_version}/bin/apache-tomcat-${tomcat_version}.tar.gz"
+  $baseurl   = "${mirror}/tomcat-5/v${tomcat_version}/bin"
+  $tomcaturl = "${baseurl}/apache-tomcat-${tomcat_version}.tar.gz"
 
-  common::archive::tar-gz{"/opt/apache-tomcat-${tomcat_version}/.installed":
-    source => $url,
-    target => "/opt",
+  common::archive{ "apache-tomcat-${tomcat_version}":
+    url         => $tomcaturl,
+    digest_url  => "${tomcaturl}.md5",
+    digest_type => "md5",
+    target      => "/opt",
   }
 
   file {"/opt/apache-tomcat":
     ensure => link,
     target => "/opt/apache-tomcat-${tomcat_version}",
-    require => Common::Archive::Tar-gz["/opt/apache-tomcat-${tomcat_version}/.installed"],
+    require => Common::Archive["apache-tomcat-${tomcat_version}"],
     before  => [File["commons-logging.jar"], File["log4j.jar"], File["log4j.properties"]],
   }
 

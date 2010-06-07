@@ -10,7 +10,7 @@ Class variables:
 
 Requires:
 - java to be previously installed
-- common::archive::tar-gz definition (from puppet Common module)
+- common::archive definition (from puppet camptocamp/common module)
 - Package["curl"]
 
 Tested on:
@@ -36,18 +36,20 @@ class tomcat::v6 inherits tomcat {
     $mirror = "http://archive.apache.org/dist/tomcat/"
   }
 
-  $baseurl   = "${mirror}/tomcat-6/v${tomcat_version}/bin/"
+  $baseurl   = "${mirror}/tomcat-6/v${tomcat_version}/bin"
   $tomcaturl = "${baseurl}/apache-tomcat-${tomcat_version}.tar.gz"
 
-  common::archive::tar-gz{"/opt/apache-tomcat-${tomcat_version}/.installed":
-    source => $tomcaturl,
-    target => "/opt",
+  common::archive{ "apache-tomcat-${tomcat_version}":
+    url         => $tomcaturl,
+    digest_url  => "${tomcaturl}.md5",
+    digest_type => "md5",
+    target      => "/opt",
   }
 
   file {"/opt/apache-tomcat":
     ensure => link,
     target => "/opt/apache-tomcat-${tomcat_version}",
-    require => Common::Archive::Tar-gz["/opt/apache-tomcat-${tomcat_version}/.installed"],
+    require => Common::Archive["apache-tomcat-${tomcat_version}"],
     before  => [File["commons-logging.jar"], File["log4j.jar"], File["log4j.properties"]],
   }
 
@@ -55,7 +57,7 @@ class tomcat::v6 inherits tomcat {
   # see: http://tomcat.apache.org/tomcat-6.0-doc/logging.html
   file { "/opt/apache-tomcat-${tomcat_version}/extras/":
     ensure  => directory,
-    require => Common::Archive::Tar-gz["/opt/apache-tomcat-${tomcat_version}/.installed"],
+    require => Common::Archive["apache-tomcat-${tomcat_version}"],
   }
 
   exec { "fetch tomcat-juli.jar":
@@ -103,7 +105,7 @@ class tomcat::v6 inherits tomcat {
       file {"/opt/apache-tomcat-${tomcat_version}/bin/catalina.sh":
         ensure  => present,
         source  => "puppet:///tomcat/catalina.sh-6.0.18",
-        require => Common::Archive::Tar-gz["/opt/apache-tomcat-${tomcat_version}/.installed"],
+        require => Common::Archive["apache-tomcat-${tomcat_version}"],
         mode => "755",
       }
     }

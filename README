@@ -43,7 +43,7 @@ use of Apache integration.
 
 The Common puppet module available at
 http://github.com/camptocamp/puppet-common is required if you want to install
-tomcat from a compressed archive (it uses common::archive::tar-gz).
+tomcat from a compressed archive (it uses common::archive).
 
 
 === Defaults:
