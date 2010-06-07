@@ -19,6 +19,8 @@ Usage:
 */
 class tomcat::package::v6 inherits tomcat {
 
+  include tomcat::params
+
   $tomcat = $operatingsystem ? {
     #TODO: RedHat => "tomcat6",
     Debian => "tomcat6",
@@ -53,11 +55,11 @@ class tomcat::package::v6 inherits tomcat {
   # tomcat::v6 and should be removed ASAP.
 
   if ( ! $tomcat_version ) {
-    $tomcat_version = "6.0.26"
+    $tomcat_version = "${tomcat::params::release_v6}"
   }
 
   if ( ! $mirror ) {
-    $mirror = "http://archive.apache.org/dist/tomcat/"
+    $mirror = "${tomcat::params::mirror}"
   }
 
   $baseurl = "${mirror}/tomcat-6/v${tomcat_version}/bin/"

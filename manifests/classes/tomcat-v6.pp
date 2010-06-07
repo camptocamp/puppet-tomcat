@@ -18,8 +18,8 @@ Tested on:
 - Debian Lenny
 
 Parameters:
-  $tomcat_version: The tomcat version you wish to install. Currently defaults to "6.0.26".
-  $mirror: URL of the closest tomcat mirror. Defaults to mirror.switch.ch.
+  $tomcat_version: The tomcat version you wish to install. Defaults to $tomcat::params::release_v6
+  $mirror: URL of the closest tomcat mirror. Defaults to $tomcat::params::mirror
 
 Usage:
   $tomcat_version = "6.0.18"
@@ -28,12 +28,14 @@ Usage:
 */
 class tomcat::v6 inherits tomcat {
 
+  include tomcat::params
+
   if ( ! $tomcat_version ) {
-    $tomcat_version = "6.0.26"
+    $tomcat_version = "${tomcat::params::release_v6}"
   }
 
   if ( ! $mirror ) {
-    $mirror = "http://archive.apache.org/dist/tomcat/"
+    $mirror = "${tomcat::params::mirror}"
   }
 
   $baseurl   = "${mirror}/tomcat-6/v${tomcat_version}/bin"
