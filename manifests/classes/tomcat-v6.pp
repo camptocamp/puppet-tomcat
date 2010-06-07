@@ -60,29 +60,33 @@ class tomcat::v6 inherits tomcat {
     require => Common::Archive["apache-tomcat-${tomcat_version}"],
   }
 
-  exec { "fetch tomcat-juli.jar":
-    command => "curl -o /opt/apache-tomcat-${tomcat_version}/extras/tomcat-juli.jar ${baseurl}/extras/tomcat-juli.jar",
-    creates => "/opt/apache-tomcat-${tomcat_version}/extras/tomcat-juli.jar",
-    require => File["/opt/apache-tomcat-${tomcat_version}/extras/"],
+  common::archive::download { "tomcat-juli.jar":
+    url         => "${baseurl}/extras/tomcat-juli.jar",
+    digest_url  => "${baseurl}/extras/tomcat-juli.jar.md5",
+    digest_type => "md5",
+    src_target  => "/opt/apache-tomcat-${tomcat_version}/extras/",
+    require     => File["/opt/apache-tomcat-${tomcat_version}/extras/"],
   }
 
-  exec { "fetch tomcat-juli-adapters.jar":
-    command => "curl -o /opt/apache-tomcat-${tomcat_version}/extras/tomcat-juli-adapters.jar ${baseurl}/extras/tomcat-juli-adapters.jar",
-    creates => "/opt/apache-tomcat-${tomcat_version}/extras/tomcat-juli-adapters.jar",
-    require => File["/opt/apache-tomcat-${tomcat_version}/extras/"],
+  common::archive::download { "tomcat-juli-adapters.jar":
+    url         => "${baseurl}/extras/tomcat-juli-adapters.jar",
+    digest_url  => "${baseurl}/extras/tomcat-juli-adapters.jar.md5",
+    digest_type => "md5",
+    src_target  => "/opt/apache-tomcat-${tomcat_version}/extras/",
+    require     => File["/opt/apache-tomcat-${tomcat_version}/extras/"],
   }
 
   # update tomcat-juli.jar with file downloaded from extras/
   file { "/opt/apache-tomcat-${tomcat_version}/bin/tomcat-juli.jar":
     ensure  => link,
     target  => "/opt/apache-tomcat-${tomcat_version}/extras/tomcat-juli.jar",
-    require => Exec["fetch tomcat-juli.jar"],
+    require => Common::Archive::Download["tomcat-juli.jar"],
   }
 
   file { "/opt/apache-tomcat-${tomcat_version}/lib/tomcat-juli-adapters.jar":
     ensure  => link,
     target  => "/opt/apache-tomcat-${tomcat_version}/extras/tomcat-juli-adapters.jar",
-    require => Exec["fetch tomcat-juli-adapters.jar"],
+    require => Common::Archive::Download["tomcat-juli-adapters.jar"],
   }
 
 

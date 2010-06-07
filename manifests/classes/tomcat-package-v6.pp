@@ -53,11 +53,11 @@ class tomcat::package::v6 inherits tomcat {
   # tomcat::v6 and should be removed ASAP.
 
   if ( ! $tomcat_version ) {
-    $tomcat_version = "6.0.20"
+    $tomcat_version = "6.0.26"
   }
 
   if ( ! $mirror ) {
-    $mirror = "http://mirror.switch.ch/mirror/apache/dist/tomcat/"
+    $mirror = "http://archive.apache.org/dist/tomcat/"
   }
 
   $baseurl = "${mirror}/tomcat-6/v${tomcat_version}/bin/"
@@ -67,28 +67,32 @@ class tomcat::package::v6 inherits tomcat {
     require => Class["tomcat::package"],
   }
 
-  exec { "fetch tomcat-juli.jar":
-    command => "curl -o /usr/share/tomcat6/extras/tomcat-juli.jar ${baseurl}/extras/tomcat-juli.jar",
-    creates => "/usr/share/tomcat6/extras/tomcat-juli.jar",
-    require => File["/usr/share/tomcat6/extras/"],
+  common::archive::download { "tomcat-juli.jar":
+    url         => "${baseurl}/extras/tomcat-juli.jar",
+    digest_url  => "${baseurl}/extras/tomcat-juli.jar.md5",
+    digest_type => "md5",
+    src_target  => "/usr/share/tomcat6/extras/",
+    require     => File["/usr/share/tomcat6/extras/"],
   }
 
-  exec { "fetch tomcat-juli-adapters.jar":
-    command => "curl -o /usr/share/tomcat6/extras/tomcat-juli-adapters.jar ${baseurl}/extras/tomcat-juli-adapters.jar",
-    creates => "/usr/share/tomcat6/extras/tomcat-juli-adapters.jar",
-    require => File["/usr/share/tomcat6/extras/"],
+  common::archive::download { "tomcat-juli-adapters.jar":
+    url         => "${baseurl}/extras/tomcat-juli-adapters.jar",
+    digest_url  => "${baseurl}/extras/tomcat-juli-adapters.jar.md5",
+    digest_type => "md5",
+    src_target  => "/usr/share/tomcat6/extras/",
+    require     => File["/usr/share/tomcat6/extras/"],
   }
 
   file { "/usr/share/tomcat6/bin/tomcat-juli.jar":
     ensure  => link,
     target  => "/usr/share/tomcat6/extras/tomcat-juli.jar",
-    require => Exec["fetch tomcat-juli.jar"],
+    require => Common::Archive::Download["tomcat-juli.jar"],
   }
 
   file { "/usr/share/tomcat6/lib/tomcat-juli-adapters.jar":
     ensure  => link,
     target  => "/usr/share/tomcat6/extras/tomcat-juli-adapters.jar",
-    require => Exec["fetch tomcat-juli-adapters.jar"],
+    require => Common::Archive::Download["tomcat-juli-adapters.jar"],
   }
 
 }
