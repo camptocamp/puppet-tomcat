@@ -38,6 +38,11 @@ class tomcat::v6 inherits tomcat {
     $mirror = "${tomcat::params::mirror}"
   }
 
+  $tomcat_home = "/opt/apache-tomcat-${tomcat_version}"
+
+  # install extra tomcat juli adapters, used to configure logging.
+  include tomcat::juli
+
   $baseurl   = "${mirror}/tomcat-6/v${tomcat_version}/bin"
   $tomcaturl = "${baseurl}/apache-tomcat-${tomcat_version}.tar.gz"
 
@@ -50,47 +55,15 @@ class tomcat::v6 inherits tomcat {
 
   file {"/opt/apache-tomcat":
     ensure => link,
-    target => "/opt/apache-tomcat-${tomcat_version}",
+    target => $tomcat_home,
     require => Common::Archive["apache-tomcat-${tomcat_version}"],
     before  => [File["commons-logging.jar"], File["log4j.jar"], File["log4j.properties"]],
   }
 
-  # configuring logging on tomcat6 requires 2 files from the extra components
-  # see: http://tomcat.apache.org/tomcat-6.0-doc/logging.html
-  file { "/opt/apache-tomcat-${tomcat_version}/extras/":
+  file { $tomcat_home:
     ensure  => directory,
     require => Common::Archive["apache-tomcat-${tomcat_version}"],
   }
-
-  common::archive::download { "tomcat-juli.jar":
-    url         => "${baseurl}/extras/tomcat-juli.jar",
-    digest_url  => "${baseurl}/extras/tomcat-juli.jar.md5",
-    digest_type => "md5",
-    src_target  => "/opt/apache-tomcat-${tomcat_version}/extras/",
-    require     => File["/opt/apache-tomcat-${tomcat_version}/extras/"],
-  }
-
-  common::archive::download { "tomcat-juli-adapters.jar":
-    url         => "${baseurl}/extras/tomcat-juli-adapters.jar",
-    digest_url  => "${baseurl}/extras/tomcat-juli-adapters.jar.md5",
-    digest_type => "md5",
-    src_target  => "/opt/apache-tomcat-${tomcat_version}/extras/",
-    require     => File["/opt/apache-tomcat-${tomcat_version}/extras/"],
-  }
-
-  # update tomcat-juli.jar with file downloaded from extras/
-  file { "/opt/apache-tomcat-${tomcat_version}/bin/tomcat-juli.jar":
-    ensure  => link,
-    target  => "/opt/apache-tomcat-${tomcat_version}/extras/tomcat-juli.jar",
-    require => Common::Archive::Download["tomcat-juli.jar"],
-  }
-
-  file { "/opt/apache-tomcat-${tomcat_version}/lib/tomcat-juli-adapters.jar":
-    ensure  => link,
-    target  => "/opt/apache-tomcat-${tomcat_version}/extras/tomcat-juli-adapters.jar",
-    require => Common::Archive::Download["tomcat-juli-adapters.jar"],
-  }
-
 
   File["commons-logging.jar"] {
     path => "/opt/apache-tomcat/lib/commons-logging.jar",
@@ -108,7 +81,7 @@ class tomcat::v6 inherits tomcat {
   case $tomcat_version {
     "6.0.18": {
       # Fix https://issues.apache.org/bugzilla/show_bug.cgi?id=45585
-      file {"/opt/apache-tomcat-${tomcat_version}/bin/catalina.sh":
+      file {"${tomcat_home}/bin/catalina.sh":
         ensure  => present,
         source  => "puppet:///tomcat/catalina.sh-6.0.18",
         require => Common::Archive["apache-tomcat-${tomcat_version}"],
