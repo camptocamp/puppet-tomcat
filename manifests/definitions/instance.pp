@@ -43,6 +43,9 @@ Parameters:
 - *conf_mode*: can be used to change the permissions on
   /srv/tomcat/$name/conf/, because some webapps require the ability to write
   their own config files. Defaults to 2570 (writeable only by $group members).
+- *webapp_mode*: can be used to change the permissions on
+  /srv/tomcat/$name/webapps/. Defaults to 2770 (readable and writeable by
+  $group members and tomcat himself, for auto-deploy).
 - *java_home*: can be used to define an alternate $JAVA_HOME, if you want the
   instance to use another JVM.
 - *sample*: set to "true" and a basic "hello world" webapp will be deployed on
@@ -92,6 +95,7 @@ define tomcat::instance($ensure="present",
                         $ajp_port="8009",
                         $ajp_address=false,
                         $conf_mode="",
+                        $webapp_mode="",
                         $java_home="",
                         $sample=undef,
                         $setenv=[]) {
@@ -99,14 +103,21 @@ define tomcat::instance($ensure="present",
   $basedir = "/srv/tomcat/${name}"
 
   if $owner == "tomcat" {
-    $dirmode  = 2770
+    $dirmode  = $webapp_mode ? {
+      ""      => 2770,
+      default => $webapp_mode,
+    }
     $filemode = 0460
     $confmode = $conf_mode ? {
       ""      => 2570,
       default => $conf_mode
     }
+
   } else {
-    $dirmode  = 2775
+    $dirmode  = $webapp_mode ? {
+      ""      => 2775,
+      default => $webapp_mode,
+    }
     $filemode = 0664
     $confmode = $conf_mode ? {
       ""      => $dirmode,
