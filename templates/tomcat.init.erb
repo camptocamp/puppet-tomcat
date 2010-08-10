@@ -6,7 +6,7 @@
 
 . /lib/lsb/init-functions
 
-SHUTDOWN_WAIT="30"
+SHUTDOWN_WAIT=30
 
 export JAVA_HOME=<%= javahome %>
 export CATALINA_HOME=<%= catalinahome %>
@@ -23,7 +23,7 @@ fi
 start() {
   isrunning
 
-  if [ "$?" == 0 ]; then
+  if [ "$?" = 0 ]; then
     echo "tomcat-<%= name %> already running"
     return 0
   fi
@@ -37,7 +37,7 @@ start() {
 stop() {
   isrunning
 
-  if [ "$?" == 1 ]; then
+  if [ "$?" = 1 ]; then
     echo "tomcat-<%= name %> already stopped"
     rm -f $CATALINA_PID # remove pidfile if still around
     return 0
@@ -45,21 +45,21 @@ stop() {
 
   echo -n "Waiting for tomcat-<%= name %> to exit (${SHUTDOWN_WAIT} sec.): "
 
-  count="0"
-  until [ "$pid" == "" ] || [ "$count" -gt "$SHUTDOWN_WAIT" ]; do
+  count=0
+  until [ "$pid" = "" ] || [ $count -gt $SHUTDOWN_WAIT ]; do
     $SU tomcat -c "$CATALINA_HOME/bin/catalina.sh stop -force" > /dev/null
     findpid
 
     echo -n "."
     sleep 3
-    let count="${count}+3"
+    count=$((count+3))
   done
 
   echo ""
 
   if [ "$count" -gt "$SHUTDOWN_WAIT" ]; then
     echo "Forcing tomcat-<%= name %> to stop"
-    kill -9 $pid && sleep 5
+    /bin/kill -9 $pid && sleep 5
   fi
 
   # check if tomcat is still around, this will be our exit status
@@ -71,7 +71,7 @@ findpid() {
   pid=$(pgrep -U tomcat -f "^$JAVA_HOME/bin/java.*catalina.base=<%= basedir %>")
 
   # validate output of pgrep
-  if ! [ "$pid" == "" ] && ! [ "$pid" -gt 0 ]; then
+  if ! [ "$pid" = "" ] && ! [ "$pid" -gt 0 ]; then
     log_failure_msg "Unable to determine if tomcat-<%= name %> is running"
     exit 1
   fi
@@ -80,7 +80,7 @@ findpid() {
 isrunning() {
   findpid
 
-  if [ "$pid" == "" ]; then
+  if [ "$pid" = "" ]; then
     return 1
   elif [ "$pid" -gt 0 ]; then
     return 0
@@ -92,7 +92,7 @@ case "$1" in
     start
     RETVAL=$?
 
-    if [ "$RETVAL" == 0 ]; then
+    if [ "$RETVAL" = 0 ]; then
       log_success_msg "Started tomcat-<%= name %>"
     else
       log_failure_msg "Not able to start tomcat-<%= name %>"
@@ -103,7 +103,7 @@ case "$1" in
     stop
     RETVAL=$?
 
-    if [ "$RETVAL" == 0 ]; then
+    if [ "$RETVAL" = 0 ]; then
       log_success_msg "Stopped tomcat-<%= name %>"
     else
       log_failure_msg "Not able to stop tomcat-<%= name %>"
@@ -116,7 +116,7 @@ case "$1" in
     start
     RETVAL=$?
 
-    if [ "$RETVAL" == 0 ]; then
+    if [ "$RETVAL" = 0 ]; then
       log_success_msg "Restarted tomcat-<%= name %>"
     else
       log_failure_msg "Not able to restart tomcat-<%= name %>"
@@ -127,7 +127,7 @@ case "$1" in
     isrunning
     RETVAL=$?
 
-    if [ "$RETVAL" == 0 ]; then
+    if [ "$RETVAL" = 0 ]; then
       echo "tomcat-<%= name %> (pid $pid) is running..."
     else
       echo "tomcat-<%= name %> is stopped"
