@@ -20,7 +20,7 @@ else
     SU="su"
 fi
 
-function start() {
+start() {
   isrunning
 
   if [ "$?" == 0 ]; then
@@ -34,7 +34,7 @@ function start() {
   $SU tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start" > /dev/null
 }
 
-function stop() {
+stop() {
   isrunning
 
   if [ "$?" == 1 ]; then
@@ -66,7 +66,7 @@ function stop() {
   ! isrunning
 }
 
-function findpid() {
+findpid() {
   pid=""
   pid=$(pgrep -U tomcat -f "^$JAVA_HOME/bin/java.*catalina.base=<%= basedir %>")
 
@@ -77,7 +77,7 @@ function findpid() {
   fi
 }
 
-function isrunning() {
+isrunning() {
   findpid
 
   if [ "$pid" == "" ]; then
