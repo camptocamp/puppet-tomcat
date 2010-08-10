@@ -20,7 +20,7 @@ class tomcat {
     RedHat: {
       package { ["log4j", "jakarta-commons-logging"]: ensure => present }
     }
-    Debian: {
+    Debian,Ubuntu: {
       package { ["liblog4j1.2-java", "libcommons-logging-java"]: ensure => present }
     }
   }
@@ -35,7 +35,7 @@ class tomcat {
     path   => undef, # overrided in subclasses
     ensure => link,
     target => $operatingsystem ? {
-      Debian => "/usr/share/java/log4j-1.2.jar",
+      /Debian|Ubuntu/ => "/usr/share/java/log4j-1.2.jar",
       RedHat => "/usr/share/java/log4j.jar",
     },
   }

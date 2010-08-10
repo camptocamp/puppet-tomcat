@@ -16,6 +16,7 @@ Requires:
 Tested on:
 - RHEL 5
 - Debian Lenny
+- Ubuntu Lucid
 
 Parameters:
   $tomcat_version: The tomcat version you wish to install. Defaults to $tomcat::params::release_v6
