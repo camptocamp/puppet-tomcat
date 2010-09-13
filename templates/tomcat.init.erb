@@ -31,6 +31,9 @@ start() {
   # Source JVM parameters
   . <%= basedir %>/bin/setenv.sh
 
+  # Remove pidfile if still around
+  test -f $CATALINA_PID && rm -f $CATALINA_PID
+
   $SU tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start" > /dev/null
 }
 
