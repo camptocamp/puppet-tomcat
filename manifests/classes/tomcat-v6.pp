@@ -27,10 +27,19 @@ Usage:
   include tomcat::v6
 
 */
-class tomcat::v6 inherits tomcat {
+class tomcat::v6 inherits tomcat::base {
+
+  case $operatingsystem {
+    RedHat: {
+      package { ["log4j", "jakarta-commons-logging"]: ensure => present }
+    }
+    Debian,Ubuntu: {
+      package { ["liblog4j1.2-java", "libcommons-logging-java"]: ensure => present }
+    }
+  }
 
   include tomcat::params
-
+  
   if ( ! $tomcat_version ) {
     $tomcat_version = "${tomcat::params::release_v6}"
   }
@@ -66,16 +75,27 @@ class tomcat::v6 inherits tomcat {
     require => Common::Archive["apache-tomcat-${tomcat_version}"],
   }
 
-  File["commons-logging.jar"] {
-    path => "/opt/apache-tomcat/lib/commons-logging.jar",
+  file {"commons-logging.jar":
+    path   => "/opt/apache-tomcat/lib/commons-logging.jar",
+    ensure => link,
+    target => "/usr/share/java/commons-logging.jar",
   }
 
-  File["log4j.jar"] {
-    path => "/opt/apache-tomcat/lib/log4j.jar",
+  file {"log4j.jar":
+    path   => "/opt/apache-tomcat/lib/log4j.jar",
+    ensure => link,
+    target => $operatingsystem ? {
+      /Debian|Ubuntu/ => "/usr/share/java/log4j-1.2.jar",
+      RedHat          => "/usr/share/java/log4j.jar",
+    },
   }
 
-  File["log4j.properties"] {
-    path => "/opt/apache-tomcat/lib/log4j.properties",
+  file {"log4j.properties":
+    path   => "/opt/apache-tomcat/lib/log4j.properties",
+    source => $log4j_conffile ? {
+      default => $log4j_conffile,
+      ""      => "puppet:///tomcat/conf/log4j.rolling.properties",
+    },
   }
 
   # Workarounds
