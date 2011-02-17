@@ -19,7 +19,7 @@ Tested on:
 - Ubuntu Lucid
 
 Parameters:
-  $tomcat_version: The tomcat version you wish to install. Defaults to $tomcat::params::release_v6
+  $tomcat_version: The tomcat version you wish to install. Defaults to $tomcat::params::default_source_release
   $mirror: URL of the closest tomcat mirror. Defaults to $tomcat::params::mirror
 
 Usage:
@@ -41,7 +41,7 @@ class tomcat::v6 inherits tomcat::base {
   include tomcat::params
   
   if ( ! $tomcat_version ) {
-    $tomcat_version = "${tomcat::params::release_v6}"
+    $tomcat_version = "${tomcat::params::default_source_release}"
   }
 
   if ( ! $mirror ) {

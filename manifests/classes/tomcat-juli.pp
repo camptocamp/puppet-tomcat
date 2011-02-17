@@ -17,7 +17,7 @@ class tomcat::juli {
   include tomcat::params
 
   if ( ! $tomcat_version ) {
-    $tomcat_version = "${tomcat::params::release_v6}"
+    $tomcat_version = "${tomcat::params::default_source_release}"
   }
 
   if ( ! $mirror ) {

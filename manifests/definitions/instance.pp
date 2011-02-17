@@ -133,16 +133,51 @@ define tomcat::instance($ensure="present",
     }
   }
 
+  include tomcat::params
+
+  if defined(Class["Tomcat::v5-5"]) or defined(Class["Tomcat::v6"]) {
+    $tomcat_type = "source"
+    if ( ! $tomcat_version ) {
+      $tomcat_maj_version = "6"
+      $tomcat_version = "${tomcat::params::default_source_release}"
+    } else {
+      notify {"tomcat_version=$tomcat_version":}
+      if versioncmp($tomcat_version, '6.0.0') >= 0 {
+        $tomcat_maj_version = "6"
+      } else {
+        if versioncmp($tomcat_version, '5.5.0') >= 0 {
+          $tomcat_maj_version = "5.5"
+        } else {
+          fail "only versions >= 5.5 or >= 6.0 are supported !"
+        }
+      }
+    }
+  } else {
+    $tomcat_type = "package"
+    if $tomcat_version { notify {"\$tomcat_version is not useful when using distribution package!":} }
+    $tomcat_maj_version = $operatingsystem ? {
+      "Debian" => $lsbdistcodename ? {
+        /lenny|squeeze/ => "6",
+      },
+      "Redhat" => $lsbdistcodename ? {
+        "Tikanga"  => "5.5",
+        "Santiago" => "6",
+      }
+    }
+  }
+
+  notify {"tomcat_type=$tomcat_type; tomcat_maj_version=$tomcat_maj_version; tomcat_version=$tomcat_version":}
+
   # default server.xml is slightly different between tomcat5.5 and tomcat6
-  if defined(Class["Tomcat::Package::v5-5"]) or defined(Class["Tomcat::v5-5"]) {
+  if $tomcat_maj_version == "5.5" {
     $serverdotxml = "server.xml.tomcat55.erb"
   }
 
-  if defined(Class["Tomcat::Package::v6"]) or defined(Class["Tomcat::v6"]) {
+  if $tomcat_maj_version == "6" {
     $serverdotxml = "server.xml.tomcat6.erb"
   }
 
-  if defined(Class["Tomcat::Package::v5-5"]) {
+  if $tomcat_maj_version == "5.5" and $tomcat_type == "package" {
     $catalinahome = $operatingsystem ? {
       RedHat => "/usr/share/tomcat5",
       Debian => "/usr/share/tomcat5.5",
@@ -150,7 +185,7 @@ define tomcat::instance($ensure="present",
     }
   }
 
-  if defined(Class["Tomcat::Package::v6"]) {
+  if $tomcat_maj_version == "6" and $tomcat_type == "package" {
     $catalinahome = $operatingsystem ? {
       #TODO: RedHat => "/usr/share/tomcat6",
       Debian => "/usr/share/tomcat6",
@@ -159,7 +194,7 @@ define tomcat::instance($ensure="present",
   }
 
   # In this case, we are using a non package-based tomcat.
-  if ( ! $catalinahome ) {
+  if $tomcat_type == "source" {
     $catalinahome = "/opt/apache-tomcat"
   }
 
@@ -343,7 +378,7 @@ define tomcat::instance($ensure="present",
     require => File["${basedir}/bin/setenv.sh"],
   }
 
-  if defined(Class["Tomcat::Package::v5-5"]) or defined(Class["Tomcat::package::v6"]) {
+  if $tomcat_type == "package" {
     $servicerequire = Package["tomcat"]
   } else {
     $servicerequire = File["/opt/apache-tomcat"]
