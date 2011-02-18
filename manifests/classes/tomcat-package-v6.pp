@@ -17,7 +17,7 @@ Usage:
   include tomcat::package::v6
 
 */
-class tomcat::package::v6 inherits tomcat::base {
+class tomcat::package::v6 inherits tomcat::package {
 
   case $operatingsystem {
     RedHat: {
@@ -40,7 +40,24 @@ class tomcat::package::v6 inherits tomcat::base {
   # included in tomcat6-* packages.
   include tomcat::juli
 
-  include tomcat::package
+  Package["tomcat"] {
+    name   => $tomcat,
+    before => [File["commons-logging.jar"], File["log4j.jar"], File["log4j.properties"]],
+  }
+
+  Service["tomcat"] {
+    name    => $tomcat,
+    stop    => "/bin/sh /etc/init.d/${tomcat} stop",
+    pattern => $operatingsystem ? {
+      Debian => "-Dcatalina.base=/var/lib/tomcat",
+      Ubuntu => "-Dcatalina.base=/var/lib/tomcat",
+      RedHat => "-Dcatalina.base=/usr/share/tomcat",
+    },
+  }
+
+  File["/etc/init.d/tomcat"] {
+    path => "/etc/init.d/${tomcat}",
+  }
 
   file { $tomcat_home:
     ensure  => directory,

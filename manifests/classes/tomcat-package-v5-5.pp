@@ -18,7 +18,7 @@ Usage:
   include tomcat::package::v5-5
 
 */
-class tomcat::package::v5-5 inherits tomcat::base {
+class tomcat::package::v5-5 inherits tomcat::package {
 
   case $operatingsystem {
     RedHat: {
@@ -35,7 +35,24 @@ class tomcat::package::v5-5 inherits tomcat::base {
     Ubuntu => "tomcat5.5",
   }
 
-  include tomcat::package
+  Package["tomcat"] {
+    name   => $tomcat,
+    before => [File["commons-logging.jar"], File["log4j.jar"], File["log4j.properties"]],
+  }
+
+  Service["tomcat"] {
+    name    => $tomcat,
+    stop    => "/bin/sh /etc/init.d/${tomcat} stop",
+    pattern => $operatingsystem ? {
+      Debian => "-Dcatalina.base=/var/lib/tomcat",
+      Ubuntu => "-Dcatalina.base=/var/lib/tomcat",
+      RedHat => "-Dcatalina.base=/usr/share/tomcat",
+    },
+  }
+
+  File["/etc/init.d/tomcat"] {
+    path => "/etc/init.d/${tomcat}",
+  } 
 
   case $operatingsystem {
 
