@@ -164,6 +164,11 @@ define tomcat::instance($ensure="present",
         "Santiago" => "6",
       }
     }
+
+    if $lsbdistcodename == "Santiago" {
+      # force catalina.sh to use the common library in CATALINA_HOME and not CATALINA_BASE
+      $classpath = "/usr/share/tomcat6/bin/tomcat-juli.jar" 
+    }
   }
 
   notify {"tomcat_type=$tomcat_type; tomcat_maj_version=$tomcat_maj_version; tomcat_version=$tomcat_version":}
@@ -187,7 +192,7 @@ define tomcat::instance($ensure="present",
 
   if $tomcat_maj_version == "6" and $tomcat_type == "package" {
     $catalinahome = $operatingsystem ? {
-      #TODO: RedHat => "/usr/share/tomcat6",
+      RedHat => "/usr/share/tomcat6",
       Debian => "/usr/share/tomcat6",
       Ubuntu => "/usr/share/tomcat6",
     }
@@ -353,7 +358,7 @@ define tomcat::instance($ensure="present",
     content => template("tomcat/setenv.sh.erb"),
     owner  => "root",
     group  => $group,
-    mode   => 750,
+    mode   => 754,
     before => Service["tomcat-${name}"],
   }
 
@@ -364,7 +369,7 @@ define tomcat::instance($ensure="present",
     content => template("tomcat/setenv-local.sh.erb"),
     owner  => "root",
     group  => $group,
-    mode   => 570,
+    mode   => 574,
     before => Service["tomcat-${name}"],
   }
 
