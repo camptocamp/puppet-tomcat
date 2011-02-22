@@ -14,6 +14,10 @@ class tomcat::base {
 
   user{"tomcat":
     ensure => present,
+    groups => $tomcat_groups? {
+      ''      => undef,
+      default => $tomcat_groups,
+    }
   }
 
   file { "/var/log/tomcat":
