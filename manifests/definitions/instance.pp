@@ -100,6 +100,7 @@ define tomcat::instance($ensure="present",
                         $sample=undef,
                         $setenv=[]) {
 
+  $tomcat_name = $name
   $basedir = "/srv/tomcat/${name}"
 
   if $owner == "tomcat" {
