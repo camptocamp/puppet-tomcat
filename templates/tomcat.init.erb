@@ -29,7 +29,7 @@ start() {
   fi
 
   # Source JVM parameters
-  test -r <%= basedir %>/bin/setenv.sh && source <%= basedir %>/bin/setenv.sh
+  test -r <%= basedir %>/bin/setenv.sh && . <%= basedir %>/bin/setenv.sh
 
   # Remove pidfile if still around
   test -f $CATALINA_PID && rm -f $CATALINA_PID
