@@ -18,6 +18,10 @@ class tomcat::package inherits tomcat::base {
     require => Package["tomcat"],
   }
 
+  file { "/usr/share/tomcat":
+    ensure => directory,
+  }
+
   # prevent default init-script from being accidentaly used
   file { "/etc/init.d/tomcat":
     mode    => 0644,

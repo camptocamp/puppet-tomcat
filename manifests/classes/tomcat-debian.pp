@@ -34,11 +34,16 @@ class tomcat::debian inherits tomcat::package {
   }
 
   Service["tomcat"] {
+    stop    => "/bin/sh /etc/init.d/${tomcat} stop",
     pattern => "-Dcatalina.base=/var/lib/${tomcat}",
   }
 
   File["/usr/share/tomcat"] {
     path => $tomcat_home,
+  }
+
+  File["/etc/init.d/tomcat"] {
+    path => "/etc/init.d/${tomcat}",
   }
 
   file {"commons-logging.jar":

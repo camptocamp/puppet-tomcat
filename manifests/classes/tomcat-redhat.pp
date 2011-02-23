@@ -102,6 +102,7 @@ class tomcat::redhat inherits tomcat::package {
   }
 
   Service["tomcat"] {
+    stop    => "/bin/sh /etc/init.d/${tomcat} stop",
     pattern => "-Dcatalina.base=/usr/share/${tomcat}",
   } 
 
