@@ -142,7 +142,6 @@ define tomcat::instance($ensure="present",
       $tomcat_maj_version = "6"
       $tomcat_version = "${tomcat::params::default_source_release}"
     } else {
-      notify {"tomcat_version=$tomcat_version":}
       if versioncmp($tomcat_version, '6.0.0') >= 0 {
         $tomcat_maj_version = "6"
       } else {
@@ -171,8 +170,6 @@ define tomcat::instance($ensure="present",
       $classpath = "/usr/share/tomcat6/bin/tomcat-juli.jar" 
     }
   }
-
-  notify {"tomcat_type=$tomcat_type; tomcat_maj_version=$tomcat_maj_version; tomcat_version=$tomcat_version":}
 
   # default server.xml is slightly different between tomcat5.5 and tomcat6
   if $tomcat_maj_version == "5.5" {
