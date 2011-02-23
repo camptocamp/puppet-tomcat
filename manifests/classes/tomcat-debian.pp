@@ -16,6 +16,11 @@ Usage:
 */
 class tomcat::debian inherits tomcat::package {
 
+  # avoid partial configuration on untested-debian-releases
+  if $lsbdistcodename !~ /^lenny$/ {
+    fail "class ${name} not tested on ${operatingsystem}/${lsbdistcodename}"
+  }
+
   $tomcat = "tomcat6"
 
   # Workaround while tomcat-juli.jar and tomcat-juli-adapters.jar aren't
