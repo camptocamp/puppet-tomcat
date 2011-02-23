@@ -27,16 +27,38 @@ class tomcat::redhat inherits tomcat::package {
 
     Tikanga: {
       $tomcat = "tomcat5"
- 
-      file {"commons-logging.jar": 
-        ensure => link,
-        path   => "/var/lib/tomcat5/common/lib/commons-logging.jar",
-      }
      
       file {"/usr/share/tomcat5/bin/catalina.sh":
-        ensure => link,
-        target => "/usr/bin/dtomcat5",
+        ensure  => link,
+        target  => "/usr/bin/dtomcat5",
+        require => Package["tomcat"],
       }
+
+      file {"commons-logging.jar":
+        path    => "/var/lib/tomcat5/common/lib/commons-logging.jar", 
+        ensure  => link,
+        target  => "/usr/share/java/commons-logging.jar",
+      }
+
+      file {"log4j.jar":
+        path   => "/var/lib/tomcat5/common/lib/log4j.jar",
+        ensure => link,
+        target => "/usr/share/java/log4j.jar",
+      }
+  
+      file {"log4j.properties":
+        path   => "/var/lib/tomcat5/common/classes/log4j.properties",
+        source => $log4j_conffile ? {
+          default => $log4j_conffile,
+          ""      => "puppet:///tomcat/conf/log4j.rolling.properties",
+        },
+      }
+
+      Package["tomcat"] { 
+        name   => $tomcat,
+        before => [File["commons-logging.jar"], File["log4j.jar"], File["log4j.properties"]],  
+      }
+
     }
 
     Santiago: {
@@ -60,20 +82,26 @@ class tomcat::redhat inherits tomcat::package {
         source  => "puppet:///tomcat/catalina.sh-6.0.24",
         require => File["/usr/share/${tomcat}/bin/setclasspath.sh"],
       }
+      
+      Package["tomcat"] { name => $tomcat }
 
     }
   }
 
-  Package["tomcat"] { name => $tomcat }
-  User["tomcat"] { require => Package[$tomcat] }
-  
-  file {"/usr/share/${tomcat}":
-    require => Package["tomcat"],
+  User["tomcat"] { 
+    require => Package[$tomcat],
+  }
+
+  File["/usr/share/tomcat"] {
+    path => "/usr/share/${tomcat}",
   }
 
   Service["tomcat"] {
-    stop    => "/bin/sh /etc/init.d/${tomcat} stop",
     pattern => "-Dcatalina.base=/usr/share/${tomcat}",
   } 
+
+  File["/etc/init.d/tomcat"] {
+    path => "/etc/init.d/${tomcat}",
+  }
 
 }
