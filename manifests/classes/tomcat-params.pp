@@ -9,7 +9,7 @@ class tomcat::params {
     $mirror = "http://archive.apache.org/dist/tomcat/"
   }
 
-  if defined(Class["Tomcat::v5-5"]) or defined(Class["Tomcat::v6"]) or defined(Class["Tomcat::source"]) {
+  if defined(Class["Tomcat::source"]) {
     $type = "source"
     if ( ! $tomcat_version ) {
       $maj_version = "6"
