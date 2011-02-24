@@ -16,19 +16,11 @@ class tomcat::juli {
 
   include tomcat::params
 
-  if ( ! $tomcat_version ) {
-    $tomcat_version = "${tomcat::params::default_source_release}"
-  }
-
-  if ( ! $mirror ) {
-    $mirror = "${tomcat::params::mirror}"
-  }
-
   if ( ! $tomcat_home ) {
     err('undefined mandatory attribute: $tomcat_home')
   }
 
-  $baseurl = "${mirror}/tomcat-6/v${tomcat_version}/bin/"
+  $baseurl = "${tomcat::params::mirror}/tomcat-6/v${tomcat::params::version}/bin"
 
   file { "${tomcat_home}/extras/":
     ensure  => directory,
