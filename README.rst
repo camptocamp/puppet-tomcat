@@ -2,12 +2,12 @@
 
 This module is provided to you by Camptocamp[http://camptocamp.com/].
 
-This module will install tomcat, either from a compressed archive or using
-your system's package manager. This is done by including one of these classes:
-- tomcat::package::v5-5
-- tomcat::package::v6
-- tomcat::v5-5
-- tomcat::v6
+This module will install tomcat, either using you system's package manager or 
+from a compressed archive available on one of the tomcat-mirrors.
+
+This is done by including one of these classes:
+- tomcat
+- tomcat::source
 
 === Instances:
 
@@ -70,12 +70,18 @@ http_port and ajp_port.
 
 Create a standalone tomcat instance whose HTTP server listen on port 8080:
 
-  include tomcat::v6
+  include tomcat
 
   tomcat::instance {"myapp":
     ensure    => present,
     http_port => "8080",
   }
+
+If you want to install a specific tomcat version from a specific mirror:
+
+  $tomcat_mirror = "http://archive.apache.org/dist/tomcat/"
+  $tomcat_version = "6.0.32"
+  include tomcat::source
 
 === Apache integration:
 
@@ -94,7 +100,7 @@ Pre-requisites:
 Create a tomcat instance which is accessible via Apache using AJP on a given
 virtualhost:
 
-  include tomcat::v5-5
+  include tomcat
 
   tomcat::instance {"myapp":
     ensure      => present,
@@ -115,7 +121,7 @@ virtualhost:
 If you create multiple Tomcat instances, you must avoid port clash by setting
 distinct ports for each instance::
 
-  include tomcat::package::v5-5
+  include tomcat
 
   tomcat::instance {"tomcat1":
     ensure      => present,
