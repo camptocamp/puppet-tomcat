@@ -28,6 +28,9 @@ class tomcat::debian inherits tomcat::package {
   # included in tomcat6-* packages.
   include tomcat::juli
 
+  # link logging libraries from java
+  include tomcat::logging
+
   Package["tomcat"] {
     name   => $tomcat,
     before => [File["commons-logging.jar"], File["log4j.jar"], File["log4j.properties"]],
@@ -44,26 +47,6 @@ class tomcat::debian inherits tomcat::package {
 
   File["/etc/init.d/tomcat"] {
     path => "/etc/init.d/${tomcat}",
-  }
-
-  file {"commons-logging.jar":
-    path   => "/usr/share/tomcat6/lib/commons-logging.jar",
-    ensure => link,
-    target => "/usr/share/java/commons-logging.jar",
-  }
-
-  file {"log4j.jar":
-    path => "/usr/share/tomcat6/lib/log4j.jar",
-    ensure => link,
-    target => "/usr/share/java/log4j-1.2.jar",
-  }
-
-  file {"log4j.properties":
-    path   => "/usr/share/tomcat6/lib/log4j.properties",
-    source => $log4j_conffile ? {
-      default => $log4j_conffile,
-      ""      => "puppet:///tomcat/conf/log4j.rolling.properties",
-    },
   }
 
 }
