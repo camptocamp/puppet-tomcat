@@ -136,51 +136,21 @@ define tomcat::instance($ensure="present",
 
   include tomcat::params
 
-  if defined(Class["Tomcat::v5-5"]) or defined(Class["Tomcat::v6"]) {
-    $tomcat_type = "source"
-    if ( ! $tomcat_version ) {
-      $tomcat_maj_version = "6"
-      $tomcat_version = "${tomcat::params::default_source_release}"
-    } else {
-      if versioncmp($tomcat_version, '6.0.0') >= 0 {
-        $tomcat_maj_version = "6"
-      } else {
-        if versioncmp($tomcat_version, '5.5.0') >= 0 {
-          $tomcat_maj_version = "5.5"
-        } else {
-          fail "only versions >= 5.5 or >= 6.0 are supported !"
-        }
-      }
-    }
-  } else {
-    $tomcat_type = "package"
-    if $tomcat_version { notify {"\$tomcat_version is not useful when using distribution package!":} }
-    $tomcat_maj_version = $operatingsystem ? {
-      "Debian" => $lsbdistcodename ? {
-        /lenny|squeeze/ => "6",
-      },
-      "Redhat" => $lsbdistcodename ? {
-        "Tikanga"  => "5.5",
-        "Santiago" => "6",
-      }
-    }
-
-    if $lsbdistcodename == "Santiago" {
-      # force catalina.sh to use the common library in CATALINA_HOME and not CATALINA_BASE
-      $classpath = "/usr/share/tomcat6/bin/tomcat-juli.jar" 
-    }
+  if $tomcat::params::type == "package" and $lsbdistcodename == "Santiago" {
+    # force catalina.sh to use the common library in CATALINA_HOME and not CATALINA_BASE
+    $classpath = "/usr/share/tomcat6/bin/tomcat-juli.jar" 
   }
 
   # default server.xml is slightly different between tomcat5.5 and tomcat6
-  if $tomcat_maj_version == "5.5" {
+  if $tomcat::params::maj_version == "5.5" {
     $serverdotxml = "server.xml.tomcat55.erb"
   }
 
-  if $tomcat_maj_version == "6" {
+  if $tomcat::params::maj_version == "6" {
     $serverdotxml = "server.xml.tomcat6.erb"
   }
 
-  if $tomcat_maj_version == "5.5" and $tomcat_type == "package" {
+  if $tomcat::params::maj_version == "5.5" and $tomcat::params::type == "package" {
     $catalinahome = $operatingsystem ? {
       RedHat => "/usr/share/tomcat5",
       Debian => "/usr/share/tomcat5.5",
@@ -188,7 +158,7 @@ define tomcat::instance($ensure="present",
     }
   }
 
-  if $tomcat_maj_version == "6" and $tomcat_type == "package" {
+  if $tomcat::params::maj_version == "6" and $tomcat::params::type == "package" {
     $catalinahome = $operatingsystem ? {
       RedHat => "/usr/share/tomcat6",
       Debian => "/usr/share/tomcat6",
@@ -197,7 +167,7 @@ define tomcat::instance($ensure="present",
   }
 
   # In this case, we are using a non package-based tomcat.
-  if $tomcat_type == "source" {
+  if $tomcat::params::type == "source" {
     $catalinahome = "/opt/apache-tomcat"
   }
 
@@ -381,7 +351,7 @@ define tomcat::instance($ensure="present",
     require => File["${basedir}/bin/setenv.sh"],
   }
 
-  if $tomcat_type == "package" {
+  if $tomcat::params::type == "package" {
     $servicerequire = Package["tomcat"]
   } else {
     $servicerequire = File["/opt/apache-tomcat"]
