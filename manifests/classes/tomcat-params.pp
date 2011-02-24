@@ -15,6 +15,7 @@ class tomcat::params {
       $maj_version = "6"
       $version = $default_source_release
     } else {
+      $version = $tomcat_version
       if versioncmp($tomcat_version, '6.0.0') >= 0 {
         $maj_version = "6"
       } else {
@@ -37,6 +38,13 @@ class tomcat::params {
         "Santiago" => "6",
       }
     }
+
+    # it would be better to set the distribution tomcat-version!
+    $version = $maj_version ? {
+      "5.5" => $default_source_release_v55,
+      "6"   => $default_source_release,
+    }
+
   }
 
   if $tomcat_debug {
