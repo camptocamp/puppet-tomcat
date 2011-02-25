@@ -1,4 +1,6 @@
-= Tomcat Puppet module
+====================
+Tomcat Puppet module
+====================
 
 This module is provided to you by Camptocamp[http://camptocamp.com/].
 
@@ -6,10 +8,12 @@ This module will install tomcat, either using you system's package manager or
 from a compressed archive available on one of the tomcat-mirrors.
 
 This is done by including one of these classes:
-- tomcat
-- tomcat::source
+ 
+ * tomcat
+ * tomcat::source
 
-=== Instances:
+Instances
+---------
 
 You'll then be able to define one or more tomcat instances, where you can drop
 your webapps in the ".war" format. This is done with the "tomcat::instance"
@@ -24,7 +28,8 @@ This is implemented by having a shared $CATALINA_HOME, and each instance having
 it's own $CATALINA_BASE. More details are found in this document:
 http://tomcat.apache.org/tomcat-6.0-doc/RUNNING.txt
 
-=== Logging:
+Logging
+-------
 
 To offer more flexibility and avoid having to restart tomcat each time
 catalina.out is rotated, tomcat is configured to send it's log messages to
@@ -35,7 +40,8 @@ This can easily be overridden on an instance base by creating a custom
 log4j.properties file and setting the "common.loader" path to point to it, by
 editing /srv/tomcat/<name>/conf/catalina.properties.
 
-=== Dependencies:
+Dependencies
+------------
 
 The Apache puppet module available at
 http://github.com/camptocamp/puppet-apache is required if you want to make
@@ -45,30 +51,32 @@ The Common puppet module available at
 http://github.com/camptocamp/puppet-common is required if you want to install
 tomcat from a compressed archive (it uses common::archive).
 
-
-=== Defaults:
+Defaults
+--------
 
 By default a new tomcat instance create by a tomcat::instance resource will
 listen on the following ports:
 
-* 8080 HTTP
-* 8005 Control
-* 8009 AJP
+ * 8080 HTTP
+ * 8005 Control
+ * 8009 AJP
 
 You should override these defaults by setting attributes server_port,
 http_port and ajp_port.
 
+Limitations
+-----------
 
-=== Limitations:
-- there is no way to automatically manage webapps (*.war files).
-- the initscript calls catalina.sh instead of using jsvc. This prevents tomcat
+ * there is no way to automatically manage webapps (\*.war files).
+ * the initscript calls catalina.sh instead of using jsvc. This prevents tomcat
   from listening on ports < 1024.
 
-== Examples:
+Examples
+--------
 
-=== Simple standalone instance
+**Simple standalone instance:**
 
-Create a standalone tomcat instance whose HTTP server listen on port 8080:
+Create a standalone tomcat instance whose HTTP server listen on port 8080::
 
   include tomcat
 
@@ -83,9 +91,10 @@ If you want to install a specific tomcat version from a specific mirror:
   $tomcat_version = "6.0.32"
   include tomcat::source
 
-=== Apache integration:
+Apache integration
+------------------
 
-Pre-requisites:
+Pre-requisites::
 
   include apache
 
@@ -98,7 +107,7 @@ Pre-requisites:
   }
 
 Create a tomcat instance which is accessible via Apache using AJP on a given
-virtualhost:
+virtualhost::
 
   include tomcat
 
@@ -116,7 +125,8 @@ virtualhost:
   }
 
 
-=== Multiple instances
+Multiple instances
+------------------
 
 If you create multiple Tomcat instances, you must avoid port clash by setting
 distinct ports for each instance::
