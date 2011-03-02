@@ -69,7 +69,7 @@ Limitations
 
  * there is no way to automatically manage webapps (\*.war files).
  * the initscript calls catalina.sh instead of using jsvc. This prevents tomcat
-  from listening on ports < 1024.
+   from listening on ports < 1024.
 
 Examples
 --------
@@ -85,7 +85,7 @@ Create a standalone tomcat instance whose HTTP server listen on port 8080::
     http_port => "8080",
   }
 
-If you want to install a specific tomcat version from a specific mirror:
+If you want to install a specific tomcat version from a specific mirror::
 
   $tomcat_mirror = "http://archive.apache.org/dist/tomcat/"
   $tomcat_version = "6.0.32"
