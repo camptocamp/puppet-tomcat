@@ -8,7 +8,7 @@ to:
 - restart tomcat instances.
 
 Requires:
-- management of /etc/sudoers with common::concatfilepart
+- definition sudo::directive from module camptocamp/puppet-sudo
 
 Warning: will overwrite /etc/sudoers !
 
@@ -19,9 +19,8 @@ class tomcat::administration {
     ensure => present,
   }
 
-  common::concatfilepart { "sudoers.tomcat":
+  sudo::directive { "tomcat-administration":
     ensure => present,
-    file => "/etc/sudoers",
     content => template("tomcat/sudoers.tomcat.erb"),
     require => Group["tomcat-admin"],
   }
