@@ -32,7 +32,7 @@ class tomcat::redhat inherits tomcat::package {
 
     Tikanga: {
       $tomcat = "tomcat5"
-      $tomcat_home = "/var/lib/tomcat5/common"
+      $tomcat_home = "/var/lib/tomcat5"
 
       # link logging libraries from java
       include tomcat::logging
