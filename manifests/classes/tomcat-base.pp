@@ -14,6 +14,10 @@ class tomcat::base {
 
   user{"tomcat":
     ensure => present,
+    uid    => $tomcat_uid? {
+      ''      => undef,
+      default => $tomcat_uid,
+    },
     groups => $tomcat_groups? {
       ''      => undef,
       default => $tomcat_groups,
