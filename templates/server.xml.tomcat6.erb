@@ -1,5 +1,21 @@
 <?xml version='1.0' encoding='utf-8'?>
-<!-- file created (but not managed) by puppet -->
+<% if not connectors.empty? -%>
+<!DOCTYPE server-xml [
+<% if not executor.empty? -%>
+<% executor.each do |exe| -%>
+  <!ENTITY executor-<%= exe %> SYSTEM "executor-<%= exe %>.xml">
+<% end -%>
+<% end -%>
+<% connectors.each do |conn| -%>
+  <!ENTITY connectors-<%= conn %> SYSTEM "connector-<%= conn %>.xml">
+<% end -%>
+]>
+<% end -%>
+<% if manage -%>
+<!-- file managed by puppet -->
+<% else -%>
+<!-- file created (but not managed by puppet -->
+<% end -%>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one or more
   contributor license agreements.  See the NOTICE file distributed with
@@ -50,55 +66,22 @@
        Documentation at /docs/config/service.html
    -->
   <Service name="Catalina">
-  
-    <!--The connectors can use a shared executor, you can define one or more named thread pools-->
-    <!--
-    <Executor name="tomcatThreadPool" namePrefix="catalina-exec-" 
-        maxThreads="150" minSpareThreads="4"/>
-    -->
     
-    
-    <!-- A "Connector" represents an endpoint by which requests are received
-         and responses are returned. Documentation at :
-         Java HTTP Connector: /docs/config/http.html (blocking & non-blocking)
-         Java AJP  Connector: /docs/config/ajp.html
-         APR (HTTP/AJP) Connector: /docs/apr.html
-         Define a non-SSL HTTP/1.1 Connector on port 8080
-    -->
+<% if not executor.empty? -%>
+<% executor.each do |exe| -%>
+    <!-- See conf/executor-<%= exe %>.xml for this executor's config. -->
+    &executor-<%= exe -%>;
 
-    <% if http_port %>
-    <Connector port="<%= http_port %>" protocol="HTTP/1.1" 
-               <% if http_address %>
-                  address="<%= http_address %>"
-               <% end %>
-               connectionTimeout="20000" 
-               redirectPort="8443" />
-    <% end %>
-    <!-- A "Connector" using the shared thread pool-->
-    <!--
-    <Connector executor="tomcatThreadPool"
-               port="8080" protocol="HTTP/1.1" 
-               connectionTimeout="20000" 
-               redirectPort="8443" />
-    -->           
-    <!-- Define a SSL HTTP/1.1 Connector on port 8443
-         This connector uses the JSSE configuration, when using APR, the 
-         connector should be using the OpenSSL style configuration
-         described in the APR documentation -->
-    <!--
-    <Connector port="8443" protocol="HTTP/1.1" SSLEnabled="true"
-               maxThreads="150" scheme="https" secure="true"
-               clientAuth="false" sslProtocol="TLS" />
-    -->
+<% end -%>
+<% end -%>
 
-    <!-- Define an AJP 1.3 Connector -->
-    <% if ajp_port %>
-    <Connector port="<%= ajp_port %>" protocol="AJP/1.3"
-               <% if ajp_address %>
-                  address="<%= ajp_address %>"
-               <% end %>
-               redirectPort="8443" />
-    <% end %>
+<% if not connectors.empty? -%>
+<% connectors.each do |conn| -%>
+    <!-- See conf/connector-<%= conn %>.xml for this connector's config. -->
+    &connector-<%= conn %>;
+
+<% end -%>
+<% end -%>
 
     <!-- An Engine represents the entry point (within Catalina) that processes
          every request.  The Engine implementation for Tomcat stand alone
