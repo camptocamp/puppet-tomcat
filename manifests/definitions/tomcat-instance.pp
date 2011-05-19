@@ -43,6 +43,7 @@ Parameters:
 - *conf_mode*: can be used to change the permissions on
   /srv/tomcat/$name/conf/, because some webapps require the ability to write
   their own config files. Defaults to 2570 (writeable only by $group members).
+- *server_xml_file*: can be used to set a specific server.xml file
 - *webapp_mode*: can be used to change the permissions on
   /srv/tomcat/$name/webapps/. Defaults to 2770 (readable and writeable by
   $group members and tomcat himself, for auto-deploy).
@@ -95,6 +96,7 @@ define tomcat::instance($ensure="present",
                         $ajp_port="8009",
                         $ajp_address=false,
                         $conf_mode="",
+                        $server_xml_file="",
                         $webapp_mode="",
                         $java_home="",
                         $sample=undef,
@@ -131,7 +133,7 @@ define tomcat::instance($ensure="present",
     }
   }
 
-  if $connector == [] {
+  if $connector == [] and $server_xml_file == "" {
     
     $connectors = ["http-${http_port}","ajp-${ajp_port}"]
     
@@ -273,19 +275,37 @@ define tomcat::instance($ensure="present",
           owner   => $owner,
           group   => $group,
           mode    => $filemode,
-          content => template("tomcat/${serverdotxml}"),
-          replace => $manage,
+          source  => $server_xml_file? {
+            ""      => undef,
+            default => $server_xml_file,
+          },
+          content => $server_xml_file? {
+            ""      => template("tomcat/${serverdotxml}"),
+            default => undef,
+          },
           before  => Service["tomcat-${name}"],
-          require => Tomcat::Connector[$connectors];
+          notify  => $manage? {
+            true    => Service["tomcat-${name}"],
+            default => undef,
+          }, 
+          require => $server_xml_file? {
+            ""      => undef,
+            default => Tomcat::Connector[$connectors],
+          },
+          replace => $manage;
 
         "${basedir}/conf/web.xml":
-          ensure => present,
-          owner  => $owner,
-          group  => $group,
-          mode   => $filemode,
+          ensure  => present,
+          owner   => $owner,
+          group   => $group,
+          mode    => $filemode,
           content => template("tomcat/web.xml.erb"),
-          replace => $manage,
-          before => Service["tomcat-${name}"];
+          before  => Service["tomcat-${name}"],
+          notify  => $manage? {
+            true    => Service["tomcat-${name}"],
+            default => undef,
+          },
+          replace => $manage;
 
         "${basedir}/README":
           ensure  => present,
@@ -409,7 +429,7 @@ define tomcat::instance($ensure="present",
       absent    => false,
     },
     require => [File["/etc/init.d/tomcat-${name}"], $servicerequire],
-    pattern => "-Dcatalina.base=${tomcat::params:instance_basedir}/${name}",
+    pattern => "-Dcatalina.base=${tomcat::params::instance_basedir}/${name}",
   }
 
   # Logrotate
