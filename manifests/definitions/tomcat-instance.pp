@@ -43,6 +43,7 @@ Parameters:
 - *conf_mode*: can be used to change the permissions on
   /srv/tomcat/$name/conf/, because some webapps require the ability to write
   their own config files. Defaults to 2570 (writeable only by $group members).
+- *server_xml_file*: can be used to set a specific server.xml file
 - *webapp_mode*: can be used to change the permissions on
   /srv/tomcat/$name/webapps/. Defaults to 2770 (readable and writeable by
   $group members and tomcat himself, for auto-deploy).
@@ -55,7 +56,8 @@ Parameters:
 - *setenv*: optional array of environment variable definitions, which will be
   added to setenv.sh. It will still be possible to override these variables by
   editing setenv-local.sh.
-
+- *connector*: an array of tomcat::connector name (string) to include in server.xml
+- *executor*: an array of tomcat::executor name (string) to include in server.xml
 
 Requires:
 - one of the tomcat classes which installs tomcat binaries.
@@ -64,7 +66,7 @@ Requires:
 
 Example usage:
 
-  include tomcat::package::v6
+  include tomcat
   include tomcat::administration
 
   tomcat::instance { "foo":
@@ -84,7 +86,6 @@ Example usage:
     ],
   }
 
-
 */
 define tomcat::instance($ensure="present",
                         $owner="tomcat",
@@ -95,13 +96,19 @@ define tomcat::instance($ensure="present",
                         $ajp_port="8009",
                         $ajp_address=false,
                         $conf_mode="",
+                        $server_xml_file="",
                         $webapp_mode="",
                         $java_home="",
                         $sample=undef,
-                        $setenv=[]) {
+                        $setenv=[],
+                        $connector=[],
+                        $executor=[],
+                        $manage=false) {
 
+  include tomcat::params
+  
   $tomcat_name = $name
-  $basedir = "/srv/tomcat/${name}"
+  $basedir = "${tomcat::params::instance_basedir}/${name}"
 
   if $owner == "tomcat" {
     $dirmode  = $webapp_mode ? {
@@ -126,15 +133,45 @@ define tomcat::instance($ensure="present",
     }
   }
 
-  if defined(File["/srv/tomcat"]) {
-    debug "File[/srv/tomcat] already defined"
+  if $connector == [] and $server_xml_file == "" {
+    
+    $connectors = ["http-${http_port}","ajp-${ajp_port}"]
+    
+    tomcat::connector{"http-${http_port}":
+      ensure   => $ensure ? {
+        "absent" => absent,
+        default  => present,
+      },
+      instance => $name,
+      protocol => "HTTP/1.1",
+      port     => $http_port,
+      manage   => $manage,
+      address  => $http_address,
+    }
+
+    tomcat::connector{"ajp-${ajp_port}":
+      ensure   => $ensure ? {
+        "absent" => absent,
+        default  => present,
+      },
+      instance => $name,
+      protocol => "AJP/1.3",
+      port     => $ajp_port,
+      manage   => $manage,
+      address  => $ajp_address,
+    }
+
   } else {
-    file {"/srv/tomcat":
+    $connectors = $connector
+  }
+
+  if defined(File["${tomcat::params::instance_basedir}"]) {
+    debug "File[${tomcat::params::instance_basedir}] already defined"
+  } else {
+    file {"${tomcat::params::instance_basedir}":
       ensure => directory,
     }
   }
-
-  include tomcat::params
 
   if $tomcat::params::type == "package" and $lsbdistcodename == "Santiago" {
     # force catalina.sh to use the common library in CATALINA_HOME and not CATALINA_BASE
@@ -234,22 +271,41 @@ define tomcat::instance($ensure="present",
           before => Service["tomcat-${name}"];
 
         "${basedir}/conf/server.xml":
-          ensure => present,
-          owner  => $owner,
-          group  => $group,
-          mode   => $filemode,
-          content => template("tomcat/${serverdotxml}"),
-          replace => false,
-          before => Service["tomcat-${name}"];
+          ensure  => present,
+          owner   => $owner,
+          group   => $group,
+          mode    => $filemode,
+          source  => $server_xml_file? {
+            ""      => undef,
+            default => $server_xml_file,
+          },
+          content => $server_xml_file? {
+            ""      => template("tomcat/${serverdotxml}"),
+            default => undef,
+          },
+          before  => Service["tomcat-${name}"],
+          notify  => $manage? {
+            true    => Service["tomcat-${name}"],
+            default => undef,
+          }, 
+          require => $server_xml_file? {
+            ""      => undef,
+            default => Tomcat::Connector[$connectors],
+          },
+          replace => $manage;
 
         "${basedir}/conf/web.xml":
-          ensure => present,
-          owner  => $owner,
-          group  => $group,
-          mode   => $filemode,
+          ensure  => present,
+          owner   => $owner,
+          group   => $group,
+          mode    => $filemode,
           content => template("tomcat/web.xml.erb"),
-          replace => false,
-          before => Service["tomcat-${name}"];
+          before  => Service["tomcat-${name}"],
+          notify  => $manage? {
+            true    => Service["tomcat-${name}"],
+            default => undef,
+          },
+          replace => $manage;
 
         "${basedir}/README":
           ensure  => present,
@@ -373,7 +429,7 @@ define tomcat::instance($ensure="present",
       absent    => false,
     },
     require => [File["/etc/init.d/tomcat-${name}"], $servicerequire],
-    pattern => "-Dcatalina.base=/srv/tomcat/${name}",
+    pattern => "-Dcatalina.base=${tomcat::params::instance_basedir}/${name}",
   }
 
   # Logrotate
