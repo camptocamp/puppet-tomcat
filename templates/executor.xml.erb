@@ -1,0 +1,14 @@
+<% if manage -%>
+<!-- file managed by puppet -->
+<% else -%>
+<!-- file created (but not managed by puppet -->
+<% end -%>
+<Executor name="<%= name %>"
+<% if thread_priority -%>
+          threadPriority="<%= thread_priority %>"
+<% end -%>
+          daemon="<%= daemon %>"
+          maxThreads="<%= max_threads %>"
+          minSpareThreads="<%= min_spare_threads %>"
+          maxIdleTime="<%= max_idle_time %>" />
+
