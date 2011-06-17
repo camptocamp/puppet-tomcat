@@ -135,9 +135,9 @@ define tomcat::instance($ensure="present",
 
   if $connector == [] and $server_xml_file == "" {
     
-    $connectors = ["http-${http_port}","ajp-${ajp_port}"]
+    $connectors = ["http-${http_port}-${name}","ajp-${ajp_port}-${name}"]
     
-    tomcat::connector{"http-${http_port}":
+    tomcat::connector{"http-${http_port}-${name}":
       ensure   => $ensure ? {
         "absent" => absent,
         default  => present,
@@ -149,7 +149,7 @@ define tomcat::instance($ensure="present",
       address  => $http_address,
     }
 
-    tomcat::connector{"ajp-${ajp_port}":
+    tomcat::connector{"ajp-${ajp_port}-${name}":
       ensure   => $ensure ? {
         "absent" => absent,
         default  => present,
