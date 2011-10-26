@@ -147,6 +147,8 @@ define tomcat::instance($ensure="present",
       port     => $http_port,
       manage   => $manage,
       address  => $http_address,
+      group    => $group,
+      owner    => $owner
     }
 
     tomcat::connector{"ajp-${ajp_port}-${name}":
@@ -159,6 +161,8 @@ define tomcat::instance($ensure="present",
       port     => $ajp_port,
       manage   => $manage,
       address  => $ajp_address,
+      group    => $group,
+      owner    => $owner
     }
 
   } else {
