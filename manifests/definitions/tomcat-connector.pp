@@ -61,6 +61,7 @@ define tomcat::connector($ensure="present",
                          $redirect_port=8443,
                          $scheme=false,
                          $executor=false,
+                         $options=[],
                          $manage=false) {
 
   include tomcat::params
