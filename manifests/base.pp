@@ -7,7 +7,7 @@ directly.
 
 Class variables:
 - *$log4j_conffile*: location of an alternate log4j.properties file. Default is
-  puppet:///tomcat/conf/log4j.rolling.properties
+  puppet:///modules/tomcat/conf/log4j.rolling.properties
 
 */
 class tomcat::base {

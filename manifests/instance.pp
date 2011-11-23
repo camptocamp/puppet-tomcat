@@ -356,7 +356,7 @@ define tomcat::instance($ensure="present",
           owner   => "tomcat",
           group   => $group,
           mode    => 0460,
-          source  => "puppet:///tomcat/sample.war",
+          source  => "puppet:///modules/tomcat/sample.war",
           require => File["${basedir}/webapps"],
           before => Service["tomcat-${name}"],
         }
