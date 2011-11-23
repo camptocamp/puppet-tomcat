@@ -78,7 +78,7 @@ class tomcat::source inherits tomcat::base {
       # Fix https://issues.apache.org/bugzilla/show_bug.cgi?id=45585
       file {"${tomcat_home}/bin/catalina.sh":
         ensure  => present,
-        source  => "puppet:///tomcat/catalina.sh-6.0.18",
+        source  => "puppet:///modules/tomcat/catalina.sh-6.0.18",
         require => Common::Archive["apache-tomcat-${tomcat::params::version}"],
         mode => "755",
       }

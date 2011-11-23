@@ -47,7 +47,7 @@ class tomcat::logging {
     },
     source => $log4j_conffile ? {
       default => $log4j_conffile,
-      ""      => "puppet:///tomcat/conf/log4j.rolling.properties",
+      ""      => "puppet:///modules/tomcat/conf/log4j.rolling.properties",
     },
   }
 

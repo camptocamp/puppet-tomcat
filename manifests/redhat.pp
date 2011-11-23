@@ -59,7 +59,7 @@ class tomcat::redhat inherits tomcat::package {
         owner  => root,
         group  => root,
         mode   => 755,
-        source => "puppet:///tomcat/setclasspath.sh-6.0.24" ,
+        source => "puppet:///modules/tomcat/setclasspath.sh-6.0.24" ,
         require => [ Package["tomcat"], File["/usr/share/${tomcat}"] ],
       }
 
@@ -68,7 +68,7 @@ class tomcat::redhat inherits tomcat::package {
         owner   => root,
         group   => root,
         mode    => 755,
-        source  => "puppet:///tomcat/catalina.sh-6.0.24",
+        source  => "puppet:///modules/tomcat/catalina.sh-6.0.24",
         require => File["/usr/share/${tomcat}/bin/setclasspath.sh"],
       }
       
