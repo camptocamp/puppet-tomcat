@@ -80,11 +80,8 @@ define tomcat::connector($ensure="present",
     content => template("tomcat/connector.xml.erb"),
     replace => $manage,
     require => $executor ? {
-      false   => File["${tomcat::params::instance_basedir}/${instance}/conf"],
-      default => [
-        Tomcat::Executor[$executor],
-        File["${tomcat::params::instance_basedir}/${instance}/conf"],
-      ],
+      false   => undef,
+      default => Tomcat::Executor[$executor],
     },
   }
 
