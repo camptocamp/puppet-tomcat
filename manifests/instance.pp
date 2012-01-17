@@ -366,7 +366,12 @@ define tomcat::instance($ensure="present",
       file {$basedir:
         ensure  => absent,
         recurse => true,
-        force   => true,
+        force   => true;
+
+        "${basedir}/conf":
+        ensure  => absent,
+        recurse => true,
+        force   => true;
       }
     }
   }
