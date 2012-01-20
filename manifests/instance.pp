@@ -212,6 +212,9 @@ define tomcat::instance($ensure="present",
     $catalinahome = "/opt/apache-tomcat"
   }
 
+  # Define a version string for use in templates
+  $tomcat_version_str = "${tomcat::params::maj_version}_${tomcat::params::type}"
+
   # Define default JAVA_HOME used in tomcat.init.erb
   if $java_home == "" {
     case $operatingsystem {
