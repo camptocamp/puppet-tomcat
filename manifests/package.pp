@@ -13,9 +13,10 @@ class tomcat::package inherits tomcat::base {
   }
 
   service { "tomcat":
-    ensure  => stopped,
-    enable  => false,
-    require => Package["tomcat"],
+    ensure    => stopped,
+    enable    => false,
+    hasstatus => false,
+    require   => Package["tomcat"],
   }
 
   file { "/usr/share/tomcat":
