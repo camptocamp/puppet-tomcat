@@ -30,7 +30,7 @@ start() {
 
   # Change directory to prevent path problems
   cd <%= basedir %>
-<% if source_basedir_setenv_in_init -%>
+<% if tomcat_version_str == '5.5_package' -%>
   # Source JVM parameters
   test -r <%= basedir %>/bin/setenv.sh && . <%= basedir %>/bin/setenv.sh
 <% end -%>

@@ -197,12 +197,6 @@ define tomcat::instance($ensure="present",
       Debian => "/usr/share/tomcat5.5",
       Ubuntu => "/usr/share/tomcat5.5",
     }
-    # catalina.sh (dtomcat5) provided in tomcat5 package does not source
-    # $CATALINA_BASE/bin/setenv.sh so we need to do it in the init script
-    $source_basedir_setenv_in_init = true
-  }
-  else {
-    $source_basedir_setenv_in_init = false
   }
 
   if $tomcat::params::maj_version == "6" and $tomcat::params::type == "package" {
@@ -217,6 +211,9 @@ define tomcat::instance($ensure="present",
   if $tomcat::params::type == "source" {
     $catalinahome = "/opt/apache-tomcat"
   }
+
+  # Define a version string for use in templates
+  $tomcat_version_str = "${tomcat::params::maj_version}-${tomcat::params::type}"
 
   # Define default JAVA_HOME used in tomcat.init.erb
   if $java_home == "" {
