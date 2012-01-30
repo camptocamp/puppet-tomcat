@@ -30,6 +30,10 @@ start() {
 
   # Change directory to prevent path problems
   cd <%= basedir %>
+<% if tomcat_version_str == '5.5_package' -%>
+  # Source JVM parameters
+  test -r <%= basedir %>/bin/setenv.sh && . <%= basedir %>/bin/setenv.sh
+<% end -%>
 
   # Remove pidfile if still around
   test -f $CATALINA_PID && rm -f $CATALINA_PID
