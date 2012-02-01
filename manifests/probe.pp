@@ -45,7 +45,7 @@ define tomcat::probe($ensure='present', $version='2.0.4') {
     '2.0.4' => '2207bbc4a45af7e3cff2dfbd9377848f1b807387',
   }
 
-  common::archive { "psi-probe-${version}":
+  archive { "psi-probe-${version}":
     url           => $url,
     digest_string => $sha1sum,
     digest_type   => "sha1",
@@ -59,7 +59,7 @@ define tomcat::probe($ensure='present', $version='2.0.4') {
   file { "/srv/tomcat/${name}/webapps/probe.war":
     ensure  => $ensure,
     source  => "file:///usr/src/psi-probe-${version}/probe.war",
-    require => Common::Archive["psi-probe-${version}"],
+    require => Archive["psi-probe-${version}"],
     notify  => Service["tomcat-${name}"],
   }
 }
