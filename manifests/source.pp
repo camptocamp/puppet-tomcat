@@ -10,7 +10,7 @@ Class variables:
 
 Requires:
 - java to be previously installed
-- common::archive definition (from puppet camptocamp/common module)
+- archive definition (from puppet camptocamp/puppet-archive module)
 - Package["curl"]
 
 Tested on:
@@ -53,7 +53,7 @@ class tomcat::source inherits tomcat::base {
   
   $tomcaturl = "${baseurl}/apache-tomcat-${tomcat::params::version}.tar.gz"
 
-  common::archive{ "apache-tomcat-${tomcat::params::version}":
+  archive{ "apache-tomcat-${tomcat::params::version}":
     url         => $tomcaturl,
     digest_url  => "${tomcaturl}.md5",
     digest_type => "md5",
@@ -63,13 +63,13 @@ class tomcat::source inherits tomcat::base {
   file {"/opt/apache-tomcat":
     ensure  => link,
     target  => $tomcat_home,
-    require => Common::Archive["apache-tomcat-${tomcat::params::version}"],
+    require => Archive["apache-tomcat-${tomcat::params::version}"],
     before  => [File["commons-logging.jar"], File["log4j.jar"], File["log4j.properties"]],
   }
 
   file { $tomcat_home:
     ensure  => directory,
-    require => Common::Archive["apache-tomcat-${tomcat::params::version}"],
+    require => Archive["apache-tomcat-${tomcat::params::version}"],
   }
 
     # Workarounds
@@ -79,7 +79,7 @@ class tomcat::source inherits tomcat::base {
       file {"${tomcat_home}/bin/catalina.sh":
         ensure  => present,
         source  => "puppet:///modules/tomcat/catalina.sh-6.0.18",
-        require => Common::Archive["apache-tomcat-${tomcat::params::version}"],
+        require => Archive["apache-tomcat-${tomcat::params::version}"],
         mode => "755",
       }
     }

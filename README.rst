@@ -47,9 +47,9 @@ The Apache puppet module available at
 http://github.com/camptocamp/puppet-apache is required if you want to make
 use of Apache integration.
 
-The Common puppet module available at
-http://github.com/camptocamp/puppet-common is required if you want to install
-tomcat from a compressed archive (it uses common::archive).
+The Archive puppet module available at
+http://github.com/camptocamp/puppet-archive is required if you want to install
+tomcat from a compressed archive (it uses archive).
 
 Defaults
 --------
