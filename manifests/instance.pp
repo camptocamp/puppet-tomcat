@@ -44,6 +44,7 @@ Parameters:
   /srv/tomcat/$name/conf/, because some webapps require the ability to write
   their own config files. Defaults to 2570 (writeable only by $group members).
 - *server_xml_file*: can be used to set a specific server.xml file
+- *web_xml_file*: can be used to set a specific web.xml file
 - *webapp_mode*: can be used to change the permissions on
   /srv/tomcat/$name/webapps/. Defaults to 2770 (readable and writeable by
   $group members and tomcat himself, for auto-deploy).
@@ -97,6 +98,7 @@ define tomcat::instance($ensure="present",
                         $ajp_address=false,
                         $conf_mode="",
                         $server_xml_file="",
+                        $web_xml_file="",
                         $webapp_mode="",
                         $java_home="",
                         $sample=undef,
@@ -306,7 +308,14 @@ define tomcat::instance($ensure="present",
           owner   => $owner,
           group   => $group,
           mode    => $filemode,
-          content => template("tomcat/web.xml.erb"),
+          source  => $web_xml_file? {
+            ""      => undef,
+            default => $web_xml_file,
+          },
+          content => $web_xml_file? {
+            ""      => template("tomcat/web.xml.erb"),
+            default => undef,
+          },
           before  => Service["tomcat-${name}"],
           notify  => $manage? {
             true    => Service["tomcat-${name}"],
