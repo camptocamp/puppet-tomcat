@@ -108,6 +108,7 @@ define tomcat::instance($ensure="present",
                         $manage=false) {
 
   include tomcat::params
+  include tomcat::source
   
   $tomcat_name = $name
   $basedir = "${tomcat::params::instance_basedir}/${name}"
