@@ -74,7 +74,15 @@ class tomcat::redhat inherits tomcat::package {
       
       Package["tomcat"] { name => $tomcat }
 
+      User[ 'tomcat' ] {
+        shell => $tomcat_shell? {
+          ''      => '/sbin/nologin',
+          default => $tomcat_shell,
+        }
+      }
+
     }
+
   }
 
   User["tomcat"] { 
