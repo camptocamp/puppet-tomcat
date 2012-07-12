@@ -15,9 +15,9 @@ export CATALINA_PID=<%= basedir %>/temp/tomcat.pid
 
 # For SELinux we need to use 'runuser' not 'su'
 if [ -x "/sbin/runuser" ]; then
-    SU="/sbin/runuser"
+    SU="/sbin/runuser -s /bin/sh"
 else
-    SU="su"
+    SU="su -s /bin/sh"
 fi
 
 start() {
