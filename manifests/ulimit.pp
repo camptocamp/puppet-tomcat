@@ -30,4 +30,23 @@ define tomcat::ulimit ($value) {
     before  => User["tomcat"],
   }
 
+  if $operatingsystem =~ /Debian|Ubuntu/ {
+
+    # pam_limits.so is not enabled by default on Debian/Ubuntu
+    if !defined( Augeas ["Enable pam limits for su"]) {
+      augeas {"Enable pam limits for su":
+        context => "/files/etc/pam.d/su",
+        changes => [
+          # Purge existing entries
+          'rm *[module="pam_limits.so"]',
+          'ins 01 before include[1]',
+          'set 01/type session',
+          'set 01/control required',
+          'set 01/module pam_limits.so',
+        ],
+      }
+    }
+
+  }
+
 }
