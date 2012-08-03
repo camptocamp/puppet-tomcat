@@ -17,7 +17,7 @@ Usage:
 class tomcat::debian inherits tomcat::package {
 
   # avoid partial configuration on untested-debian-releases
-  if $lsbdistcodename !~ /^(lenny|squeeze)$/ {
+  if $lsbdistcodename !~ /^(lenny|squeeze|precise)$/ {
     fail "class ${name} not tested on ${operatingsystem}/${lsbdistcodename}"
   }
 
