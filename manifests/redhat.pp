@@ -18,7 +18,7 @@ Usage:
 class tomcat::redhat inherits tomcat::package {
 
   # avoid partial configuration on untested-redhat-release
-  if $lsbdistcodename !~ /^(Tikanga|Santiago)$/ {
+  if $lsbdistcodename !~ /^(Tikanga|Santiago|Carbon)$/ {
     fail "class ${name} not tested on ${operatingsystem}/${lsbdistcodename}"
   }
 
@@ -50,7 +50,7 @@ class tomcat::redhat inherits tomcat::package {
 
     }
 
-    Santiago: {
+    Santiago,Carbon: {
       $tomcat = "tomcat6"
 
       # replaced the /usr/sbin/tomcat6 included script with setclasspath.sh and catalina.sh
@@ -75,6 +75,7 @@ class tomcat::redhat inherits tomcat::package {
       Package["tomcat"] { name => $tomcat }
 
     }
+    default: { fail "$lsbdistcodename not defined." }
   }
 
   User["tomcat"] { 

@@ -179,7 +179,7 @@ define tomcat::instance($ensure="present",
     }
   }
 
-  if $tomcat::params::type == "package" and $lsbdistcodename == "Santiago" {
+  if $tomcat::params::type == "package" and ($lsbdistcodename == "Santiago" or $lsbdistcodename == "Carbon") {
     # force catalina.sh to use the common library in CATALINA_HOME and not CATALINA_BASE
     $classpath = "/usr/share/tomcat6/bin/tomcat-juli.jar" 
   }
@@ -204,6 +204,7 @@ define tomcat::instance($ensure="present",
   if $tomcat::params::maj_version == "6" and $tomcat::params::type == "package" {
     $catalinahome = $operatingsystem ? {
       RedHat => "/usr/share/tomcat6",
+      SLC => "/usr/share/tomcat6",
       Debian => "/usr/share/tomcat6",
       Ubuntu => "/usr/share/tomcat6",
     }
@@ -222,6 +223,9 @@ define tomcat::instance($ensure="present",
     case $operatingsystem {
       RedHat: {
         $javahome = "/usr/lib/jvm/java"
+      }
+      SLC: {
+	$javahome = "/usr/lib/jvm/jre"
       }
       Debian,Ubuntu: {
         $javahome = "/usr"

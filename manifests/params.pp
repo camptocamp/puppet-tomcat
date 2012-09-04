@@ -42,6 +42,9 @@ class tomcat::params {
         "Tikanga"  => "5.5",
         "Santiago" => "6",
       },
+      "SLC" => $lsbdistcodename ? {
+	"Carbon" => "6",
+      },
       "Ubuntu" => $lsbdistcodename ? {
         "precise" => "6",
       }

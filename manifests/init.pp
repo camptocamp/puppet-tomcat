@@ -11,7 +11,7 @@ Example usage:
 */
 class tomcat {
   case $operatingsystem {
-    RedHat       : { include tomcat::redhat }
+    RedHat,SLC       : { include tomcat::redhat }
     Debian,Ubuntu: { include tomcat::debian }
     default      : { fail "Unsupported operatingsystem ${operatingsystem}" }
   }
