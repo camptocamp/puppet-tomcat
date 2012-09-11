@@ -220,15 +220,18 @@ define tomcat::instance($ensure="present",
 
   # Define default JAVA_HOME used in tomcat.init.erb
   if $java_home == '' {
-    case $::osfamily {
+    case $::operatingsystem {
       RedHat: {
         $javahome = '/usr/lib/jvm/java'
       }
-      Debian: {
+      CentOS: {
+        $javahome = '/etc/alternatives/jre'
+      }
+      Debian,Ubuntu: {
         $javahome = '/usr'
       }
       default: {
-        err("java_home not defined for OS family '${::osfamily}'.")
+        err("java_home not defined for operatingsystem '${::operatingsystem}'.")
       }
     }
   } else {
