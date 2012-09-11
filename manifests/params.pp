@@ -39,9 +39,9 @@ class tomcat::params {
         /lenny|squeeze/ => '6',
         'precise'         => '6',
       },
-      'RedHat' => $::lsbmajdistrelease ? {
-        '5' => '5.5',
-        '6' => '6',
+      'RedHat' => $::operatingsystemrelease ? {
+        /^5.*/ => "5.5",
+        /^6.*/ => "6",
       },
     }
 
