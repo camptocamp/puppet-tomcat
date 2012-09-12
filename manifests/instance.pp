@@ -105,7 +105,10 @@ define tomcat::instance($ensure="present",
                         $setenv=[],
                         $connector=[],
                         $executor=[],
-                        $manage=false) {
+                        $manage=false,
+                        $seluser=undef,
+                        $selrole=undef,
+                        $seltype=undef) {
 
   include tomcat::params
   
@@ -421,6 +424,18 @@ define tomcat::instance($ensure="present",
     owner   => "root",
     mode    => "755",
     require => File["${basedir}/bin/setenv.sh"],
+    seluser => $seluser ? {
+            ''      => 'system_u',
+            default => $seluser,
+          },
+    selrole => $selrole ? {
+            ''      => 'object_r',
+            default => $selrole,
+          },
+    seltype => $seltype ? {
+            ''      => 'initrc_exec_t',
+            default => $seltype,
+          },
   }
 
   if $tomcat::params::type == "package" {
