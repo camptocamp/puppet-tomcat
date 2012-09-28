@@ -28,7 +28,7 @@ class tomcat::source inherits tomcat::base {
   include tomcat::params
 
   case $operatingsystem {
-    RedHat: {
+    RedHat,CentOS: {
       package { ["log4j", "jakarta-commons-logging"]: ensure => present }
     }
     Debian,Ubuntu: {
