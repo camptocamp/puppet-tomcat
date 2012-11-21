@@ -174,17 +174,17 @@ define tomcat::instance($ensure="present",
     $connectors = $connector
   }
 
-  if defined(File["${tomcat::params::instance_basedir}"]) {
+  if defined(File[$tomcat::params::instance_basedir]) {
     debug "File[${tomcat::params::instance_basedir}] already defined"
   } else {
-    file {"${tomcat::params::instance_basedir}":
+    file {$tomcat::params::instance_basedir:
       ensure => directory,
     }
   }
 
   if $tomcat::params::type == 'package' and $::osfamily == 'RedHat' and $::lsbmajdistrelease == '6' {
     # force catalina.sh to use the common library in CATALINA_HOME and not CATALINA_BASE
-    $classpath = '/usr/share/tomcat6/bin/tomcat-juli.jar' 
+    $classpath = '/usr/share/tomcat6/bin/tomcat-juli.jar'
   }
 
   # default server.xml is slightly different between tomcat5.5 and tomcat6
@@ -197,18 +197,16 @@ define tomcat::instance($ensure="present",
   }
 
   if $tomcat::params::maj_version == '5.5' and $tomcat::params::type == 'package' {
-    $catalinahome = $operatingsystem ? {
+    $catalinahome = $::osfamily ? {
       RedHat => '/usr/share/tomcat5',
       Debian => '/usr/share/tomcat5.5',
-      Ubuntu => '/usr/share/tomcat5.5',
     }
   }
 
   if $tomcat::params::maj_version == '6' and $tomcat::params::type == 'package' {
-    $catalinahome = $operatingsystem ? {
-      /RedHat|CentOS/ => '/usr/share/tomcat6',
-      Debian          => '/usr/share/tomcat6',
-      Ubuntu          => '/usr/share/tomcat6',
+    $catalinahome = $::osfamily ? {
+      RedHat => '/usr/share/tomcat6',
+      Debian => '/usr/share/tomcat6',
     }
   }
 
@@ -222,15 +220,15 @@ define tomcat::instance($ensure="present",
 
   # Define default JAVA_HOME used in tomcat.init.erb
   if $java_home == '' {
-    case $operatingsystem {
-      RedHat,CentOS: {
+    case $::osfamily {
+      RedHat: {
         $javahome = '/usr/lib/jvm/java'
       }
-      Debian,Ubuntu: {
+      Debian: {
         $javahome = '/usr'
       }
       default: {
-        err("java_home not defined for '${operatingsystem}'.")
+        err("java_home not defined for OS family '${::osfamily}'.")
       }
     }
   } else {
@@ -242,24 +240,24 @@ define tomcat::instance($ensure="present",
     present,installed,running,stopped: {
       file {
         # Nobody usually write there
-        "${basedir}":
+        $basedir:
           ensure => directory,
           owner  => $owner,
           group  => $group,
-          mode   => 0555,
+          mode   => '0555',
           before => Service["tomcat-${name}"],
           require => $group ? {
             'adm'   => undef,
             default => Group[$group],
           };
-    
+
         "${basedir}/bin":
           ensure => directory,
           owner  => 'root',
           group  => $group,
           mode   => 755,
           before => Service["tomcat-${name}"];
-    
+
         # Developpers usually write there
         "${basedir}/conf":
           ensure => directory,
@@ -299,7 +297,7 @@ define tomcat::instance($ensure="present",
           notify  => $manage? {
             true    => Service["tomcat-${name}"],
             default => undef,
-          }, 
+          },
           require => $server_xml_file? {
             ''      => undef,
             default => Tomcat::Connector[$connectors],

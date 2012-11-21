@@ -34,17 +34,15 @@ class tomcat::params {
   } else {
     $type = 'package'
     if $tomcat_version { notify {"\$tomcat_version is not useful when using distribution package!":} }
-    $maj_version = $::operatingsystem ? {
+    $maj_version = $::osfamily ? {
       'Debian' => $::lsbdistcodename ? {
-        'lenny','squeeze' => '6',
+        /lenny|squeeze/ => '6',
+        'precise'         => '6',
       },
-      'RedHat','CentOS' => $::lsbmajdistrelease ? {
+      'RedHat' => $::lsbmajdistrelease ? {
         '5' => '5.5',
         '6' => '6',
       },
-      'Ubuntu' => $::lsbdistcodename ? {
-        'precise' => '6',
-      }
     }
 
     # it would be better to set the distribution tomcat-version!
