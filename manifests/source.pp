@@ -27,18 +27,21 @@ class tomcat::source inherits tomcat::base {
 
   include tomcat::params
 
-  case $operatingsystem {
+  case $::osfamily {
     RedHat: {
       package { ["log4j", "jakarta-commons-logging"]: ensure => present }
     }
-    Debian,Ubuntu: {
+    Debian: {
       package { ["liblog4j1.2-java", "libcommons-logging-java"]: ensure => present }
+    }
+    default: {
+      fail("Unsupported OS family ${::osfamily}")
     }
   }
 
   $tomcat_home = "/opt/apache-tomcat-${tomcat::params::version}"
 
-  if $tomcat::params::maj_version == "6" {
+  if $tomcat::params::maj_version == '6' {
     # install extra tomcat juli adapters, used to configure logging.
     include tomcat::juli
   }
