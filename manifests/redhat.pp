@@ -18,8 +18,8 @@ Usage:
 class tomcat::redhat inherits tomcat::package {
 
   # avoid partial configuration on untested-redhat-release
-  if $lsbdistcodename !~ /^(Tikanga|Santiago)$/ {
-    fail "class ${name} not tested on ${operatingsystem}/${lsbdistcodename}"
+  if $::operatingsystemrelease !~ /^(5|6).*/ {
+    fail "class ${name} not tested on ${operatingsystem}/${operatingsystemrelease}"
   }
 
   package { [
@@ -28,9 +28,9 @@ class tomcat::redhat inherits tomcat::package {
     ]: ensure => present 
   }
 
-  case $lsbdistcodename {
+  case $::operatingsystemrelease {
 
-    Tikanga: {
+    /^5.*/: {
       $tomcat = "tomcat5"
       $tomcat_home = "/var/lib/tomcat5"
 
@@ -50,7 +50,7 @@ class tomcat::redhat inherits tomcat::package {
 
     }
 
-    Santiago: {
+    /^6.*/: {
       $tomcat = "tomcat6"
 
       # replaced the /usr/sbin/tomcat6 included script with setclasspath.sh and catalina.sh
