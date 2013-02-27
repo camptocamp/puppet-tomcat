@@ -166,6 +166,7 @@ tomcat-instance:
       protocol => "HTTP/1.1",
       port     => 8080,
       manage   => true,
+      options  => ['maxThreads="150", 'maxHttpHeaderSize="8192"'],
     }
 
     tomcat::connector{"ajp-8081":
