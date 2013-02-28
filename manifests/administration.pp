@@ -17,6 +17,7 @@ class tomcat::administration {
 
   group { "tomcat-admin":
     ensure => present,
+    system => true,
   }
 
   sudo::directive { "tomcat-administration":
