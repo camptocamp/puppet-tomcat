@@ -43,6 +43,9 @@ Parameters:
 - *conf_mode*: can be used to change the permissions on
   /srv/tomcat/$name/conf/, because some webapps require the ability to write
   their own config files. Defaults to 2570 (writeable only by $group members).
+- *logs_mode*: can be used to change the permissions on
+  /srv/tomcat/$name/logs/, because you may need to make the logs readable
+  by other users / everyone. Defaults to 2770.
 - *server_xml_file*: can be used to set a specific server.xml file
 - *web_xml_file*: can be used to set a specific web.xml file
 - *webapp_mode*: can be used to change the permissions on
@@ -97,6 +100,7 @@ define tomcat::instance($ensure="present",
                         $ajp_port="8009",
                         $ajp_address=false,
                         $conf_mode="",
+                        $logs_mode="",
                         $server_xml_file="",
                         $web_xml_file="",
                         $webapp_mode="",
@@ -125,6 +129,10 @@ define tomcat::instance($ensure="present",
       ''      => '2570',
       default => $conf_mode
     }
+    $logsmode = $logs_mode ? {
+      ''      => '2770',
+      default => $logs_mode
+    }
 
   } else {
     $dirmode  = $webapp_mode ? {
@@ -135,6 +143,10 @@ define tomcat::instance($ensure="present",
     $confmode = $conf_mode ? {
       ''      => $dirmode,
       default => $conf_mode
+    }
+    $logsmode = $logs_mode ? {
+      ''      => '2770',
+      default => $logs_mode
     }
   }
 
@@ -346,7 +358,7 @@ define tomcat::instance($ensure="present",
           ensure => directory,
           owner  => 'tomcat',
           group  => $group,
-          mode   => 2770,
+          mode   => $logsmode,
           before => Service["tomcat-${name}"];
         "${basedir}/work":
           ensure => directory,
