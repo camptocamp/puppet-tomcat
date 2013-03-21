@@ -21,7 +21,8 @@ class tomcat::base {
     groups => $tomcat_groups? {
       ''      => undef,
       default => $tomcat_groups,
-    }
+    },
+    system => true,
   }
 
   file { "/var/log/tomcat":
