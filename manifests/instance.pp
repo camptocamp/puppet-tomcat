@@ -240,7 +240,7 @@ define tomcat::instance($ensure="present",
         $javahome = '/etc/alternatives/jre'
       }
       SLC: {
-	$javahome = "/usr/lib/jvm/jre"
+        $javahome = "/usr/lib/jvm/jre"
       }
       Debian,Ubuntu: {
         $javahome = '/usr'

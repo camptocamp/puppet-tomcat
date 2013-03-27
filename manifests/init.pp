@@ -11,7 +11,7 @@ Example usage:
 */
 class tomcat {
   case $::osfamily {
-    RedHat,SLC: { include tomcat::redhat }
+    RedHat: { include tomcat::redhat }
     Debian: { include tomcat::debian }
     default: { fail "Unsupported OS family ${::osfamily}" }
   }
