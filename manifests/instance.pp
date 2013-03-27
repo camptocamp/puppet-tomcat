@@ -239,6 +239,9 @@ define tomcat::instance($ensure="present",
       CentOS: {
         $javahome = '/etc/alternatives/jre'
       }
+      SLC: {
+        $javahome = "/usr/lib/jvm/jre"
+      }
       Debian,Ubuntu: {
         $javahome = '/usr'
       }
