@@ -10,11 +10,15 @@ class tomcat(
 ) {
   case $::osfamily {
     RedHat: {
-      validate_re($jdk_pkg, [undef, 'java-1.6.0-openjdk', 'java-1.7.0-openjdk'])
+      if ($jdk_pkg != undef) {
+        validate_re($jdk_pkg, ['java-1.6.0-openjdk', 'java-1.7.0-openjdk'])
+      }
       include tomcat::redhat
     }
     Debian: {
-      validate_re($jdk_pkg, [undef, 'openjdk-6-jdk', 'openjdk-7-jdk'])
+      if ($jdk_pkg != undef) {
+        validate_re($jdk_pkg, ['openjdk-6-jdk', 'openjdk-7-jdk'])
+      }
       include tomcat::debian
     }
     default: { fail "Unsupported OS family ${::osfamily}" }
