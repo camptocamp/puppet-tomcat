@@ -75,6 +75,7 @@ class tomcat::redhat inherits tomcat::package {
       Package["tomcat"] { name => $tomcat }
 
     }
+    default: { fail "${::lsbdistcodename} not defined." }
   }
 
   User["tomcat"] { 
