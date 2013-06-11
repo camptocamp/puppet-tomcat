@@ -53,21 +53,23 @@ Example usage:
   }
 
 */
-define tomcat::executor($ensure="present",
-                        $instance,
-                        $owner="tomcat",
-                        $group="adm",
-                        $thread_priority=false,
-                        $daemon=true,
-                        $name_prefix=false,
-                        $max_threads=200,
-                        $min_spare_threads=25,
-                        $max_idle_time=60000,
-                        $manage=false) {
+define tomcat::executor(
+  $instance,
+  $ensure            = 'present',
+  $owner             = 'tomcat',
+  $group             = 'adm',
+  $thread_priority   = false,
+  $daemon            = true,
+  $name_prefix       = false,
+  $max_threads       = 200,
+  $min_spare_threads = 25,
+  $max_idle_time     = 60000,
+  $manage            = false,
+  ) {
 
   include tomcat::params
 
-  if $owner == "tomcat" {
+  if $owner == 'tomcat' {
     $filemode = 0460
   } else {
     $filemode = 0664
@@ -78,7 +80,7 @@ define tomcat::executor($ensure="present",
     owner   => $owner,
     group   => $group,
     mode    => $filemode,
-    content => template("tomcat/executor.xml.erb"),
+    content => template('tomcat/executor.xml.erb'),
     replace => $manage,
     require => File["${tomcat::params::instance_basedir}/${instance}/conf"],
   }

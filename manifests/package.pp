@@ -8,25 +8,25 @@ necessary to include it directly.
 */
 class tomcat::package inherits tomcat::base {
 
-  package { "tomcat":
+  package { 'tomcat':
     ensure => present,
   }
 
-  service { "tomcat":
+  service { 'tomcat':
     ensure    => stopped,
     enable    => false,
     hasstatus => false,
-    require   => Package["tomcat"],
+    require   => Package['tomcat'],
   }
 
-  file { "/usr/share/tomcat":
+  file { '/usr/share/tomcat':
     ensure => directory,
   }
 
   # prevent default init-script from being accidentaly used
-  file { "/etc/init.d/tomcat":
-    mode    => 0644,
-    require => [Service["tomcat"], Package["tomcat"]],
+  file { '/etc/init.d/tomcat':
+    mode    => '0644',
+    require => [Service['tomcat'], Package['tomcat']],
   }
 
 }
