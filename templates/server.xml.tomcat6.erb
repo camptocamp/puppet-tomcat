@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
-<% if not connectors.empty? -%>
+<% if not @connectors.empty? -%>
 <!DOCTYPE server-xml [
-<% if not executor.empty? -%>
-<% executor.each do |exe| -%>
-  <!ENTITY executor-<%= exe %> SYSTEM "executor-<%= exe %>.xml">
+<% if not @executor.empty? -%>
+<% @executor.each do |exe| -%>
+  <!ENTITY executor-<%= @exe %> SYSTEM "executor-<%= @exe %>.xml">
 <% end -%>
 <% end -%>
-<% connectors.each do |conn| -%>
-  <!ENTITY connector-<%= conn %> SYSTEM "connector-<%= conn %>.xml">
+<% @connectors.each do |conn| -%>
+  <!ENTITY connector-<%= @conn %> SYSTEM "connector-<%= @conn %>.xml">
 <% end -%>
 ]>
 <% end -%>
-<% if manage -%>
+<% if @manage -%>
 <!-- file managed by puppet -->
 <% else -%>
 <!-- file created (but not managed by puppet -->
@@ -36,7 +36,7 @@
      define subcomponents such as "Valves" at this level.
      Documentation at /docs/config/server.html
  -->
-<Server port="<%= server_port %>" shutdown="SHUTDOWN">
+<Server port="<%= @server_port %>" shutdown="SHUTDOWN">
 
   <!--APR library loader. Documentation at /docs/apr.html -->
   <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
@@ -67,18 +67,18 @@
    -->
   <Service name="Catalina">
     
-<% if not executor.empty? -%>
-<% executor.each do |exe| -%>
+<% if not @executor.empty? -%>
+<% @executor.each do |exe| -%>
     <!-- See conf/executor-<%= exe %>.xml for this executor's config. -->
-    &executor-<%= exe -%>;
+    &executor-<%= @exe -%>;
 
 <% end -%>
 <% end -%>
 
-<% if not connectors.empty? -%>
-<% connectors.each do |conn| -%>
+<% if not @connectors.empty? -%>
+<% @connectors.each do |conn| -%>
     <!-- See conf/connector-<%= conn %>.xml for this connector's config. -->
-    &connector-<%= conn %>;
+    &connector-<%= @conn %>;
 
 <% end -%>
 <% end -%>

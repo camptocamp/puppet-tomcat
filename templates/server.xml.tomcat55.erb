@@ -12,7 +12,7 @@
      define subcomponents such as "Valves" or "Loggers" at this level.
  -->
 
-<Server port="<%= server_port %>" shutdown="SHUTDOWN">
+<Server port="<%= @server_port %>" shutdown="SHUTDOWN">
 
   <!-- Comment these entries out to disable JMX MBeans support used for the 
        administration web application -->
@@ -76,10 +76,10 @@
     -->
 
     <!-- Define a non-SSL HTTP/1.1 Connector on port 8080 -->
-    <% if http_port %>
-    <Connector port="<%= http_port %>" protocol="HTTP/1.1"
-               <% if http_address %>
-                  address="<%= http_address %>"
+    <% if @http_port %>
+    <Connector port="<%= @http_port %>" protocol="HTTP/1.1"
+               <% if @http_address %>
+                  address="<%= @http_address %>"
                <% end %>
                maxHttpHeaderSize="8192"
                maxThreads="150" minSpareThreads="25" maxSpareThreads="75"
@@ -107,10 +107,10 @@
     -->
 
     <!-- Define an AJP 1.3 Connector on port 8009 -->
-    <% if ajp_port %>
-    <Connector port="<%= ajp_port %>"
-               <% if ajp_address %>
-                  address="<%= ajp_address %>"
+    <% if @ajp_port %>
+    <Connector port="<%= @ajp_port %>"
+               <% if @ajp_address %>
+                  address="<%= @ajp_address %>"
                <% end %>
                enableLookups="false" redirectPort="8443" protocol="AJP/1.3" />
     <% end %>
