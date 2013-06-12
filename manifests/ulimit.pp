@@ -19,7 +19,7 @@ Example usage:
 define tomcat::ulimit ($value) {
 
   augeas { "set tomcat $name ulimit":
-    context => "/files/etc/security/limits.conf/",
+    context => '/files/etc/security/limits.conf/',
     changes => [
       "set \"domain[last()]\" tomcat",
       "set \"domain[.='tomcat']/type\" -",

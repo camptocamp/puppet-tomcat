@@ -8,10 +8,10 @@
 
 SHUTDOWN_WAIT=30
 
-export JAVA_HOME=<%= javahome %>
-export CATALINA_HOME=<%= catalinahome %>
-export CATALINA_BASE=<%= basedir %>
-export CATALINA_PID=<%= basedir %>/temp/tomcat.pid
+export JAVA_HOME=<%= @javahome %>
+export CATALINA_HOME=<%= @catalinahome %>
+export CATALINA_BASE=<%= @basedir %>
+export CATALINA_PID=<%= @basedir %>/temp/tomcat.pid
 
 # For SELinux we need to use 'runuser' not 'su'
 if [ -x "/sbin/runuser" ]; then
@@ -24,15 +24,15 @@ start() {
   isrunning
 
   if [ "$?" = 0 ]; then
-    echo "tomcat-<%= tomcat_name %> already running"
+    echo "tomcat-<%= @tomcat_name %> already running"
     return 0
   fi
 
   # Change directory to prevent path problems
-  cd <%= basedir %>
-<% if tomcat_version_str == '5.5_package' -%>
+  cd <%= @basedir %>
+<% if @tomcat_version_str == '5.5_package' -%>
   # Source JVM parameters
-  test -r <%= basedir %>/bin/setenv.sh && . <%= basedir %>/bin/setenv.sh
+  test -r <%= @basedir %>/bin/setenv.sh && . <%= @basedir %>/bin/setenv.sh
 <% end -%>
 
   # Remove pidfile if still around
@@ -45,12 +45,12 @@ stop() {
   isrunning
 
   if [ "$?" = 1 ]; then
-    echo "tomcat-<%= tomcat_name %> already stopped"
+    echo "tomcat-<%= @tomcat_name %> already stopped"
     rm -f $CATALINA_PID # remove pidfile if still around
     return 0
   fi
 
-  echo -n "Waiting for tomcat-<%= tomcat_name %> to exit (${SHUTDOWN_WAIT} sec.): "
+  echo -n "Waiting for tomcat-<%= @tomcat_name %> to exit (${SHUTDOWN_WAIT} sec.): "
 
   count=0
   until [ "$pid" = "" ] || [ $count -gt $SHUTDOWN_WAIT ]; do
@@ -65,7 +65,7 @@ stop() {
   echo ""
 
   if [ "$count" -gt "$SHUTDOWN_WAIT" ]; then
-    echo "Forcing tomcat-<%= tomcat_name %> to stop"
+    echo "Forcing tomcat-<%= @tomcat_name %> to stop"
     /bin/kill -9 $pid && sleep 5
   fi
 
@@ -79,7 +79,7 @@ findpid() {
 
   # validate output of pgrep
   if ! [ "$pid" = "" ] && ! [ "$pid" -gt 0 ]; then
-    log_failure_msg "Unable to determine if tomcat-<%= tomcat_name %> is running"
+    log_failure_msg "Unable to determine if tomcat-<%= @tomcat_name %> is running"
     exit 1
   fi
 }
@@ -100,9 +100,9 @@ case "$1" in
     RETVAL=$?
 
     if [ "$RETVAL" = 0 ]; then
-      log_success_msg "Started tomcat-<%= tomcat_name %>"
+      log_success_msg "Started tomcat-<%= @tomcat_name %>"
     else
-      log_failure_msg "Not able to start tomcat-<%= tomcat_name %>"
+      log_failure_msg "Not able to start tomcat-<%= @tomcat_name %>"
     fi
     ;;
 
@@ -111,9 +111,9 @@ case "$1" in
     RETVAL=$?
 
     if [ "$RETVAL" = 0 ]; then
-      log_success_msg "Stopped tomcat-<%= tomcat_name %>"
+      log_success_msg "Stopped tomcat-<%= @tomcat_name %>"
     else
-      log_failure_msg "Not able to stop tomcat-<%= tomcat_name %>"
+      log_failure_msg "Not able to stop tomcat-<%= @tomcat_name %>"
     fi
   ;;
 
@@ -124,9 +124,9 @@ case "$1" in
     RETVAL=$?
 
     if [ "$RETVAL" = 0 ]; then
-      log_success_msg "Restarted tomcat-<%= tomcat_name %>"
+      log_success_msg "Restarted tomcat-<%= @tomcat_name %>"
     else
-      log_failure_msg "Not able to restart tomcat-<%= tomcat_name %>"
+      log_failure_msg "Not able to restart tomcat-<%= @tomcat_name %>"
     fi
   ;;
 
@@ -135,9 +135,9 @@ case "$1" in
     RETVAL=$?
 
     if [ "$RETVAL" = 0 ]; then
-      echo "tomcat-<%= tomcat_name %> (pid $pid) is running..."
+      echo "tomcat-<%= @tomcat_name %> (pid $pid) is running..."
     else
-      echo "tomcat-<%= tomcat_name %> is stopped"
+      echo "tomcat-<%= @tomcat_name %> is stopped"
       RETVAL=3
     fi
   ;;
