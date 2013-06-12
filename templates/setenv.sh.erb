@@ -20,7 +20,7 @@ export JAVA_XMX="256m"
 export JAVA_XX_MAXPERMSIZE="256m"
 
 <% @setenv.each do |env| %>
-export <%= @env -%>
+export <%= env -%>
 <% end %>
 
 . $CATALINA_BASE/bin/setenv-local.sh

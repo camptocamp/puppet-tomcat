@@ -3,11 +3,11 @@
 <!DOCTYPE server-xml [
 <% if not @executor.empty? -%>
 <% @executor.each do |exe| -%>
-  <!ENTITY executor-<%= @exe %> SYSTEM "executor-<%= @exe %>.xml">
+  <!ENTITY executor-<%= exe %> SYSTEM "executor-<%= exe %>.xml">
 <% end -%>
 <% end -%>
 <% @connectors.each do |conn| -%>
-  <!ENTITY connector-<%= @conn %> SYSTEM "connector-<%= @conn %>.xml">
+  <!ENTITY connector-<%= conn %> SYSTEM "connector-<%= conn %>.xml">
 <% end -%>
 ]>
 <% end -%>
@@ -70,7 +70,7 @@
 <% if not @executor.empty? -%>
 <% @executor.each do |exe| -%>
     <!-- See conf/executor-<%= exe %>.xml for this executor's config. -->
-    &executor-<%= @exe -%>;
+    &executor-<%= exe -%>;
 
 <% end -%>
 <% end -%>
@@ -78,7 +78,7 @@
 <% if not @connectors.empty? -%>
 <% @connectors.each do |conn| -%>
     <!-- See conf/connector-<%= conn %>.xml for this connector's config. -->
-    &connector-<%= @conn %>;
+    &connector-<%= conn %>;
 
 <% end -%>
 <% end -%>
