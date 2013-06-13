@@ -1,28 +1,29 @@
-/*
-
-== Class: tomcat::source
-
-Installs tomcat 5.5.X or 6.0.X using the compressed archive from your favorite tomcat
-mirror. Files from the archive will be installed in /opt/apache-tomcat/.
-
-Class variables:
-- *$log4j_conffile*: see tomcat
-
-Requires:
-- java to be previously installed
-- archive definition (from puppet camptocamp/puppet-archive module)
-- Package["curl"]
-
-Tested on:
-- RHEL 5,6
-- Debian Lenny/Squeeze
-- Ubuntu Lucid
-
-Usage:
-  $tomcat_version = "6.0.18"
-  include tomcat::source
-
-*/
+#
+#
+#== Class: tomcat::source
+#
+#Installs tomcat 5.5.X or 6.0.X using the compressed archive from your
+#favorite tomcat mirror. Files from the archive will be installed in
+#/opt/apache-tomcat/.
+#
+#Class variables:
+#- *$log4j_conffile*: see tomcat
+#
+#Requires:
+#- java to be previously installed
+#- archive definition (from puppet camptocamp/puppet-archive module)
+#- Package["curl"]
+#
+#Tested on:
+#- RHEL 5,6
+#- Debian Lenny/Squeeze
+#- Ubuntu Lucid
+#
+#Usage:
+#  $tomcat_version = "6.0.18"
+#  include tomcat::source
+#
+#
 class tomcat::source inherits tomcat::base {
 
   include tomcat::params

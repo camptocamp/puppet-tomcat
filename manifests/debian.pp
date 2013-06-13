@@ -1,19 +1,19 @@
-/*
-
-== Class: tomcat::debian
-
-Installs tomcat on Debian using your systems package manager.
-
-Requires:
-- java to be previously installed
-
-Tested on:
-- Debian 5 (lenny, using backported packages from squeeze)
-
-Usage:
-  include tomcat::debian
-
-*/
+#
+#
+#== Class: tomcat::debian
+#
+#Installs tomcat on Debian using your systems package manager.
+#
+#Requires:
+#- java to be previously installed
+#
+#Tested on:
+#- Debian 5 (lenny, using backported packages from squeeze)
+#
+#Usage:
+#  include tomcat::debian
+#
+#
 class tomcat::debian inherits tomcat::package {
 
   # avoid partial configuration on untested-debian-releases
