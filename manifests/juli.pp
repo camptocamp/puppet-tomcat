@@ -1,17 +1,17 @@
-/*
-
-== Class: tomcat::juli
-
-Installs 2 extra components to $tomcat_home, required to configuring logging on
-tomcat6. See: http://tomcat.apache.org/tomcat-6.0-doc/logging.html
-
-Attributes:
-- *tomcat_home*: path to tomcat installation directory.
-
-This class is just there to avoid code duplication. It probably doesn't make
-any sense to include it directly.
-
-*/
+#
+# == Class: tomcat::juli
+#
+# Installs 2 extra components to $tomcat_home, required to configuring logging on
+# tomcat6. See: http://tomcat.apache.org/tomcat-6.0-doc/logging.html
+#
+# tomcat7: http://tomcat.apache.org/tomcat-7.0-doc/logging.html
+#
+# Attributes:
+# - *tomcat_home*: path to tomcat installation directory.
+#
+# This class is just there to avoid code duplication. It probably doesn't make
+# any sense to include it directly.
+#
 class tomcat::juli {
 
   include tomcat::params
@@ -20,7 +20,7 @@ class tomcat::juli {
     err('undefined mandatory attribute: $tomcat_home')
   }
 
-  $baseurl = "${tomcat::params::mirror}/tomcat-6/v${tomcat::params::version}/bin"
+  $baseurl = "${tomcat::params::mirror}/tomcat-${::tomcat::params::maj_version}/v${tomcat::params::version}/bin"
 
   file { "${tomcat_home}/extras/":
     ensure  => directory,

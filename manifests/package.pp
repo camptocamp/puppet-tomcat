@@ -8,7 +8,12 @@ necessary to include it directly.
 */
 class tomcat::package inherits tomcat::base {
 
-  package { 'tomcat':
+  case "${::lsbdistid}${::lsbmajdistrelease}" {
+    'Debian7': { $pkg_list = [ 'tomcat', 'libcommons-logging-java', 'liblog4j1.2-java' ] }
+    default: { $pkg_list = 'tomcat' }
+  }
+
+  package { $pkg_list:
     ensure => present,
   }
 
