@@ -2,6 +2,7 @@ class tomcat::params {
 
   $default_source_release = '6.0.26'
   $default_source_release_v55 = '5.5.27'
+  $default_source_release_v7 = '7.0.28'
 
   $instance_basedir = $tomcat_instance_basedir ? {
     ''      => '/srv/tomcat',
@@ -36,7 +37,8 @@ class tomcat::params {
     if $tomcat_version { notice('$tomcat_version is not useful when using distribution package!') }
     $maj_version = $::osfamily ? {
       'Debian' => $::lsbdistcodename ? {
-        /lenny|squeeze/   => '6',
+        /lenny|squeeze/ => '6',
+        /wheezy/        => '7',
         'precise'         => '6',
       },
       'RedHat' => $::operatingsystemrelease ? {
@@ -49,6 +51,7 @@ class tomcat::params {
     $version = $maj_version ? {
       '5.5' => $default_source_release_v55,
       '6'   => $default_source_release,
+      '7'   => $default_source_release_v7,
     }
 
   }

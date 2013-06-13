@@ -16,13 +16,15 @@ Usage:
 */
 class tomcat::debian inherits tomcat::package {
 
+  include tomcat::params
+
   # avoid partial configuration on untested-debian-releases
-  if $::lsbdistcodename !~ /^(lenny|squeeze|precise)$/ {
+  if $::lsbdistcodename !~ /^(lenny|squeeze|wheezy|precise)$/ {
     fail "class ${name} not tested on ${::operatingsystem}/${::lsbdistcodename}"
   }
 
-  $tomcat      = 'tomcat6'
-  $tomcat_home = '/usr/share/tomcat6'
+  $tomcat = "tomcat${::tomcat::params::maj_version}"
+  $tomcat_home = "/usr/share/tomcat${::tomcat::params::maj_version}"
 
   # Workaround while tomcat-juli.jar and tomcat-juli-adapters.jar aren't
   # included in tomcat6-* packages.
