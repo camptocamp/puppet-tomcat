@@ -1,10 +1,10 @@
-/*
-
-== Class: tomcat::v5-5
-
-Deprecated: include "tomcat::source" instead!
-
-*/
+#
+#
+#== Class: tomcat::v5-5
+#
+#Deprecated: include "tomcat::source" instead!
+#
+#
 class tomcat::v5-5 {
   include tomcat::params
   $tomcat_version = $tomcat::params::default_source_release_v55

@@ -1,11 +1,11 @@
-/*
-
-== Class: tomcat::package
-
-Common stuff shared between tomcat::package::* classes. It shouldn't be
-necessary to include it directly.
-
-*/
+#
+#
+#== Class: tomcat::package
+#
+#Common stuff shared between tomcat::package::* classes. It shouldn't be
+#necessary to include it directly.
+#
+#
 class tomcat::package inherits tomcat::base {
 
   package { 'tomcat':

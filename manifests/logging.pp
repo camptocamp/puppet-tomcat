@@ -1,16 +1,16 @@
-/*
-
-== Class: tomcat::logging
-
-Links logging libraries in tomcat installation directory
-
-Attributes:
-- *tomcat_home*: path to tomcat installation directory.
-
-This class is just there to avoid code duplication. It probably doesn't make
-any sense to include it directly.
-
-*/
+#
+#
+#== Class: tomcat::logging
+#
+#Links logging libraries in tomcat installation directory
+#
+#Attributes:
+#- *tomcat_home*: path to tomcat installation directory.
+#
+#This class is just there to avoid code duplication. It probably doesn't make
+#any sense to include it directly.
+#
+#
 class tomcat::logging {
 
   include tomcat::params
