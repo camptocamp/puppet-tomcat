@@ -2,9 +2,9 @@
 
 == Definition: tomcat::connector
 
-This definition will create a connector in a dedicated file 
+This definition will create a connector in a dedicated file
 included in server.xml with an XML entity inclusion.
-Have a look at http://tomcat.apache.org/tomcat-6.0-doc/config/http.html 
+Have a look at http://tomcat.apache.org/tomcat-6.0-doc/config/http.html
 and http://tomcat.apache.org/tomcat-6.0-doc/config/ajp.html for more details.
 
 Parameters:
@@ -17,7 +17,7 @@ Parameters:
 - *protocol*: the protocol to handle incoming traffic
 - *uri_encoding*: character encoding used to decode the URI bytes
 - *address*: the IP address on which the server must listen on
-- *connection_timeout*: (int) the number of milliseconds this connector 
+- *connection_timeout*: (int) the number of milliseconds this connector
   will wait, after accepting a connection
 - *redirect_port*: (int) automatic redirection if the request require
   SSL transport
@@ -30,7 +30,7 @@ Requires:
 - a resource tomcat::instance.
 
 Example usage:
-  
+
   tomcat::connector {"http-8080":
     ensure   => present,
     owner    => "root",
@@ -49,24 +49,26 @@ Example usage:
   }
 
 */
-define tomcat::connector($ensure="present",
-                         $instance,
-                         $port,
-                         $owner="tomcat",
-                         $group="adm",
-                         $protocol="HTTP/1.1",
-                         $uri_encoding="UTF-8",
-                         $address=false,
-                         $connection_timeout=20000,
-                         $redirect_port=8443,
-                         $scheme=false,
-                         $executor=false,
-                         $options=[],
-                         $manage=false) {
+define tomcat::connector(
+  $instance,
+  $port,
+  $ensure             = 'present',
+  $owner              = 'tomcat',
+  $group              = 'adm',
+  $protocol           = 'HTTP/1.1',
+  $uri_encoding       = 'UTF-8',
+  $address            = false,
+  $connection_timeout = 20000,
+  $redirect_port      = 8443,
+  $scheme             = false,
+  $executor           = false,
+  $options            = [],
+  $manage             = false,
+  ) {
 
   include tomcat::params
 
-  if $owner == "tomcat" {
+  if $owner == 'tomcat' {
     $filemode = 0460
   } else {
     $filemode = 0664
@@ -77,7 +79,7 @@ define tomcat::connector($ensure="present",
     owner   => $owner,
     group   => $group,
     mode    => $filemode,
-    content => template("tomcat/connector.xml.erb"),
+    content => template('tomcat/connector.xml.erb'),
     replace => $manage,
     require => $executor ? {
       false   => undef,

@@ -15,15 +15,15 @@ Warning: will overwrite /etc/sudoers !
 */
 class tomcat::administration {
 
-  group { "tomcat-admin":
+  group { 'tomcat-admin':
     ensure => present,
     system => true,
   }
 
-  sudo::directive { "tomcat-administration":
-    ensure => present,
-    content => template("tomcat/sudoers.tomcat.erb"),
-    require => Group["tomcat-admin"],
+  sudo::directive { 'tomcat-administration':
+    ensure  => present,
+    content => template('tomcat/sudoers.tomcat.erb'),
+    require => Group['tomcat-admin'],
   }
 
 }
