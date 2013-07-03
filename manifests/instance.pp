@@ -40,6 +40,9 @@ Parameters:
 - *ajp_port*: tomcat's AJP port, defaults to 8009.
 - *ajp_address*: define the IP address tomcat's AJP server must listen on.
   Defaults to all addresses.
+- *jpda*: Boolean, whether or not to enable JPDA (remote debugging)
+- *jpda_port*: tomcat's JPDA port, defaults to 8000.
+- *jpda_transport*: Transport method for JPDA, defaults to dt_socket.
 - *conf_mode*: can be used to change the permissions on
   /srv/tomcat/$name/conf/, because some webapps require the ability to write
   their own config files. Defaults to 2570 (writeable only by $group members).
@@ -100,6 +103,9 @@ define tomcat::instance(
   $http_address    = false,
   $ajp_port        = '8009',
   $ajp_address     = false,
+  $jpda_transport  = "dt_socket",
+  $jpda_port       = "8000",
+  $jpda            = false,  
   $conf_mode       = '',
   $logs_mode       = '',
   $server_xml_file = '',
