@@ -12,6 +12,8 @@ export JAVA_HOME=<%= @javahome %>
 export CATALINA_HOME=<%= @catalinahome %>
 export CATALINA_BASE=<%= @basedir %>
 export CATALINA_PID=<%= @basedir %>/temp/tomcat.pid
+export JPDA_ADDRESS=<%= jpda_port %>
+export JPDA_TRANSPORT=<%= jpda_transport %>
 
 # For SELinux we need to use 'runuser' not 'su'
 if [ -x "/sbin/runuser" ]; then
@@ -38,7 +40,12 @@ start() {
   # Remove pidfile if still around
   test -f $CATALINA_PID && rm -f $CATALINA_PID
 
-  $SU tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start" > /dev/null
+  CATALINA_START_PARAMS="start"
+<% if jpda -%>
+  CATALINA_START_PARAMS="jpda $CATALINA_START_PARAMS"
+<% end -%>
+
+  $SU tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh $CATALINA_START_PARAMS" > /dev/null
 }
 
 stop() {
