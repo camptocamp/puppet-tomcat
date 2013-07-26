@@ -38,7 +38,7 @@ start() {
   # Remove pidfile if still around
   test -f $CATALINA_PID && rm -f $CATALINA_PID
 
-  $SU tomcat -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start" > /dev/null
+  $SU <%= @owner %> -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start" > /dev/null
 }
 
 stop() {
@@ -54,7 +54,7 @@ stop() {
 
   count=0
   until [ "$pid" = "" ] || [ $count -gt $SHUTDOWN_WAIT ]; do
-    $SU tomcat -c "$CATALINA_HOME/bin/catalina.sh stop -force" > /dev/null
+    $SU <%= @owner %> -c "$CATALINA_HOME/bin/catalina.sh stop -force" > /dev/null
     findpid
 
     echo -n "."
