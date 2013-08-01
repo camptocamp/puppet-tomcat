@@ -75,7 +75,7 @@ stop() {
 
 findpid() {
   pid=""
-  pid=$(pgrep -U tomcat -f "^$JAVA_HOME/bin/java.*catalina.base=<%= basedir %>")
+  pid=$(pgrep -U <%= @owner %> -f "^$JAVA_HOME/bin/java.*catalina.base=<%= basedir %>")
 
   # validate output of pgrep
   if ! [ "$pid" = "" ] && ! [ "$pid" -gt 0 ]; then
