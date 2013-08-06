@@ -37,6 +37,7 @@ class tomcat::debian inherits tomcat::package {
   }
 
   Service['tomcat'] {
+    name    => $tomcat,
     stop    => "/bin/sh /etc/init.d/${tomcat} stop",
     pattern => "-Dcatalina.base=/var/lib/${tomcat}",
   }
