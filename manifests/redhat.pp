@@ -33,7 +33,9 @@ class tomcat::redhat inherits tomcat::package {
       $tomcat_home = '/var/lib/tomcat5'
 
       # link logging libraries from java
-      include tomcat::logging
+      class { '::tomcat::logging':
+        tomcat_home => $tomcat_home,
+      }
 
       file {'/usr/share/tomcat5/bin/catalina.sh':
         ensure  => link,

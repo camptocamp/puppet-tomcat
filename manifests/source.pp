@@ -25,7 +25,7 @@ Usage:
 */
 class tomcat::source inherits tomcat::base {
 
-  include tomcat::params
+  include ::tomcat::params
 
   case $::osfamily {
     RedHat: {
@@ -47,11 +47,15 @@ class tomcat::source inherits tomcat::base {
 
   if $tomcat::params::maj_version == '6' {
     # install extra tomcat juli adapters, used to configure logging.
-    include tomcat::juli
+    class { '::tomcat::juli':
+      tomcat_home => $tomcat_home,
+    }
   }
 
   # link logging libraries from java
-  include tomcat::logging
+  class { '::tomcat::logging':
+    tomcat_home => $tomcat_home,
+  }
 
   $baseurl = $tomcat::params::maj_version ? {
     '5.5' => "${tomcat::params::mirror}/tomcat-5/v${tomcat::params::version}/bin",

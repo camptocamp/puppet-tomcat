@@ -9,7 +9,9 @@ Example usage:
   include tomcat
 
 */
-class tomcat {
+class tomcat (
+  $home = $tomcat::params::home,
+) inherits ::tomcat::params {
   case $::osfamily {
     RedHat: { include tomcat::redhat }
     Debian: { include tomcat::debian }

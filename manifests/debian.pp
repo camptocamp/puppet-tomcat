@@ -26,10 +26,14 @@ class tomcat::debian inherits tomcat::package {
 
   # Workaround while tomcat-juli.jar and tomcat-juli-adapters.jar aren't
   # included in tomcat6-* packages.
-  include tomcat::juli
+  class { '::tomcat::juli':
+    tomcat_home => $tomcat_home,
+  }
 
   # link logging libraries from java
-  include tomcat::logging
+  class { '::tomcat::logging':
+    tomcat_home => $tomcat_home,
+  }
 
   Package['tomcat'] {
     name   => $tomcat,

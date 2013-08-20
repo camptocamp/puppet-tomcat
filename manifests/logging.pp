@@ -11,13 +11,13 @@ This class is just there to avoid code duplication. It probably doesn't make
 any sense to include it directly.
 
 */
-class tomcat::logging {
+class tomcat::logging (
+  $tomcat_home = $tomcat_home,
+) {
 
-  include tomcat::params
+  include ::tomcat::params
 
-  if ( ! $tomcat_home ) {
-    err('undefined mandatory attribute: $tomcat_home')
-  }
+  validate_absolute_path($tomcat_home)
 
   file {'commons-logging.jar':
     ensure => link,
