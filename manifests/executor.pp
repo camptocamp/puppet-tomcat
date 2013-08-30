@@ -2,8 +2,8 @@
 
 == Definition: tomcat::executor
 
-This definition will create an executor in a dedicated file 
-included in server.xml with an XML entity inclusion.Have a 
+This definition will create an executor in a dedicated file
+included in server.xml with an XML entity inclusion.Have a
 look at http://tomcat.apache.org/tomcat-6.0-doc/config/executor.html
 for more details.
 
@@ -18,7 +18,7 @@ Parameters:
 - *max_threads*: (int) max number of active threads in this pool
 - *min_spare_threads*: (int) minimum number of threads always kept alive
 - *max_idle_time*: (int) number of milliseconds before an idle thread shutsdown
-- *manage*: only add this file/executor if it isn’t already present
+- *manage*: only add this file/executor if it isn't already present
 
 Requires:
 - one of the tomcat classes which installs tomcat binaries.
