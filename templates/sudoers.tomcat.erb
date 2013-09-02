@@ -1,15 +1,7 @@
 
 ## This part comes from modules/tomcat/manifests/classes/administration.pp
-<% if has_variable?("sudo_tomcat_admin_user") -%>
-User_Alias TOMCAT_ADMIN = %tomcat-admin,<%= @sudo_tomcat_admin_user %>
-<% else -%>
-User_Alias TOMCAT_ADMIN = %tomcat-admin
-<% end -%>
-<% if has_variable?("sudo_tomcat_admin_cmnd") -%>
-Cmnd_Alias TOMCAT_ADMIN = <%= @sudo_tomcat_admin_cmnd %>
-<% else -%>
-Cmnd_Alias TOMCAT_ADMIN = /etc/init.d/tomcat-*, /bin/su tomcat, /bin/su - tomcat
-<% end -%>
+User_Alias TOMCAT_ADMIN = <%= @sudo_user_alias.join(', ') %>
+Cmnd_Alias TOMCAT_ADMIN = <%= @sudo_cmnd %>
 TOMCAT_ADMIN ALL=(tomcat) ALL : ALL=(root) TOMCAT_ADMIN
 ##
 

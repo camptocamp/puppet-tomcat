@@ -13,7 +13,13 @@ Requires:
 Warning: will overwrite /etc/sudoers !
 
 */
-class tomcat::administration {
+class tomcat::administration (
+  $sudo_user = $sudo_tomcat_admin_user,
+) {
+
+  $sudo_group = '%tomcat-admin'
+  $sudo_user_alias = flatten([$sudo_group, $sudo_user])
+  $sudo_cmnd = '/etc/init.d/tomcat-*, /bin/su tomcat, /bin/su - tomcat'
 
   group { 'tomcat-admin':
     ensure => present,
