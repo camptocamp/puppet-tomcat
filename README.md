@@ -119,8 +119,7 @@ given virtualhost:
 
     tomcat::instance {"myapp":
       ensure      => present,
-      ajp_port    => "8000",
-      http_port   => "",
+      ajp_port    => "8000"
     }
 
     apache::proxypass {"myapp":
