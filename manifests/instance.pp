@@ -236,7 +236,7 @@ define tomcat::instance(
     7 => 'server.xml.tomcat7.erb',
   }
 
-  if $tomcat::params::type == 'package' {
+  if $tomcat::type == 'package' {
     $catalinahome = $version? {
       5        => $::osfamily? {
         RedHat => '/usr/share/tomcat5',
@@ -472,7 +472,7 @@ define tomcat::instance(
     seltype => $seltype,
   }
 
-  if $tomcat::params::type == 'package' {
+  if $tomcat::type == 'package' {
     $servicerequire = Class['tomcat']
   } else {
     $servicerequire = File['/opt/apache-tomcat']
