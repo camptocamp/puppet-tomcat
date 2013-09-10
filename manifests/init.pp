@@ -1,20 +1,21 @@
-/*
-
-== Class: tomcat
-
-Installs tomcat using the default version providing by distributions.
-
-Example usage:
-
-  include tomcat
-
-*/
 class tomcat (
-  $home = $tomcat::params::home,
-) inherits ::tomcat::params {
-  case $::osfamily {
-    RedHat: { include tomcat::redhat }
-    Debian: { include tomcat::debian }
-    default: { fail "Unsupported OS family ${::osfamily}" }
-  }
+  $version          = $tomcat::params::version,
+  $sources          = false,
+  $sources_src      = $tomcat::params::sources_src,
+  $instance_basedir = $tomcat::params::instance_basedir,
+  $tomcat_uid       = $tomcat::params::uid,
+  $tomcat_gid       = $tomcat::params::gid,
+  $ulimits          = {},
+) inherits tomcat::params {
+
+  validate_re($version, '^[5-7]$')
+  validate_bool($sources)
+  validate_absolute_path($instance_basedir)
+  validate_hash($ulimits)
+
+  create_resources('tomcat::ulimit', $ulimits)
+  class {'tomcat::install': } ->
+  class {'tomcat::user': } ->
+  class {'tomcat::service': } ->
+  Class['tomcat']
 }
