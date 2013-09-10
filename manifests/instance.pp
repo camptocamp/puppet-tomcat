@@ -136,7 +136,7 @@ define tomcat::instance(
 
   include ::tomcat::params
   $_basedir = $instance_basedir? {
-    false   => tomcat::params::instance_basedir,
+    false   => $tomcat::params::instance_basedir,
     default => $instance_basedir,
   }
   validate_absolute_path($_basedir)
