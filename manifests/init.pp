@@ -13,6 +13,12 @@ class tomcat (
   validate_absolute_path($instance_basedir)
   validate_hash($ulimits)
 
+  if $sources {
+    $type = 'sources'
+  } else {
+    $type = 'package'
+  }
+
   create_resources('tomcat::ulimit', $ulimits)
   class {'tomcat::install': } ->
   class {'tomcat::user': } ->
