@@ -1,12 +1,14 @@
 require 'spec_helper'
-require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
+require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
 
 @parameters.each { |k, v|
   describe 'tomcat::executor' do
     let (:title) {'executorBar'}
     let (:facts) { {
-      :osfamily        => v['osfamily'],
-      :operatingsystem => k
+      :osfamily                  => v['osfamily'],
+      :operatingsystem           => v['operatingsystem'],
+      :operatingsystemmajrelease => v['operatingsystemmajrelease'],
+      :lsbdistmajrelease         => v['lsbdistmajrelease'],
     } }
 
     context 'when using a wrong ensure value' do
@@ -17,7 +19,7 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__executor('executorBar')
-        }.to raise_error(Puppet::ParseError, /validate_re\(\):/)
+        }.to raise_error(Puppet::Error, /validate_re\(\):/)
       end
     end
 
@@ -30,7 +32,7 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__executor('executorBar')
-        }.to raise_error(Puppet::ParseError, /.+ is not a string/)
+        }.to raise_error(Puppet::Error, /.+ is not a string/)
       end
     end
 
@@ -43,7 +45,7 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__executor('executorBar')
-        }.to raise_error(Puppet::ParseError, /.+ is not a string/)
+        }.to raise_error(Puppet::Error, /.+ is not a string/)
       end
     end
 
@@ -56,7 +58,7 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__executor('executorBar')
-        }.to raise_error(Puppet::ParseError, /.+ is not a boolean/)
+        }.to raise_error(Puppet::Error, /.+ is not a boolean/)
       end
     end
 
@@ -69,7 +71,7 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__executor('executorBar')
-        }.to raise_error(Puppet::ParseError, /validate_re\(\)/)
+        }.to raise_error(Puppet::Error, /validate_re\(\)/)
       end
     end
 
@@ -82,7 +84,7 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__executor('executorBar')
-        }.to raise_error(Puppet::ParseError, /validate_re\(\)/)
+        }.to raise_error(Puppet::Error, /validate_re\(\)/)
       end
     end
 
@@ -95,8 +97,9 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__executor('executorBar')
-        }.to raise_error(Puppet::ParseError, /validate_re\(\)/)
+        }.to raise_error(Puppet::Error, /validate_re\(\)/)
       end
+    end
 
     context 'when using a wrong manage value' do
       let (:params) {{
@@ -107,9 +110,24 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__executor('executorBar')
-        }.to raise_error(Puppet::ParseError, /.+ is not a boolean/)
+        }.to raise_error(Puppet::Error, /.+ is not a boolean/)
       end
     end
+
+    let(:params) {{
+      :instance => 'instance1',
+    }}
+    describe 'should create a file' do
+      it {
+        should contain_file('/srv/tomcat/instance1/conf/executor-executorBar.xml').with({
+          'ensure'  => 'present',
+          'owner'   => 'tomcat',
+          'group'   => 'adm',
+          'mode'    => '0460',
+          'replace' => false,
+        })
+        should contain_file('/srv/tomcat/instance1/conf/executor-executorBar.xml').with_content(/name="executorBar"/)
+      }
     end
 
   end

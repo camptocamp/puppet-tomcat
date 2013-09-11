@@ -1,12 +1,14 @@
 require 'spec_helper'
-require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
+require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
 
 @parameters.each { |k, v|
   describe 'tomcat::connector' do
     let (:title) {'ConnectBar'}
     let (:facts) { {
-      :osfamily        => v['osfamily'],
-      :operatingsystem => k
+      :osfamily                  => v['osfamily'],
+      :operatingsystem           => v['operatingsystem'],
+      :operatingsystemmajrelease => v['operatingsystemmajrelease'],
+      :lsbdistmajrelease         => v['lsbdistmajrelease'],
     } }
 
     context 'when using a wrong ensure value' do
@@ -18,7 +20,7 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__connector('ConnectBar')
-        }.to raise_error(Puppet::ParseError, /validate_re\(\):/)
+        }.to raise_error(Puppet::Error, /validate_re\(\):/)
       end
     end
 
@@ -31,7 +33,7 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__connector('ConnectBar')
-        }.to raise_error(Puppet::ParseError, /validate_re\(\):/)
+        }.to raise_error(Puppet::Error, /validate_re\(\):/)
       end
     end
 
@@ -44,7 +46,7 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__connector('ConnectBar')
-        }.to raise_error(Puppet::ParseError, /.+ is not a string/)
+        }.to raise_error(Puppet::Error, /.+ is not a string/)
       end
     end
 
@@ -58,7 +60,7 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__connector('ConnectBar')
-        }.to raise_error(Puppet::ParseError, /.+ is not a string/)
+        }.to raise_error(Puppet::Error, /.+ is not a string/)
       end
     end
 
@@ -72,7 +74,7 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__connector('ConnectBar')
-        }.to raise_error(Puppet::ParseError, /.+ is not a string/)
+        }.to raise_error(Puppet::Error, /.+ is not a string/)
       end
     end
 
@@ -86,7 +88,7 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__connector('ConnectBar')
-        }.to raise_error(Puppet::ParseError, /validate_re\(\)/)
+        }.to raise_error(Puppet::Error, /validate_re\(\)/)
       end
     end
 
@@ -100,7 +102,7 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__connector('ConnectBar')
-        }.to raise_error(Puppet::ParseError, /validate_re\(\)/)
+        }.to raise_error(Puppet::Error, /validate_re\(\)/)
       end
     end
 
@@ -114,7 +116,7 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__connector('ConnectBar')
-        }.to raise_error(Puppet::ParseError, /.+ is not an Array/)
+        }.to raise_error(Puppet::Error, /.+ is not an Array/)
       end
     end
 
@@ -128,7 +130,7 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__connector('ConnectBar')
-        }.to raise_error(Puppet::ParseError, /.+ is not a boolean/)
+        }.to raise_error(Puppet::Error, /.+ is not a boolean/)
       end
     end
 
@@ -142,8 +144,27 @@ require File.expand_path(File.direname(__FILE__)) + '/parameters.rb'
       it 'should fail' do
         expect { 
           should contain_tomcat__connector('ConnectBar')
-        }.to raise_error(Puppet::ParseError, /.+ is not an absolute path/)
+        }.to raise_error(Puppet::Error, /.+ is not an absolute path/)
       end
+    end
+
+    let(:params) {{
+      :instance => 'instance1',
+      :port     => '8442',
+    }}
+
+    describe 'should create /srv/tomcat/instance1/conf/connector-ConnectBar.xml' do
+      it {
+        should contain_file('/srv/tomcat/instance1/conf/connector-ConnectBar.xml').with({
+          'ensure'  => 'present',
+          'owner'   => 'tomcat',
+          'group'   => 'adm',
+          'mode'    => '0460',
+          'replace' => false,
+        })
+        should contain_file('/srv/tomcat/instance1/conf/connector-ConnectBar.xml').with_content(/port="8442"/)
+        should contain_file('/srv/tomcat/instance1/conf/connector-ConnectBar.xml').with_content(/protocol="HTTP\/1.1"/)
+      }
     end
 
 

@@ -1,6 +1,9 @@
+$concat_basedir = '/var/lib/puppet/concat'
+
 node default {
   include ::tomcat
-  ::tomcat::instance {'instance1': }
+  tomcat::instance {'instance1':
+  }
 }
 
 node instance_with_connectors {
