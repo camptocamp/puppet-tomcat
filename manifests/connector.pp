@@ -64,7 +64,6 @@ define tomcat::connector(
   $instance_basedir   = false,
 ) {
 
-  validate_absolute_path($_basedir)
   validate_string($instance)
   validate_re($port, '^[0-9]+$')
   validate_re($ensure, ['present', 'absent'])
@@ -80,6 +79,7 @@ define tomcat::connector(
     false   => $tomcat::params::instance_basedir,
     default => $instance_basedir,
   }
+  validate_absolute_path($_basedir)
 
   if $owner == 'tomcat' {
     $filemode = '0460'
