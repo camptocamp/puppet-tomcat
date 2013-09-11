@@ -1,3 +1,7 @@
+# == Class: tomcat::install::redhat
+#
+# Some hacks needed on redhat...
+#
 class tomcat::install::redhat (
   $tomcat_home = $tomcat::params::home,
 ) inherits ::tomcat::params {
@@ -13,7 +17,7 @@ class tomcat::install::redhat (
 
     6: {
       file {"/usr/share/tomcat${tomcat::version}/bin/setclasspath.sh":
-        ensure  => present,
+        ensure  => file,
         owner   => root,
         group   => root,
         mode    => '0755',
@@ -21,7 +25,7 @@ class tomcat::install::redhat (
       }
 
       file {"/usr/share/tomcat${tomcat::version}/bin/catalina.sh":
-        ensure  => present,
+        ensure  => file,
         owner   => root,
         group   => root,
         mode    => '0755',
