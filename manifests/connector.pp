@@ -64,18 +64,22 @@ define tomcat::connector(
   $instance_basedir   = false,
 ) {
 
-  include ::tomcat::params
-  $_basedir = $instance_basedir? {
-    false   => $tomcat::params::instance_basedir,
-    default => $instance_basedir,
-  }
-
   validate_absolute_path($_basedir)
   validate_string($instance)
   validate_re($port, '^[0-9]+$')
   validate_re($ensure, ['present', 'absent'])
   validate_string($owner)
   validate_string($group)
+  validate_re($connection_timeout, '^[0-9]+$')
+  validate_re($redirect_port, '^[0-9]+$')
+  validate_array($options)
+  validate_bool($manage)
+
+  include ::tomcat::params
+  $_basedir = $instance_basedir? {
+    false   => $tomcat::params::instance_basedir,
+    default => $instance_basedir,
+  }
 
   if $owner == 'tomcat' {
     $filemode = '0460'
