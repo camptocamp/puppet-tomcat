@@ -325,7 +325,7 @@ define tomcat::instance(
           before => Service["tomcat-${name}"];
 
         "${basedir}/conf/server.xml":
-          ensure  => present,
+          ensure  => file,
           owner   => $owner,
           group   => $group,
           mode    => $filemode,
@@ -430,10 +430,10 @@ define tomcat::instance(
   }
 
   $present = $ensure ? {
-    present   => 'present',
-    installed => 'present',
-    running   => 'present',
-    stopped   => 'present',
+    present   => 'file',
+    installed => 'file',
+    running   => 'file',
+    stopped   => 'file',
     absent    => 'absent',
   }
 
