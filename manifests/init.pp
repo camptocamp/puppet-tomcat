@@ -6,7 +6,7 @@ class tomcat (
   $tomcat_uid       = $tomcat::params::uid,
   $tomcat_gid       = $tomcat::params::gid,
   $ulimits          = {},
-) inherits tomcat::params {
+) inherits ::tomcat::params {
 
   validate_re($version, '^[5-7]$')
   validate_bool($sources)
@@ -20,7 +20,8 @@ class tomcat (
   }
 
   create_resources('tomcat::ulimit', $ulimits)
-  class {'tomcat::install': } ->
+
+  #class {'tomcat::install': } ->
   class {'tomcat::user': } ->
   class {'tomcat::service': } ->
   Class['tomcat']
