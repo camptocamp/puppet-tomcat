@@ -1,3 +1,7 @@
+# == Class: tomcat::install
+#
+# install tomcat and logging stuff
+#
 class tomcat::install {
 
   include tomcat::params
