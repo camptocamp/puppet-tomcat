@@ -31,9 +31,9 @@
 #
 # Following this example, you should be able to point your browser to
 # http://localhost:8080/probe/
-# 
+#
 # See also: http://code.google.com/p/psi-probe/
-# 
+#
 define tomcat::probe($ensure='present', $version='2.0.4') {
 
   validate_re($ensure, ['present','absent'])
