@@ -282,8 +282,6 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
           'mode'   => '0755',
         })
         should contain_file('/etc/init.d/tomcat-fooBar').with_content(/JAVA_HOME=#{v['java_home']}/)
-        should contain_file('/etc/init.d/tomcat-fooBar').with_content(/CATALINA_HOME=\/usr\/share\/tomcat#{v['tomcat_version']}/)
-        should contain_file('/etc/init.d/tomcat-fooBar').with_content(/CATALINA_BASE=\/srv\/tomcat\/fooBar/)
       }
     end
 
