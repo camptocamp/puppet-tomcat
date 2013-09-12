@@ -39,10 +39,10 @@ class tomcat::source (
     tomcat_home => $tomcat_home,
   }
 
-  $a_version = split($version, '.')
+  $a_version = split($version, '[.]')
   $maj_version = $a_version[0]
 
-  $baseurl = "${tomcat::params::mirror}/tomcat-${maj_version}/v${version}/bin"
+  $baseurl = "${sources_src}/tomcat-${maj_version}/v${version}/bin"
   $tomcaturl = "${baseurl}/apache-tomcat-${version}.tar.gz"
 
   archive{ "apache-tomcat-${version}":
