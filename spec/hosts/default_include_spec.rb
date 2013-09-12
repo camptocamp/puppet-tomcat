@@ -41,6 +41,29 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
       }
     end
 
+    describe "#{k}: should have tomcat-instance1 init-script" do
+      it {
+        should contain_file('/etc/init.d/tomcat-instance1').with({
+          'ensure' => 'file',
+          'mode'   => '0755',
+          'owner'  => 'root',
+        })
+
+        should contain_file('/etc/init.d/tomcat-instance1').with_content(/CATALINA_HOME=\/usr\/share\/tomcat#{v['tomcat_version']}/)
+        should contain_file('/etc/init.d/tomcat-instance1').with_content(/CATALINA_BASE=\/srv\/tomcat\/instance1/)
+        should contain_file('/etc/init.d/tomcat-instance1').with_content(/JAVA_HOME=#{v['java_home']}/)
+      }
+    end
+
+    describe "#{k}: should have tomcat-instance1 service" do
+      it {
+        should contain_service('tomcat-instance1').with({
+          'ensure' => 'running',
+          'enable' => true,
+        })
+      }
+    end
+
 
   end
 }
