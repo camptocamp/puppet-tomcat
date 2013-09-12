@@ -144,7 +144,7 @@ define tomcat::instance(
     false   => $tomcat::params::version,
     default => $tomcat_version,
   }
-  validate_re($version, '^[5-7]$')
+  validate_re($version, '^[5-7]([\.0-9]+)?$')
 
   $tomcat_name = $name
   $basedir = "${_basedir}/${name}"
@@ -221,7 +221,7 @@ define tomcat::instance(
     $connectors = $connector
   }
 
-  if $tomcat::params::type == 'package' and
+  if $tomcat::type == 'package' and
       $::osfamily == 'RedHat' and
       $::operatingsystemrelease =~ /^6.*/ {
     # force catalina.sh to use the common library
@@ -245,7 +245,6 @@ define tomcat::instance(
       default  => "/usr/share/tomcat${version}",
     }
   }
-
 
   # In this case, we are using a non package-based tomcat.
   if $tomcat::params::type == 'source' {
