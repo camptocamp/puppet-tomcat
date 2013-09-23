@@ -226,7 +226,7 @@ define tomcat::instance(
       $::operatingsystemrelease =~ /^6.*/ {
     # force catalina.sh to use the common library
     # in CATALINA_HOME and not CATALINA_BASE
-    $classpath = '/usr/share/tomcat6/bin/tomcat-juli.jar'
+    $classpath = "/usr/share/tomcat${tomcat_version}/bin/tomcat-juli.jar"
   }
 
   # default server.xml is slightly different between tomcat5.5 and tomcat6
