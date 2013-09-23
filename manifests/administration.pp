@@ -1,18 +1,15 @@
-/*
-
-== Class: tomcat::administration
-
-Creates a "tomcat-admin" group and use sudo to allows members of this group
-to:
-- su to the tomcat user (which allows to kill java, remove lockfiles, etc)
-- restart tomcat instances.
-
-Requires:
-- definition sudo::directive from module camptocamp/puppet-sudo
-
-Warning: will overwrite /etc/sudoers !
-
-*/
+# == Class: tomcat::administration
+#
+# Creates a "tomcat-admin" group and use sudo to allows members of this group
+# to:
+# - su to the tomcat user (which allows to kill java, remove lockfiles, etc)
+# - restart tomcat instances.
+#
+# Requires:
+# - definition sudo::directive from module camptocamp/puppet-sudo
+#
+# Warning: will overwrite /etc/sudoers !
+#
 class tomcat::administration (
   $sudo_user = $sudo_tomcat_admin_user,
 ) {
