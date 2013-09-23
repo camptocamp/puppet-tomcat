@@ -4,7 +4,7 @@ class tomcat::juli::debian (
 ) inherits ::tomcat::params {
 
   $url =[
-    $tomcat::params::mirror,
+    $tomcat::params::sources_src,
     "tomcat-${tomcat::version}",
     "v${tomcat_src_version}",
     'bin'
