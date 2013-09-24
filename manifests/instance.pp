@@ -134,14 +134,13 @@ define tomcat::instance(
   validate_array($executor)
   validate_bool($manage)
 
-  include ::tomcat::params
   $_basedir = $instance_basedir? {
-    false   => $tomcat::params::instance_basedir,
+    false   => $tomcat::instance_basedir,
     default => $instance_basedir,
   }
   validate_absolute_path($_basedir)
   $version = $tomcat_version? {
-    false   => $tomcat::params::version,
+    false   => $tomcat::version,
     default => $tomcat_version,
   }
   validate_re($version, '^[5-7]([\.0-9]+)?$')
@@ -255,12 +254,12 @@ define tomcat::instance(
   }
 
   # In this case, we are using a non package-based tomcat.
-  if $tomcat::params::type == 'source' {
+  if $tomcat::type == 'source' {
     $catalinahome = '/opt/apache-tomcat'
   }
 
   # Define a version string for use in templates
-  $tomcat_version_str = "${version}_${tomcat::params::type}"
+  $tomcat_version_str = "${version}_${tomcat::type}"
 
   # Define default JAVA_HOME used in tomcat.init.erb
   if $java_home == '' {
@@ -501,7 +500,7 @@ define tomcat::instance(
       absent    => false,
     },
     require => [File["/etc/init.d/tomcat-${name}"], $servicerequire],
-    pattern => "-Dcatalina.base=${tomcat::params::instance_basedir}/${name}",
+    pattern => "-Dcatalina.base=${tomcat::instance_basedir}/${name}",
   }
 
   # Logrotate
