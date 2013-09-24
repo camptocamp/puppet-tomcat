@@ -221,6 +221,14 @@ define tomcat::instance(
     $connectors = $connector
   }
 
+  if defined(File[$tomcat::instance_basedir]) {
+    debug "File[${tomcat::instance_basedir}] already defined"
+  } else {
+    file {$tomcat::instance_basedir:
+      ensure => directory,
+    }
+  }
+
   if $tomcat::type == 'package' and
       $::osfamily == 'RedHat' and
       $::operatingsystemrelease =~ /^6.*/ {
