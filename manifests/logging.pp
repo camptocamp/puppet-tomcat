@@ -31,6 +31,10 @@ class tomcat::logging (
     RedHat => '/usr/share/java/log4j.jar',
   }
 
+  file {$base_path:
+    ensure => directory,
+  }
+
   file {'/var/log/tomcat':
     ensure => directory,
     owner  => 'tomcat',
