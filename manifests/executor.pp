@@ -66,18 +66,17 @@ define tomcat::executor(
   $instance_basedir  = false,
 ) {
 
-  include ::tomcat::params
   $_basedir = $instance_basedir? {
-    false   => $tomcat::params::instance_basedir,
+    false   => $tomcat::instance_basedir,
     default => $instance_basedir,
   }
+  validate_absolute_path($_basedir)
 
   if $owner == 'tomcat' {
     $filemode = '0460'
   } else {
     $filemode = '0664'
   }
-  validate_absolute_path($_basedir)
 
   validate_string($instance)
   validate_re($ensure, ['present', 'absent'])
@@ -97,7 +96,6 @@ define tomcat::executor(
     mode    => $filemode,
     content => template('tomcat/executor.xml.erb'),
     replace => $manage,
-    require => File["${tomcat::params::instance_basedir}/${instance}/conf"],
   }
 
 }

@@ -2,9 +2,7 @@
 #
 # Some hacks needed on redhat...
 #
-class tomcat::install::redhat (
-  $tomcat_home = $tomcat::params::home,
-) inherits ::tomcat::params {
+class tomcat::install::redhat {
 
   case $::operatingsystemmajrelease {
     5: {

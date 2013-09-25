@@ -139,6 +139,7 @@ define tomcat::instance(
     default => $instance_basedir,
   }
   validate_absolute_path($_basedir)
+
   $version = $tomcat_version? {
     false   => $tomcat::version,
     default => $tomcat_version,

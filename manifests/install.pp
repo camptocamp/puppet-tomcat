@@ -4,28 +4,17 @@
 #
 class tomcat::install {
 
-  include tomcat::params
-
   if !$tomcat::sources {
     package {"tomcat${tomcat::version}":
       ensure => present,
     } ->
-    class {'::tomcat::juli':
-      tomcat_home => $tomcat::params::home,
-    } ->
-    class {'::tomcat::logging':
-      tomcat_home => $tomcat::params::home,
-    }
+    class {'::tomcat::juli': } ->
+    class {'::tomcat::logging': }
 
     if $::osfamily == 'RedHat' {
-      class {'::tomcat::install::redhat':
-        tomcat_home => $tomcat::params::home,
-      }
+      class {'::tomcat::install::redhat': }
     }
   } else {
-    class {'tomcat::source':
-      version     => $tomcat::version,
-      sources_src => $tomcat::sources_src,
-    }
+    class {'tomcat::source': }
   }
 }

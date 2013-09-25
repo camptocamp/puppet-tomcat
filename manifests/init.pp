@@ -3,8 +3,8 @@ class tomcat (
   $sources          = false,
   $sources_src      = $tomcat::params::sources_src,
   $instance_basedir = $tomcat::params::instance_basedir,
-  $tomcat_uid       = $tomcat::params::uid,
-  $tomcat_gid       = $tomcat::params::gid,
+  $tomcat_uid       = undef,
+  $tomcat_gid       = undef,
   $ulimits          = {},
 ) inherits ::tomcat::params {
 
@@ -13,10 +13,20 @@ class tomcat (
   validate_absolute_path($instance_basedir)
   validate_hash($ulimits)
 
-  if $sources {
-    $type = 'sources'
-  } else {
-    $type = 'package'
+  $type = $sources ? {
+    true  => 'sources',
+    false => 'package',
+  }
+
+  $src_version = $version? {
+    5 => '5.5.27',
+    6 => '6.0.26',
+    7 => '7.0.42',
+  }
+
+  $home = $::osfamily? {
+    Debian => "/usr/share/tomcat${version}",
+    RedHat => "/var/lib/tomcat${version}",
   }
 
   create_resources('tomcat::ulimit', $ulimits)

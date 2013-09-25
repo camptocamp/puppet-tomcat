@@ -74,9 +74,8 @@ define tomcat::connector(
   validate_array($options)
   validate_bool($manage)
 
-  include ::tomcat::params
   $_basedir = $instance_basedir? {
-    false   => $tomcat::params::instance_basedir,
+    false   => $tomcat::instance_basedir,
     default => $instance_basedir,
   }
   validate_absolute_path($_basedir)

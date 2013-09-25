@@ -3,21 +3,14 @@
 # Links logging libraries in tomcat installation directory
 #
 # Attributes:
-# - *tomcat_home*: path to tomcat installation directory.
 # - *conffile*:    configuration file for log4j
-# - *version*:     tomcat version.
 #
 # This class is just there to avoid code duplication. It probably
 # doesn't make any sense to include it directly.
 #
 class tomcat::logging (
-  $tomcat_home = $tomcat::params::home,
   $conffile    = "puppet:///modules/${module_name}/conf/log4j.rolling.properties",
-  $version     = $tomcat::params::version,
-) inherits ::tomcat::params {
-
-  validate_absolute_path($tomcat_home)
-  validate_re($version, '^[5-7]$')
+) {
 
   $package = $::osfamily? {
     Debian => ['liblog4j1.2-java', 'libcommons-logging-java'],
@@ -28,9 +21,9 @@ class tomcat::logging (
     ensure => present,
   }
 
-  $base_path = $version? {
-    '5'     => "${tomcat_home}/common/lib",
-    default => "${tomcat_home}/lib",
+  $base_path = $tomcat::version ? {
+    '5'     => "${tomcat::home}/common/lib",
+    default => "${tomcat::home}/lib",
   }
 
   $log4j = $::osfamily? {

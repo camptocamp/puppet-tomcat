@@ -21,9 +21,9 @@
 #   include tomcat::source
 #
 class tomcat::source (
-  $version     = $tomcat::params::version,
-  $sources_src = $tomcat::params::sources_src,
-) inherits tomcat::params {
+  $version     = $tomcat::version,
+  $sources_src = $tomcat::sources_src,
+) {
 
   $tomcat_home = "/opt/apache-tomcat-${version}"
 
@@ -71,7 +71,7 @@ class tomcat::source (
       file {"${tomcat_home}/bin/catalina.sh":
         ensure  => present,
         source  => 'puppet:///modules/tomcat/catalina.sh-6.0.18',
-        require => Archive["apache-tomcat-${tomcat::params::version}"],
+        require => Archive["apache-tomcat-${tomcat::version}"],
         mode    => '0755',
       }
     }
