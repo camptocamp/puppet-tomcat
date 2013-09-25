@@ -2,7 +2,7 @@ class tomcat::params {
 
   $version = $::osfamily? {
     Debian => '6',
-    RedHat => $::lsbdistmajrelease ? {
+    RedHat => $::lsbmajdistrelease ? {
       '5' => '5',
       '6' => '6',
     }
