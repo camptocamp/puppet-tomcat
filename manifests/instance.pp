@@ -240,8 +240,8 @@ define tomcat::instance(
   # default server.xml is slightly different between tomcat5.5 and tomcat6 or 7
   $serverdotxml = $version? {
     5 => 'server.xml.tomcat55.erb',
-    6 => 'server.xml.tomcat.erb',
-    7 => 'server.xml.tomcat.erb',
+    6 => 'server.xml.tomcat6.erb',
+    7 => 'server.xml.tomcat7.erb',
   }
 
   if $tomcat::type == 'package' {
