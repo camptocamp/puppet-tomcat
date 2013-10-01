@@ -60,6 +60,7 @@ class tomcat::source inherits tomcat::base {
   $baseurl = $tomcat::params::maj_version ? {
     '5.5' => "${tomcat::params::mirror}/tomcat-5/v${tomcat::params::version}/bin",
     '6'   => "${tomcat::params::mirror}/tomcat-6/v${tomcat::params::version}/bin",
+    '7'   => "${tomcat::params::mirror}/tomcat-7/v${tomcat::params::version}/bin",
   }
 
   $tomcaturl = "${baseurl}/apache-tomcat-${tomcat::params::version}.tar.gz"
