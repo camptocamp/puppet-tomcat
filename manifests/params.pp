@@ -21,13 +21,19 @@ class tomcat::params {
       $version = $default_source_release
     } else {
       $version = $tomcat_version
-      if versioncmp($tomcat_version, '6.0.0') >= 0 {
-        $maj_version = '6'
-      } else {
-        if versioncmp($tomcat_version, '5.5.0') >= 0 {
-          $maj_version = '5.5'
+         
+      if versioncmp($tomcat_version, '7.0.0') >= 0 {
+          $maj_version = '7'
+      }
+      else {
+        if versioncmp($tomcat_version, '6.0.0') >= 0 {
+            $maj_version = '6'
         } else {
-          fail 'only versions >= 5.5 or >= 6.0 are supported !'
+            if versioncmp($tomcat_version, '5.5.0') >= 0 {
+            $maj_version = '5.5'
+            } else {
+            fail 'only versions >= 5.5 or >= 6.0 are supported !'
+            }
         }
       }
     }
