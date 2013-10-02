@@ -37,14 +37,19 @@
      Documentation at /docs/config/server.html
  -->
 <Server port="<%= @server_port %>" shutdown="SHUTDOWN">
-
+  <!-- Security listener. Documentation at /docs/config/listeners.html
+  <Listener className="org.apache.catalina.security.SecurityListener" />
+  -->
   <!--APR library loader. Documentation at /docs/apr.html -->
+  <!--
   <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+  -->
   <!--Initialize Jasper prior to webapps are loaded. Documentation at /docs/jasper-howto.html -->
   <Listener className="org.apache.catalina.core.JasperListener" />
-  <!-- JMX Support for the Tomcat server. Documentation at /docs/non-existent.html -->
-  <Listener className="org.apache.catalina.mbeans.ServerLifecycleListener" />
+  <!-- Prevent memory leaks due to use of particular java/javax APIs-->
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
   <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
 
   <!-- Global JNDI resources
        Documentation at /docs/jndi-resources-howto.html
@@ -61,12 +66,12 @@
   </GlobalNamingResources>
 
   <!-- A "Service" is a collection of one or more "Connectors" that share
-       a single "Container" Note:  A "Service" is not itself a "Container", 
+       a single "Container" Note:  A "Service" is not itself a "Container",
        so you may not define subcomponents such as "Valves" at this level.
        Documentation at /docs/config/service.html
    -->
   <Service name="Catalina">
-    
+
 <% if not @executor.empty? -%>
 <% @executor.each do |exe| -%>
     <!-- See conf/executor-<%= exe %>.xml for this executor's config. -->
@@ -90,8 +95,8 @@
          Documentation at /docs/config/engine.html -->
 
     <!-- You should set jvmRoute to support load-balancing via AJP ie :
-    <Engine name="Catalina" defaultHost="localhost" jvmRoute="jvm1">         
-    --> 
+    <Engine name="Catalina" defaultHost="localhost" jvmRoute="jvm1">
+    -->
     <Engine name="Catalina" defaultHost="localhost">
 
       <!--For clustering, please take a look at documentation at:
@@ -99,28 +104,21 @@
           /docs/config/cluster.html (reference documentation) -->
       <!--
       <Cluster className="org.apache.catalina.ha.tcp.SimpleTcpCluster"/>
-      -->        
-
-      <!-- The request dumper valve dumps useful debugging information about
-           the request and response data received and sent by Tomcat.
-           Documentation at: /docs/config/valve.html -->
-      <!--
-      <Valve className="org.apache.catalina.valves.RequestDumperValve"/>
       -->
 
-      <!-- This Realm uses the UserDatabase configured in the global JNDI
-           resources under the key "UserDatabase".  Any edits
-           that are performed against this UserDatabase are immediately
-           available for use by the Realm.  -->
-      <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
-             resourceName="UserDatabase"/>
+      <!-- Use the LockOutRealm to prevent attempts to guess user passwords
+           via a brute-force attack -->
+      <Realm className="org.apache.catalina.realm.LockOutRealm">
+        <!-- This Realm uses the UserDatabase configured in the global JNDI
+             resources under the key "UserDatabase".  Any edits
+             that are performed against this UserDatabase are immediately
+             available for use by the Realm.  -->
+        <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+               resourceName="UserDatabase"/>
+      </Realm>
 
-      <!-- Define the default virtual host
-           Note: XML Schema validation will not work with Xerces 2.2.
-       -->
       <Host name="localhost"  appBase="webapps"
-            unpackWARs="true" autoDeploy="true"
-            xmlValidation="false" xmlNamespaceAware="false">
+            unpackWARs="true" autoDeploy="true">
 
         <!-- SingleSignOn valve, share authentication between web applications
              Documentation at: /docs/config/valve.html -->
@@ -129,11 +127,11 @@
         -->
 
         <!-- Access log processes all example.
-             Documentation at: /docs/config/valve.html -->
-        <!--
-        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"  
-               prefix="localhost_access_log." suffix=".txt" pattern="common" resolveHosts="false"/>
-        -->
+             Documentation at: /docs/config/valve.html
+             Note: The pattern used is equivalent to using pattern="common" -->
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+               prefix="localhost_access_log." suffix=".txt"
+               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
 
       </Host>
     </Engine>
