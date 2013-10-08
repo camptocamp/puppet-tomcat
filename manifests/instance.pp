@@ -255,7 +255,7 @@ define tomcat::instance(
   }
 
   # In this case, we are using a non package-based tomcat.
-  if $tomcat::type == 'source' {
+  if $tomcat::type == 'sources' {
     $catalinahome = '/opt/apache-tomcat'
   }
 
