@@ -21,7 +21,7 @@
 #   include tomcat::source
 #
 class tomcat::source (
-  $version     = $tomcat::version,
+  $version     = $tomcat::src_version,
   $sources_src = $tomcat::sources_src,
 ) {
 
