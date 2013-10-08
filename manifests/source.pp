@@ -29,9 +29,7 @@ class tomcat::source (
 
   if $version =~ /^6\./ {
     # install extra tomcat juli adapters, used to configure logging.
-    class { '::tomcat::juli':
-      tomcat_home => $tomcat_home,
-    }
+    class { '::tomcat::juli': }
   }
 
   # link logging libraries from java
