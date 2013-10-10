@@ -2,26 +2,24 @@
 #
 # Links logging libraries in tomcat installation directory
 #
-# Attributes:
-# - *conffile*:    configuration file for log4j
+# This class must not be included directly. It is automatically included
+# by the tomcat module.
 #
-# This class is just there to avoid code duplication. It probably
-# doesn't make any sense to include it directly.
-#
-class tomcat::logging (
-  $conffile    = "puppet:///modules/${module_name}/conf/log4j.rolling.properties",
-  $base_path   = $tomcat::version ? {
-    '5'     => "${tomcat::home}/common/lib",
-    default => "${tomcat::home}/lib",
-  },
-) {
+class tomcat::logging {
 
-  $package = $::osfamily? {
+  $conffile = "puppet:///modules/${module_name}/conf/log4j.rolling.properties"
+
+  $base_path = $::tomcat::version ? {
+    '5'     => "${::tomcat::home}/common/lib",
+    default => "${::tomcat::home}/lib",
+  }
+
+  $log4j_packages = $::osfamily? {
     Debian => ['liblog4j1.2-java', 'libcommons-logging-java'],
     RedHat => ['log4j', 'jakarta-commons-logging'],
   }
 
-  package {$package:
+  package {$log4j_packages:
     ensure => present,
   }
 
@@ -47,20 +45,20 @@ class tomcat::logging (
     ensure  => link,
     path    => "${base_path}/commons-logging.jar",
     target  => '/usr/share/java/commons-logging.jar',
-    require => Package[$package],
+    require => Package[$log4j_packages],
   }
 
   file {'log4j.jar':
     ensure  => link,
     path    => "${base_path}/log4j.jar",
     target  => $log4j,
-    require => Package[$package],
+    require => Package[$log4j_packages],
   }
 
   file {'log4j.properties':
     path    => "${base_path}/log4j.properties",
     source  => $conffile,
-    require => Package[$package],
+    require => Package[$log4j_packages],
   }
 
 }

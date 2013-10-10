@@ -3,6 +3,9 @@
 # Installs tomcat using the compressed archive from your favorite tomcat
 # mirror. Files from the archive will be installed in /opt/apache-tomcat/.
 #
+# This class must not be included directly. It is included when the source
+# parameters on the tomcat module is set to true.
+#
 # Class variables:
 # - *$log4j_conffile*: see tomcat
 #
@@ -16,16 +19,10 @@
 # - Debian Lenny/Squeeze
 # - Ubuntu Lucid
 #
-# Usage:
-#   $tomcat_version = "6.0.18"
-#   include tomcat::source
-#
-class tomcat::source (
-  $version     = $tomcat::src_version,
-  $sources_src = $tomcat::sources_src,
-) {
+class tomcat::source {
 
-  $tomcat_home = "/opt/apache-tomcat-${version}"
+  $version     = $tomcat::src_version
+  $sources_src = $tomcat::sources_src
 
   if $version =~ /^6\./ {
     # install extra tomcat juli adapters, used to configure logging.
@@ -33,8 +30,7 @@ class tomcat::source (
   }
 
   # link logging libraries from java
-  class { '::tomcat::logging':
-    base_path => $tomcat_home, }
+  class {'::tomcat::logging': }
 
   $a_version = split($version, '[.]')
   $maj_version = $a_version[0]
@@ -51,12 +47,12 @@ class tomcat::source (
 
   file { '/opt/apache-tomcat':
     ensure  => link,
-    target  => $tomcat_home,
+    target  => $::tomcat::home,
     require => Archive["apache-tomcat-${version}"],
     before  => Class['tomcat::logging'],
   }
 
-  file { $tomcat_home:
+  file { $::tomcat::home:
     ensure  => directory,
     require => Archive["apache-tomcat-${version}"],
   }
@@ -65,7 +61,7 @@ class tomcat::source (
   case $version {
     '6.0.18': {
       # Fix https://issues.apache.org/bugzilla/show_bug.cgi?id=45585
-      file {"${tomcat_home}/bin/catalina.sh":
+      file {"${::tomcat::home}/bin/catalina.sh":
         ensure  => present,
         source  => 'puppet:///modules/tomcat/catalina.sh-6.0.18',
         require => Archive["apache-tomcat-${tomcat::version}"],
