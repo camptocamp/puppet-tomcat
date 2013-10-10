@@ -33,7 +33,8 @@ class tomcat::source (
   }
 
   # link logging libraries from java
-  class { '::tomcat::logging': }
+  class { '::tomcat::logging':
+    base_path => $tomcat_home, }
 
   $a_version = split($version, '[.]')
   $maj_version = $a_version[0]
