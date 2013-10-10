@@ -24,9 +24,12 @@ class tomcat (
     7 => '7.0.42',
   }
 
-  $home = $::osfamily? {
-    Debian => "/usr/share/tomcat${version}",
-    RedHat => "/var/lib/tomcat${version}",
+  $home = $sources ? {
+    true  => "/opt/apache-tomcat-${src_version}",
+    false => $::osfamily? {
+      Debian => "/usr/share/tomcat${version}",
+      RedHat => "/var/lib/tomcat${version}",
+    }
   }
 
   create_resources('tomcat::ulimit', $ulimits)
