@@ -10,6 +10,10 @@
 #
 class tomcat::logging (
   $conffile    = "puppet:///modules/${module_name}/conf/log4j.rolling.properties",
+  $base_path   = $tomcat::version ? {
+    '5'     => "${tomcat::home}/common/lib",
+    default => "${tomcat::home}/lib",
+  },
 ) {
 
   $package = $::osfamily? {
@@ -21,18 +25,16 @@ class tomcat::logging (
     ensure => present,
   }
 
-  $base_path = $tomcat::version ? {
-    '5'     => "${tomcat::home}/common/lib",
-    default => "${tomcat::home}/lib",
-  }
-
   $log4j = $::osfamily? {
     Debian => '/usr/share/java/log4j-1.2.jar',
     RedHat => '/usr/share/java/log4j.jar',
   }
 
-  file {$base_path:
-    ensure => directory,
+  # The source class need (and define) this directory before logging
+  if $::tomcat::sources == false {
+    file {$base_path:
+      ensure => directory,
+    }
   }
 
   file {'/var/log/tomcat':
