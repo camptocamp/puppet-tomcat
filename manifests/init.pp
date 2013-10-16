@@ -19,9 +19,10 @@ class tomcat (
   }
 
   $src_version = $version? {
-    5 => '5.5.27',
-    6 => '6.0.26',
-    7 => '7.0.42',
+    5       => '5.5.27',
+    6       => '6.0.26',
+    7       => '7.0.42',
+    default => $version,
   }
 
   $home = $sources ? {
