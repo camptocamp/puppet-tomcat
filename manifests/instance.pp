@@ -266,7 +266,7 @@ define tomcat::instance(
   if $java_home == '' {
     case $::operatingsystem {
       RedHat: {
-        $javahome = '/usr/lib/jvm/java'
+        $javahome = '/usr/lib/jvm/jre'
       }
       CentOS: {
         $javahome = '/etc/alternatives/jre'
