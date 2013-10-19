@@ -4,8 +4,8 @@
 #
 class tomcat::install::redhat {
 
-  case $::operatingsystemmajrelease {
-    5: {
+  case $::operatingsystemrelease {
+    /^5.*/: {
       file {'/usr/share/tomcat5/bin/catalina.sh':
         ensure  => link,
         target  => "/usr/bin/dtomcat${tomcat::version}",
@@ -13,7 +13,7 @@ class tomcat::install::redhat {
       }
     }
 
-    6: {
+    /^6.*/: {
       file {"/usr/share/tomcat${tomcat::version}/bin/setclasspath.sh":
         ensure  => file,
         owner   => root,
@@ -32,7 +32,7 @@ class tomcat::install::redhat {
       }
     }
     default: {
-      fail "Don't know what to do for ${::operatingsystem}/${::operatingsystemmajrelease}"
+      fail "Don't know what to do for ${::operatingsystem}/${::operatingsystemrelease}"
     }
   }
 }
