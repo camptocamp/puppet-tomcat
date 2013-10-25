@@ -431,7 +431,6 @@ define tomcat::instance(
         ensure  => absent,
         recurse => true,
         force   => true,
-        require => Service["tomcat-${name}"],
       }
     }
   }
