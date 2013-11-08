@@ -345,10 +345,6 @@ define tomcat::instance(
             default => undef,
           },
           before  => Service["tomcat-${name}"],
-          notify  => $manage? {
-            true    => Service["tomcat-${name}"],
-            default => undef,
-          },
           require => $server_xml_file? {
             ''      => undef,
             default => Tomcat::Connector[$connectors],
@@ -369,10 +365,6 @@ define tomcat::instance(
             default => undef,
           },
           before  => Service["tomcat-${name}"],
-          notify  => $manage? {
-            true    => Service["tomcat-${name}"],
-            default => undef,
-          },
           replace => $manage;
 
         "${basedir}/README":
@@ -502,6 +494,14 @@ define tomcat::instance(
     },
     require => [File["/etc/init.d/tomcat-${name}"], $servicerequire],
     pattern => "-Dcatalina.base=${tomcat::instance_basedir}/${name}",
+    subscribe => $manage? {
+      true    => [ File["${basedir}/bin/setenv.sh"], 
+                   File["${basedir}/bin/setenv-local.sh"],
+		   File["${basedir}/conf/server.xml"],
+		   File["${basedir}/conf/web.xml"]],
+      default => undef,
+    },
+
   }
 
   # Logrotate
