@@ -17,7 +17,7 @@
 # - *min_spare_threads*: (int) minimum number of threads always kept alive
 # - *max_idle_time*: (int) number of milliseconds before an idle thread
 #   shutsdown
-# - *manage*: only add this file/executor if it isn’t already present
+# - *manage*: only add this file/executor if it isn't already present
 #
 # Requires:
 # - one of the tomcat classes which installs tomcat binaries.

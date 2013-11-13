@@ -21,7 +21,7 @@
 #   SSL transport
 # - *scheme*: to identify the name of the protocol (default=http)
 # - *executor*: the name of a thead pool shared between components
-# - *manage*: only add this file/connector if it isn’t already present
+# - *manage*: only add this file/connector if it isn't already present
 #
 # Requires:
 # - one of the tomcat classes which installs tomcat binaries.
