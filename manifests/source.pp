@@ -23,6 +23,7 @@ class tomcat::source {
 
   $version     = $tomcat::src_version
   $sources_src = $tomcat::sources_src
+  $maven       = $tomcat::maven
 
   if $version =~ /^6\./ {
     # install extra tomcat juli adapters, used to configure logging.
@@ -35,7 +36,12 @@ class tomcat::source {
   $a_version = split($version, '[.]')
   $maj_version = $a_version[0]
 
-  $baseurl = "${sources_src}/tomcat-${maj_version}/v${version}/bin"
+  if $maven {
+    $baseurl = "${sources_src}/org/apache/apache-tomcat/${version}"
+  } else {
+    $baseurl = "${sources_src}/tomcat-${maj_version}/v${version}/bin"
+  }
+
   $tomcaturl = "${baseurl}/apache-tomcat-${version}.tar.gz"
 
   archive{ "apache-tomcat-${version}":
@@ -43,6 +49,9 @@ class tomcat::source {
     digest_url  => "${tomcaturl}.md5",
     digest_type => 'md5',
     target      => '/opt',
+    # nexus uses different md5 file format! so assuming that if you use nexus for hosting the apache sources
+    # you are on an internal network anyway
+    checksum    => !$maven,
   }
 
   file { '/opt/apache-tomcat':

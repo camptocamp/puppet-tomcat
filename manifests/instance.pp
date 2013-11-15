@@ -196,25 +196,28 @@ define tomcat::instance(
     }
 
     tomcat::connector{"http-${http_port}-${name}":
-      ensure   => $connector_ensure,
-      instance => $name,
-      protocol => 'HTTP/1.1',
-      port     => $http_port,
-      manage   => $manage,
-      address  => $http_address,
-      group    => $group,
-      owner    => $owner
+      ensure           => $connector_ensure,
+      instance         => $name,
+      protocol         => 'HTTP/1.1',
+      port             => $http_port,
+      manage           => $manage,
+      address          => $http_address,
+      group            => $group,
+      owner            => $owner,
+      instance_basedir => $instance_basedir
     }
 
     tomcat::connector{"ajp-${ajp_port}-${name}":
-      ensure   => $connector_ensure,
-      instance => $name,
-      protocol => 'AJP/1.3',
-      port     => $ajp_port,
-      manage   => $manage,
-      address  => $ajp_address,
-      group    => $group,
-      owner    => $owner
+      ensure           => $connector_ensure,
+      instance         => $name,
+      protocol         => 'AJP/1.3',
+      port             => $ajp_port,
+      manage           => $manage,
+      address          => $ajp_address,
+      group            => $group,
+      owner            => $owner,
+      instance_basedir => $instance_basedir
+
     }
 
   } else {

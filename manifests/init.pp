@@ -2,6 +2,7 @@ class tomcat (
   $version          = $tomcat::params::version,
   $sources          = false,
   $sources_src      = $tomcat::params::sources_src,
+  $maven            = false,
   $instance_basedir = $tomcat::params::instance_basedir,
   $tomcat_uid       = undef,
   $tomcat_gid       = undef,
@@ -10,6 +11,7 @@ class tomcat (
 
   validate_re($version, '^[5-7]([\.0-9]+)?$')
   validate_bool($sources)
+  validate_bool($maven)
   validate_absolute_path($instance_basedir)
   validate_hash($ulimits)
 
