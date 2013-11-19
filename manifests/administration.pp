@@ -6,7 +6,9 @@
 # - restart tomcat instances.
 #
 # Requires:
-# - definition sudo::directive from module camptocamp/puppet-sudo
+# - definition sudo::conf from module camptocamp/puppet-sudo
+# OR
+# - definition sudo::conf from module saz/puppet-sudo
 #
 # Warning: will overwrite /etc/sudoers !
 #
@@ -23,7 +25,7 @@ class tomcat::administration (
     system => true,
   }
 
-  sudo::directive { 'tomcat-administration':
+  sudo::conf { 'tomcat-administration':
     ensure  => present,
     content => template('tomcat/sudoers.tomcat.erb'),
     require => Group['tomcat-admin'],
