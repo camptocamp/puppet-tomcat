@@ -109,6 +109,7 @@ define tomcat::instance(
   $setenv           = [],
   $connector        = [],
   $executor         = [],
+  $resource         = [],
   $manage           = false,
   $seluser          = 'system_u',
   $selrole          = 'object_r',
@@ -289,6 +290,9 @@ define tomcat::instance(
   }
   validate_absolute_path($javahome)
 
+
+  $resources = regsubst( $resource, '\/', '-', 'G')
+
   # Instance directories
   case $ensure {
     present,installed,running,stopped: {
@@ -369,6 +373,15 @@ define tomcat::instance(
           },
           before  => Service["tomcat-${name}"],
           replace => $manage;
+
+        "${basedir}/conf/context.xml":
+	  ensure  => present,
+	  owner   => $owner,
+	  group   => $group,
+	  mode    => $filemode,
+	  content => template("${module_name}/context.xml.erb"),
+	  before  => Service["tomcat-${name}"],
+	  replace => $manage;
 
         "${basedir}/README":
           ensure  => present,
