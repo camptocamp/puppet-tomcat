@@ -9,6 +9,11 @@
 <% @connectors.each do |conn| -%>
   <!ENTITY connector-<%= conn %> SYSTEM "connector-<%= conn %>.xml">
 <% end -%>
+<% if not @resources.empty? -%>
+<% @resources.each do |res| -%>
+  <!ENTITY resource-<%= res %> SYSTEM "resource-<%= res %>.xml">
+<% end -%>
+<% end -%>
 ]>
 <% end -%>
 <% if @manage -%>
@@ -58,6 +63,15 @@
               description="User database that can be updated and saved"
               factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
               pathname="conf/tomcat-users.xml" />
+
+<% if not @resources.empty? -%>
+  <% @resources.each do |res| -%>
+    <!-- See conf/resource-<%= res %>.xml for this resources's config. -->
+     &resource-<%= res %>;
+   <% end -%>
+ <% end -%>
+
+
   </GlobalNamingResources>
 
   <!-- A "Service" is a collection of one or more "Connectors" that share

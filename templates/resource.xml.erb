@@ -1,0 +1,23 @@
+<% if @manage -%>
+<!-- file managed by puppet -->
+<% else -%>
+<!-- file created (but not managed by puppet -->
+<% end -%>
+<Resource name="<%= @global_name %>" 
+<% if @type -%>
+          type="<%= @type %>"
+<% end -%>
+<% if @factory -%>
+          factory="<%= @factory %>"
+<% end -%>
+<% if @auth -%>
+          auth="<%= @auth %>"
+<% end -%>
+<% if @description -%>
+          description="<%= @description %>"
+<% end -%>
+<% if @scope -%>
+          scope="<%= @scope %>"
+<% end -%>
+          <%= options.collect! {|i| "#{i}" }.join("\n          ") %>
+          />

@@ -109,6 +109,7 @@ define tomcat::instance(
   $setenv           = [],
   $connector        = [],
   $executor         = [],
+  $resource         = [],
   $manage           = false,
   $seluser          = 'system_u',
   $selrole          = 'object_r',
@@ -196,25 +197,28 @@ define tomcat::instance(
     }
 
     tomcat::connector{"http-${http_port}-${name}":
-      ensure   => $connector_ensure,
-      instance => $name,
-      protocol => 'HTTP/1.1',
-      port     => $http_port,
-      manage   => $manage,
-      address  => $http_address,
-      group    => $group,
-      owner    => $owner
+      ensure           => $connector_ensure,
+      instance         => $name,
+      protocol         => 'HTTP/1.1',
+      port             => $http_port,
+      manage           => $manage,
+      address          => $http_address,
+      group            => $group,
+      owner            => $owner,
+      instance_basedir => $instance_basedir
     }
 
     tomcat::connector{"ajp-${ajp_port}-${name}":
-      ensure   => $connector_ensure,
-      instance => $name,
-      protocol => 'AJP/1.3',
-      port     => $ajp_port,
-      manage   => $manage,
-      address  => $ajp_address,
-      group    => $group,
-      owner    => $owner
+      ensure           => $connector_ensure,
+      instance         => $name,
+      protocol         => 'AJP/1.3',
+      port             => $ajp_port,
+      manage           => $manage,
+      address          => $ajp_address,
+      group            => $group,
+      owner            => $owner,
+      instance_basedir => $instance_basedir
+
     }
 
   } else {
@@ -266,7 +270,7 @@ define tomcat::instance(
   if $java_home == '' {
     case $::operatingsystem {
       RedHat: {
-        $javahome = '/usr/lib/jvm/java'
+        $javahome = '/usr/lib/jvm/jre'
       }
       CentOS: {
         $javahome = '/etc/alternatives/jre'
@@ -285,6 +289,9 @@ define tomcat::instance(
     $javahome = $java_home
   }
   validate_absolute_path($javahome)
+
+
+  $resources = regsubst( $resource, '\/', '-', 'G')
 
   # Instance directories
   case $ensure {
@@ -345,10 +352,6 @@ define tomcat::instance(
             default => undef,
           },
           before  => Service["tomcat-${name}"],
-          notify  => $manage? {
-            true    => Service["tomcat-${name}"],
-            default => undef,
-          },
           require => $server_xml_file? {
             ''      => undef,
             default => Tomcat::Connector[$connectors],
@@ -369,11 +372,24 @@ define tomcat::instance(
             default => undef,
           },
           before  => Service["tomcat-${name}"],
-          notify  => $manage? {
-            true    => Service["tomcat-${name}"],
-            default => undef,
-          },
           replace => $manage;
+
+        "${basedir}/conf/context.xml":
+	  ensure  => present,
+	  owner   => $owner,
+	  group   => $group,
+	  mode    => $filemode,
+	  content => template("${module_name}/context.xml.erb"),
+	  before  => Service["tomcat-${name}"],
+	  replace => $manage;
+
+	"${basedir}/conf/catalina.properties":
+	  ensure => present,
+	  owner   => $owner,
+          group   => $group,
+          mode    => $filemode,
+	  source => "puppet:///modules/${module_name}/conf/catalina.properties",
+	  before  => Service["tomcat-${name}"];
 
         "${basedir}/README":
           ensure  => present,
@@ -501,6 +517,14 @@ define tomcat::instance(
     },
     require => [File["/etc/init.d/tomcat-${name}"], $servicerequire],
     pattern => "-Dcatalina.base=${tomcat::instance_basedir}/${name}",
+    subscribe => $manage? {
+      true    => [ File["${basedir}/bin/setenv.sh"], 
+                   File["${basedir}/bin/setenv-local.sh"],
+		   File["${basedir}/conf/server.xml"],
+		   File["${basedir}/conf/web.xml"]],
+      default => undef,
+    },
+
   }
 
   # Logrotate
