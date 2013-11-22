@@ -383,6 +383,14 @@ define tomcat::instance(
 	  before  => Service["tomcat-${name}"],
 	  replace => $manage;
 
+	"${basedir}/conf/catalina.properties":
+	  ensure => present,
+	  owner   => $owner,
+          group   => $group,
+          mode    => $filemode,
+	  source => "puppet:///modules/${module_name}/conf/catalina.properties",
+	  before  => Service["tomcat-${name}"];
+
         "${basedir}/README":
           ensure  => present,
           owner   => 'root',
