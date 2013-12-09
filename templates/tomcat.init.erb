@@ -1,6 +1,6 @@
 #!/bin/sh
 # chkconfig: 2345 20 80
-# description: Handle tomcat instance <%= tomcat_name %>
+# description: Handle tomcat instance <%= @tomcat_name %>
 
 # file managed by puppet
 
@@ -75,7 +75,7 @@ stop() {
 
 findpid() {
   pid=""
-  pid=$(pgrep -U <%= @owner %> -f "^$JAVA_HOME/bin/java.*catalina.base=<%= basedir %>")
+  pid=$(pgrep -U <%= @owner %> -f "^$JAVA_HOME/bin/java.*catalina.base=<%= @basedir %>")
 
   # validate output of pgrep
   if ! [ "$pid" = "" ] && ! [ "$pid" -gt 0 ]; then
