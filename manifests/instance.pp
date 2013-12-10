@@ -117,6 +117,8 @@ define tomcat::instance(
   $tomcat_version   = false,
 ) {
 
+  Class['tomcat::install'] -> Tomcat::Instance[$title]
+
   validate_re($ensure, [
     'present',
     'running',
