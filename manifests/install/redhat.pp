@@ -20,6 +20,7 @@ class tomcat::install::redhat {
         group   => root,
         mode    => '0755',
         source  => "puppet:///modules/${module_name}/setclasspath.sh-6.0.24",
+        require => Package["tomcat${tomcat::version}"],
       }
 
       file {"/usr/share/tomcat${tomcat::version}/bin/catalina.sh":
