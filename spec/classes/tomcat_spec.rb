@@ -13,9 +13,9 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
 
       describe 'should include basic classes' do
         it {
-          should include_class('tomcat::install')
-          should include_class('tomcat::user')
-          should include_class('tomcat::service')
+          should contain_class('tomcat::install')
+          should contain_class('tomcat::user')
+          should contain_class('tomcat::service')
         }
       end
 
@@ -27,8 +27,8 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
 
       describe 'should include tomcat::logging and tomcat::juli' do
         it {
-          should include_class('tomcat::logging')
-          should include_class('tomcat::juli')
+          should contain_class('tomcat::logging')
+          should contain_class('tomcat::juli')
         }
       end
 
@@ -70,7 +70,7 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
           }}
           describe 'should include tomcat::source' do
             it {
-              should include_class('tomcat::source')
+              should contain_class('tomcat::source')
             }
           end
           describe 'should download tomcat' do
