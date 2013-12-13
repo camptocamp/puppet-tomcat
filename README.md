@@ -1,6 +1,8 @@
 Tomcat Puppet module
 ====================
 
+[![Build Status](https://travis-ci.org/camptocamp/puppet-tomcat.png?branch=master)](https://travis-ci.org/camptocamp/puppet-tomcat)
+
 **Manages Tomcat configuration.**
 
 This module is provided by [Camptocamp](http://camptocamp.com/).
