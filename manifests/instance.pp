@@ -291,6 +291,18 @@ define tomcat::instance(
   # Instance directories
   case $ensure {
     present,installed,running,stopped: {
+      concat_build { "server.xml_${name}": }
+      concat_fragment { "server.xml_${name}+01_header":
+        content => '<?xml version=\'1.0\' encoding=\'utf-8\'?>
+<!DOCTYPE server-xml [
+',
+      }
+      concat_fragment { "server.xml_${name}+04_body1":
+        content => template("${module_name}/body1_${serverdotxml}"),
+      }
+      concat_fragment { "server.xml_${name}+07_body2":
+        content => template("${module_name}/body2_${serverdotxml}"),
+      }
       file {
         # Nobody usually write there
         $basedir:
@@ -339,11 +351,17 @@ define tomcat::instance(
           group   => $group,
           mode    => $filemode,
           source  => $server_xml_file? {
-            ''      => undef,
+            ''      => $version ? {
+              5       => undef,
+              default => concat_output("server.xml_${name}"),
+            },
             default => $server_xml_file,
           },
           content => $server_xml_file? {
-            ''      => template("${module_name}/${serverdotxml}"),
+            ''      => $version ? {
+              5       => template("${module_name}/${serverdotxml}"),
+              default => undef,
+            },
             default => undef,
           },
           before  => Service["tomcat-${name}"],
@@ -352,7 +370,7 @@ define tomcat::instance(
             default => undef,
           },
           require => $server_xml_file? {
-            ''      => undef,
+            ''      => Concat_build["server.xml_${name}"],
             default => Tomcat::Connector[$connectors],
           },
           replace => $manage;
