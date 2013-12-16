@@ -91,30 +91,31 @@
 #   }
 #
 define tomcat::instance(
-  $ensure           = present,
-  $owner            = 'tomcat',
-  $group            = 'adm',
-  $server_port      = '8005',
-  $http_port        = '8080',
-  $http_address     = false,
-  $ajp_port         = '8009',
-  $ajp_address      = false,
-  $conf_mode        = '',
-  $logs_mode        = '',
-  $server_xml_file  = '',
-  $web_xml_file     = '',
-  $webapp_mode      = '',
-  $java_home        = '',
-  $sample           = undef,
-  $setenv           = [],
-  $connector        = [],
-  $executor         = [],
-  $manage           = false,
-  $seluser          = 'system_u',
-  $selrole          = 'object_r',
-  $seltype          = 'initrc_exec_t',
-  $instance_basedir = false,
-  $tomcat_version   = false,
+  $ensure             = present,
+  $owner              = 'tomcat',
+  $group              = 'adm',
+  $server_port        = '8005',
+  $http_port          = '8080',
+  $http_address       = false,
+  $ajp_port           = '8009',
+  $ajp_address        = false,
+  $conf_mode          = '',
+  $logs_mode          = '',
+  $server_xml_file    = '',
+  $web_xml_file       = '',
+  $webapp_mode        = '',
+  $java_home          = '',
+  $sample             = undef,
+  $setenv             = [],
+  $connector          = [],
+  $default_connectors = true,
+  $executor           = [],
+  $manage             = false,
+  $seluser            = 'system_u',
+  $selrole            = 'object_r',
+  $seltype            = 'initrc_exec_t',
+  $instance_basedir   = false,
+  $tomcat_version     = false,
 ) {
 
   Class['tomcat::install'] -> Tomcat::Instance[$title]
@@ -188,7 +189,7 @@ define tomcat::instance(
   validate_re($logsmode, '^[0-9]+$')
 
 
-  if $connector == [] and $server_xml_file == '' {
+  if $connector == [] and $server_xml_file == '' and $default_connectors {
 
     $connectors = ["http-${http_port}-${name}","ajp-${ajp_port}-${name}"]
 
