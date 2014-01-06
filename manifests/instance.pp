@@ -292,17 +292,19 @@ define tomcat::instance(
   # Instance directories
   case $ensure {
     present,installed,running,stopped: {
-      concat_build { "server.xml_${name}": }
-      concat_fragment { "server.xml_${name}+01_header":
-        content => '<?xml version=\'1.0\' encoding=\'utf-8\'?>
-<!DOCTYPE server-xml [
-',
-      }
-      concat_fragment { "server.xml_${name}+04_body1":
-        content => template("${module_name}/body1_${serverdotxml}"),
-      }
-      concat_fragment { "server.xml_${name}+07_body2":
-        content => template("${module_name}/body2_${serverdotxml}"),
+      if $version != 5 {
+        concat_build { "server.xml_${name}": }
+        concat_fragment { "server.xml_${name}+01_header":
+          content => '<?xml version=\'1.0\' encoding=\'utf-8\'?>
+          <!DOCTYPE server-xml [
+            ',
+          }
+        concat_fragment { "server.xml_${name}+04_body1":
+          content => template("${module_name}/body1_${serverdotxml}"),
+        }
+        concat_fragment { "server.xml_${name}+07_body2":
+          content => template("${module_name}/body2_${serverdotxml}"),
+        }
       }
       file {
         # Nobody usually write there
@@ -370,8 +372,11 @@ define tomcat::instance(
             true    => Service["tomcat-${name}"],
             default => undef,
           },
-          require => $server_xml_file? {
-            ''      => Concat_build["server.xml_${name}"],
+          require  => $server_xml_file? {
+            ''      => $version ? {
+              5       => undef,
+              default => Concat_build["server.xml_${name}"],
+            },
             default => Tomcat::Connector[$connectors],
           },
           replace => $manage;

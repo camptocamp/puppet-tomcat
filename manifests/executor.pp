@@ -98,13 +98,15 @@ define tomcat::executor(
     replace => $manage,
   }
 
-  concat_fragment { "server.xml_${instance}+02_executor_${name}":
-    content => "  <!ENTITY executor-${name} SYSTEM \"executor-${name}.xml\">\n",
-  }
+  if $::tomcat::version != 5 {
+    concat_fragment { "server.xml_${instance}+02_executor_${name}":
+      content => "  <!ENTITY executor-${name} SYSTEM \"executor-${name}.xml\">\n",
+    }
 
-  concat_fragment { "server.xml_${instance}+05_executor_${name}":
-    content => "    <!-- See conf/executor-${name}.xml for this executor's config. -->
-    &executor-${name};\n",
+    concat_fragment { "server.xml_${instance}+05_executor_${name}":
+      content => "    <!-- See conf/executor-${name}.xml for this executor's config. -->
+      &executor-${name};\n",
+    }
   }
 
 }

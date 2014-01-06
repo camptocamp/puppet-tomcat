@@ -101,13 +101,15 @@ define tomcat::connector(
     require => $require,
   }
 
-  concat_fragment { "server.xml_${instance}+03_connector_${name}":
-    content => "  <!ENTITY connector-${name} SYSTEM \"connector-${name}.xml\">\n",
-  }
+  if $::tomcat::version != 5 {
+    concat_fragment { "server.xml_${instance}+03_connector_${name}":
+      content => "  <!ENTITY connector-${name} SYSTEM \"connector-${name}.xml\">\n",
+    }
 
-  concat_fragment { "server.xml_${instance}+06_connector_${name}":
-    content => "    <!-- See conf/connector-${name}.xml for this connector's config. -->
-    &connector-${name};\n",
+    concat_fragment { "server.xml_${instance}+06_connector_${name}":
+      content => "    <!-- See conf/connector-${name}.xml for this connector's config. -->
+      &connector-${name};\n",
+    }
   }
 
 }
