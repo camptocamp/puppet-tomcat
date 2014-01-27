@@ -491,6 +491,14 @@ define tomcat::instance(
     before  => Service["tomcat-${name}"],
   }
 
+  # Default rotation of catalina.out
+  # Not managed by default
+  # TODO: managed mode with more options ?
+  file{ "/etc/logrotate.d/catalina-${name}":
+    ensure  => $present,
+    replace => false,
+    content => template( 'tomcat/logrotate.catalina.erb' ),
+  }
 
   # Init and env scripts
   file {"/etc/init.d/tomcat-${name}":
