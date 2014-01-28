@@ -13,7 +13,7 @@ all.each { |k, v|
       :osfamily                  => v['osfamily'],
       :operatingsystem           => v['operatingsystem'],
       :operatingsystemmajrelease => v['operatingsystemmajrelease'],
-      :lsbdistmajrelease         => v['lsbdistmajrelease'],
+      :lsbmajdistrelease         => v['lsbmajdistrelease'],
     }}
 
     describe "#{k} should create connector1" do
