@@ -8,7 +8,7 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
       :osfamily                  => v['osfamily'],
       :operatingsystem           => v['operatingsystem'],
       :operatingsystemmajrelease => v['operatingsystemmajrelease'],
-      :lsbdistmajrelease         => v['lsbdistmajrelease'],
+      :lsbmajdistrelease         => v['lsbmajdistrelease'],
     } }
 
     context 'when using a wrong ensure value' do

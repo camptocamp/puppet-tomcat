@@ -8,7 +8,7 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
         :osfamily                  => v['osfamily'],
         :operatingsystem           => v['operatingsystem'],
         :operatingsystemmajrelease => v['operatingsystemmajrelease'],
-        :lsbdistmajrelease         => v['lsbdistmajrelease'],
+        :lsbmajdistrelease         => v['lsbmajdistrelease'],
       } }
 
       describe 'should include basic classes' do
@@ -59,11 +59,11 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
       end
 
       {
-        '5.0.1' => 5,
-        '6.0.1' => 6,
-        '7.0.1' => 7,
-      }.each { |version, maj|
-        context "install tomcat#{version} from sources" do
+        '5' => '5.5.27',
+        '6' => '6.0.26',
+        '7' => '7.0.42',
+      }.each { |version, fullversion|
+        context "install tomcat#{fullversion} from sources" do
           let(:params) {{
             :sources => true,
             :version => version,
@@ -75,21 +75,21 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
           end
           describe 'should download tomcat' do
             it {
-              should contain_archive("apache-tomcat-#{version}").with({
-                'url' => /tomcat-#{maj}\/v#{version}\/bin/,
+              should contain_archive("apache-tomcat-#{fullversion}").with({
+                'url' => /tomcat-#{version}\/v#{fullversion}\/bin/,
               })
             }
           end
           describe 'should create tomcat home' do
             it {
-              should contain_file("/opt/apache-tomcat-#{version}").with_ensure('directory')
+              should contain_file("/opt/apache-tomcat-#{fullversion}").with_ensure('directory')
             }
           end
           describe 'should create symlink' do
             it {
               should contain_file('/opt/apache-tomcat').with({
                 'ensure'  => 'link',
-                'target'  => "/opt/apache-tomcat-#{version}",
+                'target'  => "/opt/apache-tomcat-#{fullversion}",
               })
             }
           end

@@ -3,12 +3,13 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
 
 @parameters.each { |k, v|
   describe 'tomcat::instance' do
+    let(:pre_condition) { 'include tomcat' }
     let (:title) {'fooBar'}
     let (:facts) { {
       :osfamily                  => v['osfamily'],
       :operatingsystem           => v['operatingsystem'],
       :operatingsystemmajrelease => v['operatingsystemmajrelease'],
-      :lsbdistmajrelease         => v['lsbdistmajrelease'],
+      :lsbmajdistrelease         => v['lsbmajdistrelease'],
     } }
 
     context 'when using a wrong ensure value' do

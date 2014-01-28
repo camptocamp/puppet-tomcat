@@ -8,13 +8,14 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
       :osfamily                  => v['osfamily'],
       :operatingsystem           => v['operatingsystem'],
       :operatingsystemmajrelease => v['operatingsystemmajrelease'],
-      :lsbdistmajrelease         => v['lsbdistmajrelease'],
+      :lsbmajdistrelease         => v['lsbmajdistrelease'],
     } }
 
     context 'when using a wrong ensure value' do
       let (:params) {{
-        :ensure   => 'foobar',
-        :instance => 'instance'
+        :ensure           => 'foobar',
+        :instance         => 'instance',
+        :instance_basedir => '/srv/tomcat',
       }}
       it 'should fail' do
         expect { 
@@ -25,9 +26,10 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
 
     context 'when using a wrong owner value' do
       let (:params) {{
-        :ensure   => 'present',
-        :instance => 'instance',
-        :owner    => true
+        :ensure           => 'present',
+        :instance         => 'instance',
+        :instance_basedir => '/srv/tomcat',
+        :owner            => true
       }}
       it 'should fail' do
         expect { 
@@ -38,9 +40,10 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
 
     context 'when using a wrong group value' do
       let (:params) {{
-        :ensure   => 'present',
-        :instance => 'instance',
-        :group    => true
+        :ensure           => 'present',
+        :instance         => 'instance',
+        :instance_basedir => '/srv/tomcat',
+        :group            => true
       }}
       it 'should fail' do
         expect { 
@@ -51,9 +54,10 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
 
     context 'when using a wrong daemon value' do
       let (:params) {{
-        :ensure   => 'present',
-        :instance => 'instance',
-        :daemon   => 'foobar'
+        :ensure           => 'present',
+        :instance         => 'instance',
+        :instance_basedir => '/srv/tomcat',
+        :daemon           => 'foobar'
       }}
       it 'should fail' do
         expect { 
@@ -64,9 +68,10 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
 
     context 'when using a wrong max_threads value' do
       let (:params) {{
-        :ensure   => 'present',
-        :instance => 'instance',
-        :max_threads => 'string'
+        :ensure           => 'present',
+        :instance         => 'instance',
+        :instance_basedir => '/srv/tomcat',
+        :max_threads      => 'string'
       }}
       it 'should fail' do
         expect { 
@@ -77,8 +82,9 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
 
     context 'when using a wrong min_spare_threads value' do
       let (:params) {{
-        :ensure   => 'present',
-        :instance => 'instance',
+        :ensure            => 'present',
+        :instance          => 'instance',
+        :instance_basedir  => '/srv/tomcat',
         :min_spare_threads => 'string'
       }}
       it 'should fail' do
@@ -90,9 +96,10 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
 
     context 'when using a wrong max_idle_time value' do
       let (:params) {{
-        :ensure   => 'present',
-        :instance => 'instance',
-        :max_idle_time => 'string'
+        :ensure           => 'present',
+        :instance         => 'instance',
+        :instance_basedir => '/srv/tomcat',
+        :max_idle_time    => 'string'
       }}
       it 'should fail' do
         expect { 
@@ -103,9 +110,10 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
 
     context 'when using a wrong manage value' do
       let (:params) {{
-        :ensure   => 'present',
-        :instance => 'instance',
-        :manage   => 'bbbb'
+        :ensure           => 'present',
+        :instance         => 'instance',
+        :instance_basedir => '/srv/tomcat',
+        :manage           => 'bbbb'
       }}
       it 'should fail' do
         expect { 
@@ -115,7 +123,8 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
     end
 
     let(:params) {{
-      :instance => 'instance1',
+      :instance         => 'instance1',
+      :instance_basedir => '/srv/tomcat',
     }}
     describe 'should create a file' do
       it {
