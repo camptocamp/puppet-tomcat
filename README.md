@@ -11,10 +11,9 @@ This module will install tomcat, either using you system's package
 manager or from a compressed archive available on one of the
 tomcat-mirrors.
 
-This is done by including one of these classes:
-
- -   tomcat
- -   tomcat::source
+This is done by including the tomcat class for a package based setup
+or declaring the class with the parameter sources => true for a source
+based setup.
 
 Instances
 ---------
