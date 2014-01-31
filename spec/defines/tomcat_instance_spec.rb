@@ -233,15 +233,28 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
     end
 
     describe "should create /srv/tomcat/fooBar/conf/server.xml" do
-      it {
-        should contain_file("/srv/tomcat/fooBar/conf/server.xml").with({
-          'ensure'  => 'file',
-          'owner'   => 'tomcat',
-          'group'   => 'adm',
-          'mode'    => '0460',
-          'content' => /port="8005"/,
-        })
-      }
+      if k.include? 'RHEL5'
+        it {
+          should contain_file("/srv/tomcat/fooBar/conf/server.xml").with({
+            'ensure'  => 'file',
+            'owner'   => 'tomcat',
+            'group'   => 'adm',
+            'mode'    => '0460',
+            'source'  => nil,
+          })
+        }
+      else
+        it {
+          should contain_file("/srv/tomcat/fooBar/conf/server.xml").with({
+            'ensure'  => 'file',
+            'owner'   => 'tomcat',
+            'group'   => 'adm',
+            'mode'    => '0460',
+            'source'  => /server.xml_fooBar/,
+          })
+        }
+
+      end
     end
 
     describe "should create bin/setenv.sh" do
