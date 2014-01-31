@@ -20,6 +20,9 @@
 # - Ubuntu Lucid
 #
 class tomcat::source {
+  if $caller_module_name != $module_name {
+    fail("Use of private class ${name} by ${caller_module_name}")
+  }
 
   $version     = $tomcat::src_version
   $sources_src = $tomcat::sources_src
