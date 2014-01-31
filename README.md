@@ -88,15 +88,15 @@ Create a standalone tomcat instance whose HTTP server listen on port
 
     include tomcat
 
-    tomcat::instance {"myapp":
+    tomcat::instance {'myapp':
       ensure    => present,
-      http_port => "8080",
+      http_port => '8080',
     }
 
 If you want to install a specific tomcat version from a specific mirror:
 
-    $tomcat_mirror = "http://archive.apache.org/dist/tomcat/"
-    $tomcat_version = "6.0.32"
+    $tomcat_mirror = 'http://archive.apache.org/dist/tomcat/'
+    $tomcat_version = '6.0.32'
     include tomcat::source
 
 Apache integration
@@ -106,11 +106,11 @@ Pre-requisites:
 
     include apache
 
-    apache::module {"proxy_ajp":
+    apache::module {'proxy_ajp':
       ensure  => present,
     }
 
-    apache::vhost {"www.mycompany.com":
+    apache::vhost {'www.mycompany.com':
       ensure => present,
     }
 
@@ -119,17 +119,16 @@ given virtualhost:
 
     include tomcat
 
-    tomcat::instance {"myapp":
+    tomcat::instance {'myapp':
       ensure      => present,
-      ajp_port    => "8000",
-      http_port   => "",
+      ajp_port    => '8000'
     }
 
-    apache::proxypass {"myapp":
+    apache::proxypass {'myapp':
       ensure   => present,
-      location => "/myapp",
-      vhost    => "www.mycompany.com",
-      url      => "ajp://localhost:8000",
+      location => '/myapp',
+      vhost    => 'www.mycompany.com',
+      url      => 'ajp://localhost:8000',
     }
 
 Multiple instances
@@ -140,18 +139,18 @@ setting distinct ports for each instance:
 
     include tomcat
 
-    tomcat::instance {"tomcat1":
+    tomcat::instance {'tomcat1':
       ensure      => present,
-      server_port => "8005",
-      http_port   => "8080",
-      ajp_port    => "8009",
+      server_port => '8005',
+      http_port   => '8080',
+      ajp_port    => '8009',
     }
 
-    tomcat::instance {"tomcat2":
+    tomcat::instance {'tomcat2':
       ensure      => present,
-      server_port => "8006",
-      http_port   => "8081",
-      ajp_port    => "8010",
+      server_port => '8006',
+      http_port   => '8081',
+      ajp_port    => '8010',
     }
 
 Create a tomcat instance with custom connectors
@@ -162,25 +161,25 @@ tomcat-instance:
 
     include tomcat
 
-    tomcat::connector{"http-8080":
+    tomcat::connector{'http-8080':
       ensure   => present,
-      instance => "tomcat1",
-      protocol => "HTTP/1.1",
+      instance => 'tomcat1',
+      protocol => 'HTTP/1.1',
       port     => 8080,
       manage   => true,
     }
 
-    tomcat::connector{"ajp-8081":
+    tomcat::connector{'ajp-8081':
       ensure   => present
-      instance => "tomcat1"
-      protocol => "AJP/1.3",
+      instance => 'tomcat1'
+      protocol => 'AJP/1.3',
       port     => 8081,
       manage   => true,
     }
 
-    tomcat::instance {"tomcat1":
+    tomcat::instance {'tomcat1':
       ensure    => present,
-      group     => "tomcat-admin",
+      group     => 'tomcat-admin',
       manage    => true,
-      connector => ["http-8080","ajp-8081"],
+      connector => ['http-8080','ajp-8081'],
     }
