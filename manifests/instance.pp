@@ -418,19 +418,19 @@ define tomcat::instance(
         # Tomcat usually write there
         "${basedir}/logs":
           ensure => directory,
-          owner  => 'tomcat',
+          owner  => $owner,
           group  => $group,
           mode   => $logsmode,
           before => Service["tomcat-${name}"];
         "${basedir}/work":
           ensure => directory,
-          owner  => 'tomcat',
+          owner  => $owner,
           group  => $group,
           mode   => '2770',
           before => Service["tomcat-${name}"];
         "${basedir}/temp":
           ensure => directory,
-          owner  => 'tomcat',
+          owner  => $owner,
           group  => $group,
           mode   => '2770',
           before => Service["tomcat-${name}"];
@@ -443,7 +443,7 @@ define tomcat::instance(
         #
         file { "${basedir}/webapps/sample.war":
           ensure  => present,
-          owner   => 'tomcat',
+          owner   => $owner,
           group   => $group,
           mode    => '0460',
           source  => "puppet:///modules/${module_name}/sample.war",
