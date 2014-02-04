@@ -360,13 +360,13 @@ define tomcat::instance(
             },
             default => $server_xml_file,
           },
-          #content => $server_xml_file? {
-          #  ''      => $version ? {
-          #    5       => template("${module_name}/${serverdotxml}"),
-          #    default => undef,
-          #  },
-          #  default => undef,
-          #},
+          content => $server_xml_file? {
+            ''      => $version ? {
+              5       => template("${module_name}/${serverdotxml}"),
+              default => undef,
+            },
+            default => undef,
+          },
           before  => Service["tomcat-${name}"],
           notify  => $manage? {
             true    => Service["tomcat-${name}"],
@@ -418,19 +418,19 @@ define tomcat::instance(
         # Tomcat usually write there
         "${basedir}/logs":
           ensure => directory,
-          owner  => $owner,
+          owner  => 'tomcat',
           group  => $group,
           mode   => $logsmode,
           before => Service["tomcat-${name}"];
         "${basedir}/work":
           ensure => directory,
-          owner  => $owner,
+          owner  => 'tomcat',
           group  => $group,
           mode   => '2770',
           before => Service["tomcat-${name}"];
         "${basedir}/temp":
           ensure => directory,
-          owner  => $owner,
+          owner  => 'tomcat',
           group  => $group,
           mode   => '2770',
           before => Service["tomcat-${name}"];
