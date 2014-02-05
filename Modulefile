@@ -1,5 +1,5 @@
 name         'camptocamp-tomcat'
-version      '0.5.0'
+version      '0.6.0'
 source       'https://github.com/camptocamp/puppet-tomcat'
 author       'DevOps Team / Camptocamp'
 license      'GNU GPLv3'
