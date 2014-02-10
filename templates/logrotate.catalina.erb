@@ -1,5 +1,5 @@
 # file installed but NOT managed by Puppet
-<%= basedir %>/logs/catalina.out {
+<%= @basedir %>/logs/catalina.out {
       copytruncate
       weekly
       size 500M
