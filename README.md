@@ -45,18 +45,6 @@ This can easily be overridden on an instance base by creating a custom
 log4j.properties file and setting the `common.loader` path to point to
 it, by editing `/srv/tomcat/<name>/conf/catalina.properties`.
 
-Dependencies
-------------
-
-The Apache puppet module available at
-[http://github.com/camptocamp/puppet-apache](http://github.com/camptocamp/puppet-apache)
-is required if you want to make use of Apache integration.
-
-The Archive puppet module available at
-[http://github.com/camptocamp/puppet-archive](http://github.com/camptocamp/puppet-archive)
-is required if you want to install tomcat from a compressed archive (it
-uses archive).
-
 Defaults
 --------
 
@@ -103,13 +91,13 @@ Apache integration
 
 Pre-requisites:
 
-    include apache
+    include apache_c2c
 
-    apache::module {'proxy_ajp':
+    apache_c2c::module {'proxy_ajp':
       ensure  => present,
     }
 
-    apache::vhost {'www.mycompany.com':
+    apache_c2c::vhost {'www.mycompany.com':
       ensure => present,
     }
 
@@ -123,7 +111,7 @@ given virtualhost:
       ajp_port    => '8000'
     }
 
-    apache::proxypass {'myapp':
+    apache_c2c::proxypass {'myapp':
       ensure   => present,
       location => '/myapp',
       vhost    => 'www.mycompany.com',
