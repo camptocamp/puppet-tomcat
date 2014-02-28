@@ -206,7 +206,11 @@ define tomcat::instance(
       manage   => $manage,
       address  => $http_address,
       group    => $group,
-      owner    => $owner
+      owner    => $owner,
+      notify   => $manage ? {
+        true    => Service["tomcat-${name}"],
+        default => undef,
+      },
     }
 
     tomcat::connector{"ajp-${ajp_port}-${name}":
@@ -217,7 +221,11 @@ define tomcat::instance(
       manage   => $manage,
       address  => $ajp_address,
       group    => $group,
-      owner    => $owner
+      owner    => $owner,
+      notify   => $manage ? {
+        true    => Service["tomcat-${name}"],
+        default => undef,
+      },
     }
 
   } else {
