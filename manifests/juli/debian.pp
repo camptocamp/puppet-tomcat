@@ -11,6 +11,7 @@ class tomcat::juli::debian {
 
   file { "${tomcat::home}/extras/":
     ensure  => directory,
+    require => Package["tomcat${tomcat::version}"],
   }
 
   archive::download { 'tomcat-juli.jar':
