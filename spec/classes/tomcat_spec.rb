@@ -15,7 +15,6 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
         it {
           should contain_class('tomcat::install')
           should contain_class('tomcat::user')
-          should contain_class('tomcat::service')
         }
       end
 
