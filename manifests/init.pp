@@ -36,6 +36,6 @@ class tomcat (
 
   class {'tomcat::install': } ->
   class {'tomcat::user': } ->
-  class {'tomcat::service': } ->
   Class['tomcat']
+
 }
