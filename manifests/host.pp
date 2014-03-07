@@ -58,7 +58,7 @@ define tomcat::host(
     target       => "/var/lib/puppet/concat/fragments/server.xml_${server}_service_${service}_engine/20_${host}",
   }
   concat_fragment { "server.xml_${server}_service_${service}_engine_host_${host}+01":
-    content => "      <Host name=\"${host}\"${_appBase}${_unpack_wars}${_autoDeploy}${_xml_validation}${_xml_namespace_aware}>",
+    content => "      <Host name=\"${host}\"${_app_base}${_unpack_wars}${_autoDeploy}${_xml_validation}${_xml_namespace_aware}>",
   }
   concat_fragment { "server.xml_${server}_service_${service}_engine_host_${host}+99":
     content => "      </Host>",
