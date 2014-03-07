@@ -36,6 +36,32 @@ define tomcat::resource(
     undef   => '',
     default => "\n              type=\"${type}\"",
   }
+
+  ensure_resource(
+    'concat_build',
+    "server.xml_${name}_globalnamingresources",
+    {
+      parent_build => "server.xml_${name}",
+      target       => "/var/lib/puppet/concat/fragments/server.xml_${name}/03",
+    }
+  )
+
+  ensure_resource(
+    'concat_fragment',
+    "server.xml_${name}_globalnamingresources+01",
+    {
+      content => '  <GlobalNamingResources>',
+    }
+  )
+
+  ensure_resource(
+    'concat_fragment',
+    "server.xml_${name}_globalnamingresources+99",
+    {
+      content => '  </GlobalNamingResources>',
+    }
+  )
+
   concat_fragment { "server.xml_${server}_globalnamingresources+02_${resource}":
     content => "    <Resource name=\"${resource}\"${_auth}${_type}${_description}${_factory}${_pathname} />",
   }

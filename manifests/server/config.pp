@@ -123,15 +123,4 @@ define tomcat::server::config(
     content => '</Server>',
   }
 
-  concat_build { "server.xml_${name}_globalnamingresources":
-    parent_build => "server.xml_${name}",
-    target       => "/var/lib/puppet/concat/fragments/server.xml_${name}/03",
-  }
-  concat_fragment { "server.xml_${name}_globalnamingresources+01":
-    content => '  <GlobalNamingResources>',
-  }
-  concat_fragment { "server.xml_${name}_globalnamingresources+99":
-    content => '  </GlobalNamingResources>',
-  }
-
 }
