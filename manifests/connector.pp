@@ -47,8 +47,8 @@
 #   }
 #
 define tomcat::connector(
-  $instance,
   $port,
+  $instance           = undef,
   $ensure             = present,
   $owner              = 'tomcat',
   $group              = 'adm',
@@ -62,53 +62,76 @@ define tomcat::connector(
   $options            = [],
   $manage             = false,
   $instance_basedir   = false,
+  $server             = regsubst($name, '^([^:]+):[^:]+:[^:]+$', '\1') ? {
+    $name   => undef,
+    default => regsubst($name, '^([^:]+):[^:]+:[^:]+$', '\1'),
+  },
+  $service            = regsubst($name, '^[^:]+:([^:]+):.*$', '\1') ? {
+    $name   => undef,
+    default => regsubst($name, '^[^:]+:([^:]+):.*$', '\1'),
+  },
+  $connector          = regsubst($name, '^[^:]+:[^:]+:([^:]+)$', '\1') ? {
+    $name   => undef,
+    default => regsubst($name, '^[^:]+:[^:]+:([^:]+)$', '\1'),
+  },
 ) {
 
-  validate_string($instance)
-  validate_re($port, '^[0-9]+$')
+  validate_re("${port}", '^[0-9]+$')
   validate_re($ensure, ['present', 'absent'])
   validate_string($owner)
   validate_string($group)
-  validate_re($connection_timeout, '^[0-9]+$')
-  validate_re($redirect_port, '^[0-9]+$')
+  validate_re("${connection_timeout}", '^[0-9]+$')
+  validate_re("${redirect_port}", '^[0-9]+$')
   validate_array($options)
   validate_bool($manage)
 
-  $_basedir = $instance_basedir? {
-    false   => $tomcat::instance_basedir,
-    default => $instance_basedir,
-  }
-  validate_absolute_path($_basedir)
+  if $server != undef and $service != undef and $connector != undef {
+    validate_string($server)
+    validate_string($service)
+    validate_string($connector)
 
-  if $owner == 'tomcat' {
-    $filemode = '0460'
+    concat_fragment { "server.xml_${server}_service_${service}+20_${connector}":
+      content => template('tomcat/connector.xml.erb'),
+    }
   } else {
-    $filemode = '0664'
-  }
+    validate_string($instance)
 
-  $require = $executor? {
-    false   => undef,
-    default => Tomcat::Executor[$executor],
-  }
+    $_basedir = $instance_basedir? {
+      false   => $tomcat::instance_basedir,
+      default => $instance_basedir,
+    }
+    validate_absolute_path($_basedir)
 
-  file {"${_basedir}/${instance}/conf/connector-${name}.xml":
-    ensure  => $ensure,
-    owner   => $owner,
-    group   => $group,
-    mode    => $filemode,
-    content => template('tomcat/connector.xml.erb'),
-    replace => $manage,
-    require => $require,
-  }
-
-  if $::tomcat::version != 5 {
-    concat_fragment { "server.xml_${instance}+03_connector_${name}":
-      content => "  <!ENTITY connector-${name} SYSTEM \"connector-${name}.xml\">\n",
+    if $owner == 'tomcat' {
+      $filemode = '0460'
+    } else {
+      $filemode = '0664'
     }
 
-    concat_fragment { "server.xml_${instance}+06_connector_${name}":
-      content => "    <!-- See conf/connector-${name}.xml for this connector's config. -->
+    $require = $executor? {
+      false   => undef,
+      default => Tomcat::Executor[$executor],
+    }
+
+    file {"${_basedir}/${instance}/conf/connector-${name}.xml":
+      ensure  => $ensure,
+      owner   => $owner,
+      group   => $group,
+      mode    => $filemode,
+      content => template('tomcat/connector.xml.erb'),
+      replace => $manage,
+      require => $require,
+    }
+
+    if $::tomcat::version != 5 {
+      concat_fragment { "server.xml_${instance}+03_connector_${name}":
+        content => "  <!ENTITY connector-${name} SYSTEM \"connector-${name}.xml\">\n",
+      }
+
+      concat_fragment { "server.xml_${instance}+06_connector_${name}":
+        content => "    <!-- See conf/connector-${name}.xml for this connector's config. -->
       &connector-${name};\n",
+      }
     }
   }
 
