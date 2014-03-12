@@ -62,6 +62,8 @@
 #   server.xml
 # - *executor*: an array of tomcat::executor name (string) to include in
 #   server.xml
+# - *catalina_logrotate*: install an UNMANAGED logrotate configuration file,
+#   to handle the catalina.out file of the instance. Default to true.
 #
 # Requires:
 # - one of the tomcat classes which installs tomcat binaries.
@@ -116,6 +118,7 @@ define tomcat::instance(
   $seltype            = 'initrc_exec_t',
   $instance_basedir   = false,
   $tomcat_version     = false,
+  $catalina_logrotate = true,
 ) {
 
   Class['tomcat::install'] -> Tomcat::Instance[$title]
@@ -502,10 +505,12 @@ define tomcat::instance(
   # Default rotation of catalina.out
   # Not managed by default
   # TODO: managed mode with more options ?
-  file{ "/etc/logrotate.d/catalina-${name}":
-    ensure  => $present,
-    replace => false,
-    content => template( 'tomcat/logrotate.catalina.erb' ),
+  if $catalina_logrotate {
+    file{ "/etc/logrotate.d/catalina-${name}":
+      ensure  => $present,
+      replace => false,
+      content => template( 'tomcat/logrotate.catalina.erb' ),
+    }
   }
 
   # Init and env scripts
