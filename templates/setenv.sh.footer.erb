@@ -1,0 +1,8 @@
+
+. $CATALINA_BASE/bin/setenv-local.sh
+
+export JAVA_OPTS="-Dsun.java2d.opengl=${DSUN_JAVA2D_OPENGL} \
+                  -Djava.awt.headless=${DJAVA_AWT_HEADLESS} \
+                  -Xmx${JAVA_XMX} \
+                  -XX:MaxPermSize=${JAVA_XX_MAXPERMSIZE} \
+                  ${ADD_JAVA_OPTS}"
