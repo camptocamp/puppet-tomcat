@@ -310,8 +310,10 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
           'group'   => 'adm',
           'mode'    => '0754',
         })
-        should contain_file('/srv/tomcat/fooBar/bin/setenv.sh').with_content(/JAVA_XMX=\"512m\"/)
-        should contain_file('/srv/tomcat/fooBar/bin/setenv.sh').with_content(/JAVA_XX_MAXPERMSIZE=\"512m\"/)
+        should contain_concat_build('setenv.sh_fooBar')
+        should contain_concat_fragment('setenv.sh_fooBar+01_header').with_content(/JAVA_XMX=\"512m\"/)
+        should contain_concat_fragment('setenv.sh_fooBar+01_header').with_content(/JAVA_XX_MAXPERMSIZE=\"512m\"/)
+        should contain_file('/srv/tomcat/fooBar/bin/setenv.sh')
       }
     end
 
