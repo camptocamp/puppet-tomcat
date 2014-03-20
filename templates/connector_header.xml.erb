@@ -15,6 +15,3 @@
            executor="<%= @executor %>"
 <% end -%>
            <%= @options.collect! {|i| "#{i}" }.join("\n") %>
-           protocol="<%= @protocol %>" 
-           connectionTimeout="<%= @connection_timeout %>" 
-           redirectPort="<%= @redirect_port %>" />

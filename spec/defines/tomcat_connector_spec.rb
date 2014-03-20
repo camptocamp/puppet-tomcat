@@ -156,6 +156,9 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
 
     describe 'should create /srv/tomcat/instance1/conf/connector-ConnectBar.xml' do
       it {
+        should contain_concat_build('connector_ConnectBar')
+        should contain_concat_fragment('connector_ConnectBar+01').with_content(/port="8442"/)
+        should contain_concat_fragment('connector_ConnectBar+99').with_content(/protocol="HTTP\/1.1"/)
         should contain_file('/srv/tomcat/instance1/conf/connector-ConnectBar.xml').with({
           'ensure'  => 'present',
           'owner'   => 'tomcat',
@@ -163,8 +166,6 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
           'mode'    => '0460',
           'replace' => false,
         })
-        should contain_file('/srv/tomcat/instance1/conf/connector-ConnectBar.xml').with_content(/port="8442"/)
-        should contain_file('/srv/tomcat/instance1/conf/connector-ConnectBar.xml').with_content(/protocol="HTTP\/1.1"/)
       }
     end
 

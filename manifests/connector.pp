@@ -113,14 +113,21 @@ define tomcat::connector(
       default => Tomcat::Executor[$executor],
     }
 
+    concat_build { "connector_${name}": } ->
     file {"${_basedir}/${instance}/conf/connector-${name}.xml":
       ensure  => $ensure,
       owner   => $owner,
       group   => $group,
       mode    => $filemode,
-      content => template('tomcat/connector.xml.erb'),
+      source  => concat_output("connector_${name}"),
       replace => $manage,
       require => $require,
+    }
+    concat_fragment { "connector_${name}+01":
+      content => template('tomcat/connector_header.xml.erb'),
+    }
+    concat_fragment { "connector_${name}+99":
+      content => template('tomcat/connector_footer.xml.erb'),
     }
 
     if $::tomcat::version != 5 {
