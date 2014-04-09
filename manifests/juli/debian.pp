@@ -30,7 +30,7 @@ class tomcat::juli::debian {
     require     => File["${tomcat::home}/extras/"],
   }
 
-  file { "${tomcat_home}/bin/tomcat-juli.jar":
+  file { "${tomcat::home}/bin/tomcat-juli.jar":
     ensure  => link,
     target  => "${tomcat::home}/extras/tomcat-juli.jar",
     require => Archive::Download['tomcat-juli.jar'],
