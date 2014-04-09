@@ -245,7 +245,7 @@ define tomcat::instance(
 
   if $tomcat::type == 'package' and
       $::osfamily == 'RedHat' and
-      $::operatingsystemrelease =~ /^6.*/ {
+      $::operatingsystemmajrelease == 6 {
     # force catalina.sh to use the common library
     # in CATALINA_HOME and not CATALINA_BASE
     $classpath = "/usr/share/tomcat${version}/bin/tomcat-juli.jar"

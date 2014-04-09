@@ -10,6 +10,7 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
       :operatingsystem           => v['operatingsystem'],
       :operatingsystemmajrelease => v['operatingsystemmajrelease'],
       :lsbmajdistrelease         => v['lsbmajdistrelease'],
+      :puppet_vardir             => '/var/lib/puppet',
     }}
 
     describe "#{k}: should contain tomcat::connectors" do

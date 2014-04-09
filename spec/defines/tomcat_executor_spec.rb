@@ -10,6 +10,9 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
       :operatingsystemmajrelease => v['operatingsystemmajrelease'],
       :lsbmajdistrelease         => v['lsbmajdistrelease'],
     } }
+    let :pre_condition do
+      "class { 'tomcat': }"
+    end
 
     context 'when using a wrong ensure value' do
       let (:params) {{

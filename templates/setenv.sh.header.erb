@@ -8,7 +8,7 @@
 # JVM tuning parameters
 #
 
-<% if has_variable?("classpath") %>
+<% if @classpath %>
 # force catalina.sh to use the common library in CATALINA_HOME and not CATALINA_BASE
 # this is required to run tomcat on RHEL6 (Santiago)
 export CLASSPATH=<%= @classpath %>

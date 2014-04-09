@@ -9,7 +9,11 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
       :operatingsystem           => v['operatingsystem'],
       :operatingsystemmajrelease => v['operatingsystemmajrelease'],
       :lsbmajdistrelease         => v['lsbmajdistrelease'],
+      :puppet_vardir             => '/var/lib/puppet',
     } }
+    let :pre_condition do
+      "class { 'tomcat': }"
+    end
 
     context 'when using a wrong ensure value' do
       let (:params) {{

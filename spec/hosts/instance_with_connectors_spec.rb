@@ -14,6 +14,7 @@ all.each { |k, v|
       :operatingsystem           => v['operatingsystem'],
       :operatingsystemmajrelease => v['operatingsystemmajrelease'],
       :lsbmajdistrelease         => v['lsbmajdistrelease'],
+      :puppet_vardir             => '/var/lib/puppet',
     }}
 
     describe "#{k} should create connector1" do
