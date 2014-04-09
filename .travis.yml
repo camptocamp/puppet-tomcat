@@ -36,5 +36,3 @@ matrix:
       env: PUPPET_GEM_VERSION="~> 3.3.0"
     - rvm: 2.1.0
       env: PUPPET_GEM_VERSION="~> 3.4.0"
-  allow_failures:
-    - env: PUPPET_GEM_VERSION="~> 3.5.0.rc3" STRICT_VARIABLES="yes"
