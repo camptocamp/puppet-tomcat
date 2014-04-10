@@ -206,3 +206,7 @@ tomcat::connector { 'tomcat1:Catalina2:http-8080':
   port => '8080',
 }
 ```
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/camptocamp/puppet-tomcat/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
