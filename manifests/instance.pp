@@ -282,6 +282,9 @@ define tomcat::instance(
       RedHat: {
         $javahome = '/usr/lib/jvm/java'
       }
+      Scientific: {
+        $javahome = '/usr/lib/jvm/java'
+      }
       CentOS: {
         $javahome = '/etc/alternatives/jre'
       }
