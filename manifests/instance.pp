@@ -210,6 +210,7 @@ define tomcat::instance(
       address  => $http_address,
       group    => $group,
       owner    => $owner,
+      instance_basedir => $instance_basedir,
       notify   => $manage ? {
         true    => Service["tomcat-${name}"],
         default => undef,
@@ -225,6 +226,7 @@ define tomcat::instance(
       address  => $ajp_address,
       group    => $group,
       owner    => $owner,
+      instance_basedir => $instance_basedir,
       notify   => $manage ? {
         true    => Service["tomcat-${name}"],
         default => undef,
