@@ -7,11 +7,18 @@ define tomcat::server::config(
   $owner = 'tomcat',
 ) {
   # Default JVM options
+  concat_build { "setenv.sh_${name}": } ->
   file {"${basedir}/bin/setenv.sh":
-    content => template('tomcat/setenv.sh.erb'),
+    content => concat_output("setenv.sh_${name}"),
     owner   => 'root',
     group   => $group,
     mode    => '0754',
+  }
+  concat_fragment { "setenv.sh_${name}+01_header":
+    content => template('tomcat/setenv.sh.header.erb'),
+  }
+  concat_fragment { "setenv.sh_${name}+99_footer":
+    content => template('tomcat/setenv.sh.footer.erb'),
   }
 
   # User customized JVM options
