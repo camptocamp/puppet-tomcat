@@ -73,6 +73,10 @@ Examples
 Create a standalone tomcat instance whose HTTP server listen on port
 8080:
 
+    Exec {
+      path => '/usr/bin:/usr/sbin/:/bin:/sbin:/usr/local/bin:/usr/local/sbin',
+    }
+
     include tomcat
 
     tomcat::instance {'myapp':
