@@ -1,7 +1,6 @@
 # file installed but NOT managed by Puppet
 <%= @basedir %>/logs/catalina.out {
       copytruncate
-      weekly
       size 500M
       dateext
       rotate 53
