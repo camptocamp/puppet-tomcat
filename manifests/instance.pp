@@ -119,6 +119,7 @@ define tomcat::instance(
   $instance_basedir   = false,
   $tomcat_version     = false,
   $catalina_logrotate = true,
+  $extra_jars         = [],
 ) {
 
   Class['tomcat::install'] -> Tomcat::Instance[$title]
@@ -139,6 +140,7 @@ define tomcat::instance(
   validate_array($connector)
   validate_array($executor)
   validate_bool($manage)
+  validate_array($extra_jars)
 
   $_basedir = $instance_basedir? {
     false   => $tomcat::instance_basedir,
@@ -322,6 +324,13 @@ define tomcat::instance(
           content => template("${module_name}/body2_${serverdotxml}"),
         }
       }
+      # extra jars
+      #tomcat::instance::extra_jar { $extra_jars: }
+      tomcat::instance::link { $extra_jars:
+        fromdir => "${basedir}/lib",
+                todir     => '/usr/share/java',
+      }
+
       file {
         # Nobody usually write there
         $basedir:
@@ -565,5 +574,15 @@ define tomcat::instance(
   # Logrotate
   file {"/etc/logrotate.d/tomcat-${name}.conf":
     ensure => absent,
+  }
+}
+
+define tomcat::instance::link (
+    $fromdir,
+    $todir,
+    ) {
+  file { "${fromdir}/${name}":
+    ensure => link,
+    target   => "${todir}/${name}",
   }
 }
