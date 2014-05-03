@@ -325,10 +325,8 @@ define tomcat::instance(
         }
       }
       # extra jars
-      #tomcat::instance::extra_jar { $extra_jars: }
-      tomcat::instance::link { $extra_jars:
-        fromdir => "${basedir}/lib",
-                todir     => '/usr/share/java',
+      tomcat::instance::link_extra_jar { $extra_jars:
+        instance_libdir => "${basedir}/lib",
       }
 
       file {
@@ -577,12 +575,18 @@ define tomcat::instance(
   }
 }
 
-define tomcat::instance::link (
-    $fromdir,
-    $todir,
+# TODO after discussing with Mickael he seems to think that this
+# should be nested in its own .pp file. Not sure though, because it 
+# is related only to tomcat instances.
+define tomcat::instance::link_extra_jar (
+      $instance_libdir,
     ) {
-  file { "${fromdir}/${name}":
+  # TODO Should'nt this be a function in puppet-stdlib ?
+  $bname = inline_template('<%= File.basename(@name) %>')
+  $from = "${instance_libdir}/${bname}"
+  $to = $name
+  file { "${from}":
     ensure => link,
-    target   => "${todir}/${name}",
+    target   => "${to}",
   }
 }
