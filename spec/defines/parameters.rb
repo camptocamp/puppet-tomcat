@@ -51,4 +51,17 @@
     'tomcat_version'            => '6',
     'sudo_version'              => '1.7.3',
   },
+  'ORACLELINUX6' => {
+    'java_home'                 => '/usr/lib/jvm/java',
+    'log4j'                     => 'log4j',
+    'logging'                   => 'jakarta-commons-logging',
+    'lsbmajdistrelease'         => '6',
+    'operatingsystem'           => 'OracleLinux',
+    'operatingsystemmajrelease' => '6',
+    'osfamily'                  => 'RedHat',
+    'tomcat_home'               => '/var/lib/tomcat',
+    'tomcat_package'            => 'tomcat6',
+    'tomcat_version'            => '6',
+    'sudo_version'              => '1.7.3',
+  },
 }
