@@ -8,3 +8,4 @@ description  'Tomcat Module for Puppet'
 project_page 'https://github.com/camptocamp/puppet-tomcat'
 dependency   'camptocamp/archive'
 dependency   'theforeman/concat_native'
+dependency   'puppetlabs/stdlib
