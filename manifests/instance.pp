@@ -280,7 +280,7 @@ define tomcat::instance(
 
   # Define default JAVA_HOME used in tomcat.init.erb
   if $java_home == '' {
-    case $::operatingsystem {
+    case $::osfamily {
       RedHat: {
         $javahome = '/usr/lib/jvm/java'
       }
