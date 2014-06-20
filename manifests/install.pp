@@ -17,13 +17,13 @@ class tomcat::install {
 
     # Moved from Class[tomcat::service] to here so that we can create a
     # tomcat::service definition.
-    service {"tomcat${tomcat::version}":
-      ensure => stopped,
-      enable => false,
-    } ->
     file {"/etc/init.d/tomcat${tomcat::version}":
       ensure => file,
       mode   => '0644',
+    } ->
+    service {"tomcat${tomcat::version}":
+      ensure => stopped,
+      enable => false,
     }
 
   } else {
