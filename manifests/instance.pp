@@ -331,8 +331,9 @@ define tomcat::instance(
           mode    => '0555',
           before  => Service["tomcat-${name}"],
           require => $group ? {
-            'adm'   => undef,
-            default => Group[$group],
+            'adm'    => undef,
+            'tomcat' => undef,
+            default  => Group[$group],
           };
 
         "${basedir}/bin":
