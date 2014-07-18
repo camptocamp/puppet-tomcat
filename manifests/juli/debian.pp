@@ -9,9 +9,14 @@ class tomcat::juli::debian {
 
   $baseurl = inline_template('<%=@url.join("/")%>')
 
+  $require = $::tomcat::sources ? {
+    true => undef,
+    false  => Package["tomcat${tomcat::version}"],
+  }
+
   file { "${tomcat::home}/extras/":
     ensure  => directory,
-    require => Package["tomcat${tomcat::version}"],
+    require => $require,
   }
 
   archive::download { 'tomcat-juli.jar':
