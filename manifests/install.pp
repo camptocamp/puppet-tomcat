@@ -25,6 +25,7 @@ class tomcat::install {
       ensure => stopped,
       enable => false,
       before => File["/etc/init.d/tomcat${tomcat::version}"],
+      require => Package["tomcat${tomcat::version}"],
     }
   } else {
     class {'tomcat::source': }
