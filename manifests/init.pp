@@ -1,5 +1,6 @@
 class tomcat (
   $version          = $tomcat::params::version,
+  $srcversion       = undef,
   $sources          = false,
   $sources_src      = $tomcat::params::sources_src,
   $instance_basedir = $tomcat::params::instance_basedir,
@@ -18,10 +19,15 @@ class tomcat (
     false => 'package',
   }
 
-  $src_version = $version? {
-    5 => '5.5.27',
-    6 => '6.0.26',
-    7 => '7.0.42',
+  # Allow to choose the source version, without breaking backward compatibility
+  if $srcversion != undef {
+    $src_version = $srcversion
+  } else {
+    $src_version = $version? {
+      5 => '5.5.27',
+      6 => '6.0.26',
+      7 => '7.0.42',
+    }
   }
 
   $home = $sources ? {
