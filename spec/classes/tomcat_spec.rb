@@ -59,8 +59,8 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
 
       {
         '5' => '5.5.27',
-        '6' => '6.0.26',
-        '7' => '7.0.42',
+        '6' => '6.0.41',
+        '7' => '7.0.55',
       }.each { |version, fullversion|
         context "install tomcat#{fullversion} from sources" do
           let(:params) {{
