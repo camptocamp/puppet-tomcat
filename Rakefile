@@ -1,4 +1,6 @@
-require 'puppet-lint/tasks/puppet-lint'
 require 'puppetlabs_spec_helper/rake_tasks'
+require 'puppet-lint/tasks/puppet-lint'
 
-task :default => [:spec, :lint]
+PuppetLint.configuration.fail_on_warnings
+PuppetLint.configuration.send('disable_80chars')
+PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "pkg/**/*.pp"]

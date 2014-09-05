@@ -1,6 +1,7 @@
 pkg/
-*.swp
-spec/fixtures/modules/
 Gemfile.lock
-.bundle/
+vendor/
+spec/fixtures/
 .vagrant/
+.bundle/
+coverage/
