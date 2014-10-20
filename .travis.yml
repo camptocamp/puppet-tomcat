@@ -2,6 +2,12 @@
 language: ruby
 bundler_args: --without development
 script: "bundle exec rake validate && bundle exec rake lint && bundle exec rake spec SPEC_OPTS='--format documentation'"
+after_success:
+  ["git clone -q git://github.com/puppetlabs/ghpublisher.git .forge-releng", ".forge-releng/publish"]
+env:
+  global:
+    - PUBLISHER_LOGIN=camptocamp
+    - secure: "cXg3HW8yv/OpAmDP3qL/h/Y9hiWRtwrC9bX+0z72fPO6A65xz+SQ85PiW1YRcTSYDX8NkPCvG8esUc8VeIS1VdkSE++THt6iZ361AvM3vm1acTERe3ax/e6jsTIEvw+yMYZxXZq8S0A5tuCK21EbI7M/lheuetwtqY1C4GbVsKA="
 matrix:
   fast_finish: true
   include:
