@@ -1,6 +1,7 @@
 Tomcat Puppet module
 ====================
 
+[![Puppet Forge](http://img.shields.io/puppetforge/v/camptocamp/tomcat.svg)](https://forge.puppetlabs.com/camptocamp/tomcat)
 [![Build Status](https://travis-ci.org/camptocamp/puppet-tomcat.png?branch=master)](https://travis-ci.org/camptocamp/puppet-tomcat)
 
 **Manages Tomcat configuration.**
