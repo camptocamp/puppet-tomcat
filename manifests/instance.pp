@@ -119,6 +119,7 @@ define tomcat::instance(
   $instance_basedir   = false,
   $tomcat_version     = false,
   $catalina_logrotate = true,
+  $extra_jars         = [],
 ) {
 
   Class['tomcat::install'] -> Tomcat::Instance[$title]
@@ -139,6 +140,7 @@ define tomcat::instance(
   validate_array($connector)
   validate_array($executor)
   validate_bool($manage)
+  validate_array($extra_jars)
 
   $_basedir = $instance_basedir? {
     false   => $tomcat::instance_basedir,
@@ -322,6 +324,11 @@ define tomcat::instance(
           content => template("${module_name}/body2_${serverdotxml}"),
         }
       }
+      # extra jars
+      tomcat::instance::link_extra_jar { $extra_jars:
+        instance_libdir => "${basedir}/lib",
+      }
+
       file {
         # Nobody usually write there
         $basedir:
@@ -565,5 +572,21 @@ define tomcat::instance(
   # Logrotate
   file {"/etc/logrotate.d/tomcat-${name}.conf":
     ensure => absent,
+  }
+}
+
+# TODO after discussing with Mickael he seems to think that this
+# should be nested in its own .pp file. Not sure though, because it 
+# is related only to tomcat instances.
+define tomcat::instance::link_extra_jar (
+      $instance_libdir,
+    ) {
+  # TODO Should'nt this be a function in puppet-stdlib ?
+  $bname = inline_template('<%= File.basename(@name) %>')
+  $from = "${instance_libdir}/${bname}"
+  $to = $name
+  file { "${from}":
+    ensure => link,
+    target   => "${to}",
   }
 }
