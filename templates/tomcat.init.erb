@@ -4,7 +4,10 @@
 
 # file managed by puppet
 
-. /lib/lsb/init-functions
+if test -f /lib/lsb/init-functions; then
+    . /lib/lsb/init-functions
+fi
+. /etc/init.d/functions
 
 SHUTDOWN_WAIT=30
 
