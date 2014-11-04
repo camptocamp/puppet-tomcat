@@ -9,7 +9,9 @@ define tomcat::server(
 ) {
   validate_absolute_path($basedir)
   validate_hash($listeners)
+  # lint:ignore:only_variable_string
   validate_re("${port}", '^[0-9]+$')
+  # lint:endignore
   validate_hash($resources)
   validate_hash($services)
   validate_string($shutdown)
