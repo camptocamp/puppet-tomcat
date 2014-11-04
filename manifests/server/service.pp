@@ -8,7 +8,7 @@ define tomcat::server::service(
   }
 
   service {"tomcat-${name}":
-    ensure  => $ensure,
-    enable  => $enable,
+    ensure => $ensure,
+    enable => $enable,
   }
 }

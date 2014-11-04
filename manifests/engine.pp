@@ -23,7 +23,7 @@ define tomcat::engine(
     content => "    <Engine name=\"${engine}\" defaultHost=\"${default_host}\">",
   }
   concat_fragment { "server.xml_${server}_service_${service}_engine+99":
-    content => "    </Engine>",
+    content => '    </Engine>',
   }
   create_resources(
     'tomcat::host',

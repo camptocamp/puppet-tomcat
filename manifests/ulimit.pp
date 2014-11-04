@@ -24,7 +24,7 @@
 #
 define tomcat::ulimit ($value) {
 
-  augeas { "set tomcat $name ulimit":
+  augeas { "set tomcat ${name} ulimit":
     incl    => '/etc/security/limits.conf',
     lens    => 'Limits.lns',
     changes => [

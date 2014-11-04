@@ -212,8 +212,8 @@ define tomcat::instance(
       owner            => $owner,
       instance_basedir => $instance_basedir,
       notify           => $manage ? {
-        true           => Service["tomcat-${name}"],
-        default        => undef,
+        true    => Service["tomcat-${name}"],
+        default => undef,
       },
     }
 
@@ -228,8 +228,8 @@ define tomcat::instance(
       owner            => $owner,
       instance_basedir => $instance_basedir,
       notify           => $manage ? {
-        true           => Service["tomcat-${name}"],
-        default        => undef,
+        true    => Service["tomcat-${name}"],
+        default => undef,
       },
     }
 

@@ -61,7 +61,7 @@ define tomcat::host(
     content => "      <Host name=\"${host}\"${_app_base}${_unpack_wars}${_autoDeploy}${_xml_validation}${_xml_namespace_aware}>",
   }
   concat_fragment { "server.xml_${server}_service_${service}_engine_host_${host}+99":
-    content => "      </Host>",
+    content => '      </Host>',
   }
 
   create_resources(

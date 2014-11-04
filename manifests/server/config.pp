@@ -32,10 +32,10 @@ define tomcat::server::config(
 
   # Nobody usually write there
   file { $basedir:
-    ensure  => directory,
-    owner   => $owner,
-    group   => $group,
-    mode    => '0555',
+    ensure => directory,
+    owner  => $owner,
+    group  => $group,
+    mode   => '0555',
   }
 
   file { "${basedir}/bin":
