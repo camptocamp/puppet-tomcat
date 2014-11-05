@@ -76,6 +76,7 @@ define tomcat::connector(
   },
 ) {
 
+  # lint:ignore:only_variable_string
   validate_re("${port}", '^[0-9]+$')
   validate_re($ensure, ['present', 'absent'])
   validate_string($owner)
@@ -84,6 +85,7 @@ define tomcat::connector(
   validate_re("${redirect_port}", '^[0-9]+$')
   validate_array($options)
   validate_bool($manage)
+  # lint:endignore
 
   if $server != undef and $service != undef and $connector != undef {
     validate_string($server)

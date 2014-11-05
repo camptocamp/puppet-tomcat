@@ -23,11 +23,11 @@ class tomcat::install::redhat {
         require => Package["tomcat${tomcat::version}"],
       } ->
       file {"/usr/share/tomcat${tomcat::version}/bin/catalina.sh":
-        ensure  => file,
-        owner   => root,
-        group   => root,
-        mode    => '0755',
-        source  => "puppet:///modules/${module_name}/catalina.sh-6.0.24",
+        ensure => file,
+        owner  => root,
+        group  => root,
+        mode   => '0755',
+        source => "puppet:///modules/${module_name}/catalina.sh-6.0.24",
       }
     }
     default: {

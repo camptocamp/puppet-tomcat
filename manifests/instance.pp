@@ -132,6 +132,8 @@ define tomcat::instance(
     ])
   validate_string($owner)
   validate_string($group)
+
+  # lint:ignore:only_variable_string
   validate_re("${server_port}", '^[0-9]+$')
   validate_re("${http_port}", '^[0-9]+$')
   validate_re("${ajp_port}", '^[0-9]+$')
@@ -139,6 +141,7 @@ define tomcat::instance(
   validate_array($connector)
   validate_array($executor)
   validate_bool($manage)
+  # lint:endignore
 
   $_basedir = $instance_basedir? {
     false   => $tomcat::instance_basedir,
@@ -191,6 +194,15 @@ define tomcat::instance(
   validate_re($confmode, '^[0-9]+$')
   validate_re($logsmode, '^[0-9]+$')
 
+  $service_notify = $manage ? {
+    true    => Service["tomcat-${name}"],
+    default => undef,
+  }
+
+  $group_require = $group ? {
+    'adm'   => undef,
+    default => Group[$group],
+  }
 
   if $connector == [] and $server_xml_file == '' and $default_connectors {
 
@@ -211,10 +223,7 @@ define tomcat::instance(
       group            => $group,
       owner            => $owner,
       instance_basedir => $instance_basedir,
-      notify           => $manage ? {
-        true           => Service["tomcat-${name}"],
-        default        => undef,
-      },
+      notify           => $service_notify,
     }
 
     tomcat::connector{"ajp-${ajp_port}-${name}":
@@ -227,10 +236,7 @@ define tomcat::instance(
       group            => $group,
       owner            => $owner,
       instance_basedir => $instance_basedir,
-      notify           => $manage ? {
-        true           => Service["tomcat-${name}"],
-        default        => undef,
-      },
+      notify           => $service_notify,
     }
 
   } else {
@@ -322,6 +328,8 @@ define tomcat::instance(
           content => template("${module_name}/body2_${serverdotxml}"),
         }
       }
+
+      # lint:ignore:selector_inside_resource
       file {
         # Nobody usually write there
         $basedir:
@@ -330,10 +338,8 @@ define tomcat::instance(
           group   => $group,
           mode    => '0555',
           before  => Service["tomcat-${name}"],
-          require => $group ? {
-            'adm'   => undef,
-            default => Group[$group],
-          };
+          require => $group_require,
+          ;
 
         "${basedir}/bin":
           ensure => directory,
@@ -384,11 +390,8 @@ define tomcat::instance(
             default => undef,
           },
           before  => Service["tomcat-${name}"],
-          notify  => $manage? {
-            true    => Service["tomcat-${name}"],
-            default => undef,
-          },
-          require  => $server_xml_file? {
+          notify  => $service_notify,
+          require => $server_xml_file? {
             ''      => $version ? {
               5       => undef,
               default => Concat_build["server.xml_${name}"],
@@ -411,10 +414,7 @@ define tomcat::instance(
             default => undef,
           },
           before  => Service["tomcat-${name}"],
-          notify  => $manage? {
-            true    => Service["tomcat-${name}"],
-            default => undef,
-          },
+          notify  => $service_notify,
           replace => $manage;
 
         "${basedir}/README":
@@ -451,6 +451,7 @@ define tomcat::instance(
           mode   => '2770',
           before => Service["tomcat-${name}"];
       }
+      # lint:endignore
 
       if $sample {
 
@@ -543,6 +544,7 @@ define tomcat::instance(
     $servicerequire = File['/opt/apache-tomcat']
   }
 
+  # lint:ignore:selector_inside_resource
   service {"tomcat-${name}":
     ensure  => $ensure ? {
       present   => 'running',
@@ -561,6 +563,7 @@ define tomcat::instance(
     require => [File["/etc/init.d/tomcat-${name}"], $servicerequire],
     pattern => "-Dcatalina.base=${tomcat::instance_basedir}/${name}",
   }
+  # lint:endignore
 
   # Logrotate
   file {"/etc/logrotate.d/tomcat-${name}.conf":
