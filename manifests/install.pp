@@ -7,9 +7,9 @@ class tomcat::install {
   $package_name = $::osfamily ? {
     'redhat' => $::operatingsystemmajrelease ? {
       '7'     => 'tomcat',
-      default => "tomcat=${tomcat::version}",
+      default => "tomcat${tomcat::version}",
     },
-    'debian' => "tomcat=${tomcat::version}",
+    'debian' => "tomcat${tomcat::version}",
   }
 
   if !$tomcat::sources {
