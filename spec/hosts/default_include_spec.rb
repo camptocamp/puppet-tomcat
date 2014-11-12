@@ -9,13 +9,14 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
       :osfamily                  => v['osfamily'],
       :operatingsystem           => v['operatingsystem'],
       :operatingsystemmajrelease => v['operatingsystemmajrelease'],
+      :path                      => '/foo',
       :lsbmajdistrelease         => v['lsbmajdistrelease'],
       :puppet_vardir             => '/var/lib/puppet',
     }}
 
     describe "#{k}: should install #{v['tomcat_package']} package" do
       it {
-        should contain_package(v['tomcat_package'])
+        should contain_package('tomcat').with_name(v['tomcat_package'])
       }
     end
 

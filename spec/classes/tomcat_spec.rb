@@ -5,6 +5,7 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
   describe "tomcat" do
     context k do
       let (:facts) { {
+        :path                      => '/foo',
         :osfamily                  => v['osfamily'],
         :operatingsystem           => v['operatingsystem'],
         :operatingsystemmajrelease => v['operatingsystemmajrelease'],
@@ -20,7 +21,7 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
 
       describe 'should install tomcat package' do
         it {
-          should contain_package(v['tomcat_package'])
+          should contain_package('tomcat').with_name(v['tomcat_package'])
         }
       end
 
