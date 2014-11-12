@@ -4,9 +4,18 @@
 #
 class tomcat::install {
 
+  $package_name = $::osfamily ? {
+    'redhat' => $::operatingsystemmajrelease ? {
+      '7'     => 'tomcat',
+      default => "tomcat${tomcat::version}",
+    },
+    'debian' => "tomcat${tomcat::version}",
+  }
+
   if !$tomcat::sources {
-    package {"tomcat${tomcat::version}":
+    package {'tomcat':
       ensure => present,
+      name   => $package_name,
     } ->
     class {'::tomcat::juli': } ->
     class {'::tomcat::logging': }
