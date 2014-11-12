@@ -5,6 +5,7 @@ group :development, :test do
   gem 'rspec-puppet',            :require => false
   gem 'puppetlabs_spec_helper',  :require => false
   gem 'puppet-lint',             :require => false
+  gem 'metadata-json-lint',      :require => false
 end
 
 if facterversion = ENV['FACTER_GEM_VERSION']
