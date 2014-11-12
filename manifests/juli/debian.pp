@@ -11,7 +11,7 @@ class tomcat::juli::debian {
 
   $require = $::tomcat::sources ? {
     true => undef,
-    false  => Package["tomcat${tomcat::version}"],
+    false  => Package['tomcat'],
   }
 
   file { "${tomcat::home}/extras/":
