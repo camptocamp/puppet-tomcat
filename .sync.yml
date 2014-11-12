@@ -1,3 +1,9 @@
 ---
 .travis.yml:
   forge_password: "PxFc4SYyoJEPwHxcBnkL2aMwbwHf8kyxPltQqbOQ+HjighHf9vXjJo1RAjpn3YqdR0nTzKuZm4bnwCzA7bFxn9MeZCuNt4qSriPbHfvEm+FXiLPGYniQGcb0BnP+GtT8ZjaJvz2fNDqHagqtjcAkk6bLCFyGTqKs8oJk8uRoh6U="
+Gemfile:
+  optional:
+  - gem: serverspec
+  - gem: beaker
+  - gem: beaker-rspec
+  - gem: pry
