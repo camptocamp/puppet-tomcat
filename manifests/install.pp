@@ -24,6 +24,12 @@ class tomcat::install {
     package {'tomcat':
       ensure => present,
       name   => $package_name,
+    } ->
+    # Ensure default service is stopped
+    service { 'tomcat':
+      ensure => stopped,
+      name   => $service_name,
+      enable => false,
     }
 
     if $::osfamily != 'RedHat' or $::operatingsystemmajrelease != 7 {
@@ -35,19 +41,12 @@ class tomcat::install {
         class {'::tomcat::install::redhat': }
       }
 
+      # Set the init script unexecutable
       file {"/etc/init.d/tomcat${tomcat::version}":
         ensure  => file,
         mode    => '0644',
-        require => Package['tomcat'],
-        before  => Service['tomcat'],
+        require => Service['tomcat'],
       }
-    }
-
-    # Ensure default service is stopped
-    service { 'tomcat':
-      ensure => stopped,
-      name   => $service_name,
-      enable => false,
     }
 
   } else {
