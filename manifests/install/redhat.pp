@@ -5,7 +5,7 @@
 class tomcat::install::redhat {
 
   case $::operatingsystemmajrelease {
-    '5', '7': {
+    '5': {
       file {'/usr/share/tomcat5/bin/catalina.sh':
         ensure  => link,
         target  => "/usr/bin/dtomcat${tomcat::version}",
