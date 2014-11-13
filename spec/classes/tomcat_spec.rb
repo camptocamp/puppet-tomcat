@@ -47,8 +47,9 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
 
       describe 'should deactivate default tomcat service' do
         it {
-          should contain_service("tomcat#{v['tomcat_version']}").with({
+          should contain_service('tomcat').with({
             'ensure' => 'stopped',
+            'name'   => "tomcat#{v['tomcat_version']}",
             'enable' => false,
           })
           should contain_file("/etc/init.d/tomcat#{v['tomcat_version']}").with({
