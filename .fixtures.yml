@@ -1,7 +1,10 @@
 fixtures:
   repositories:
-    "stdlib": "git://github.com/puppetlabs/puppetlabs-stdlib.git"
-    "concat_native": "git://github.com/theforeman/puppet-concat.git"
-    "archive": "git://github.com/camptocamp/puppet-archive.git"
+    augeasproviders_core: https://github.com/hercules-team/augeasproviders_core.git
+    augeasproviders_shellvar: https://github.com/hercules-team/augeasproviders_shellvar.git
+    archive: https://github.com/camptocamp/puppet-archive.git
+    concat_native: https://github.com/theforeman/puppet-concat.git
+    stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
+    systemd: https://github.com/camptocamp/puppet-systemd.git
   symlinks:
-    "tomcat": "#{source_dir}"
+    tomcat: "#{source_dir}"
