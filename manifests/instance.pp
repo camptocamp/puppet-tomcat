@@ -527,15 +527,55 @@ define tomcat::instance(
   }
 
   # Init and env scripts
-  file {"/etc/init.d/tomcat-${name}":
-    ensure  => $present,
-    content => template('tomcat/tomcat.init.erb'),
-    owner   => 'root',
-    mode    => '0755',
-    require => File["${basedir}/bin/setenv.sh"],
-    seluser => $seluser,
-    selrole => $selrole,
-    seltype => $seltype,
+  if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
+    include ::systemd
+
+    file { "/usr/lib/systemd/system/tomcat-${name}.service":
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      source  => '/usr/lib/systemd/system/tomcat.service',
+      replace => false,
+    } ->
+    ini_setting { 'SERVICE_NAME':
+      ensure            => present,
+      path              => "/usr/lib/systemd/system/tomcat-${name}.service",
+      section           => 'Service',
+      setting           => 'Environment',
+      key_val_separator => '=',
+      value             => "\"SERVICE_NAME=tomcat-${name}\"",
+    } ~>
+    Exec['systemctl-daemon-reload']
+
+    file { "/etc/sysconfig/tomcat-${name}":
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0664',
+      source  => '/etc/sysconfig/tomcat',
+      replace => false,
+      notify  => Service["tomcat-${name}"],
+    } ->
+    shellvar { "CATALINA_BASE_${name}":
+      ensure    => present,
+      target    => "/etc/sysconfig/tomcat-${name}",
+      variable  => 'CATALINA_BASE',
+      value     => $basedir,
+      uncomment => true,
+    }
+  } else {
+    file {"/etc/init.d/tomcat-${name}":
+      ensure  => $present,
+      content => template('tomcat/tomcat.init.erb'),
+      owner   => 'root',
+      mode    => '0755',
+      require => File["${basedir}/bin/setenv.sh"],
+      seluser => $seluser,
+      selrole => $selrole,
+      seltype => $seltype,
+      before  => Service["tomcat-${name}"],
+    }
   }
 
   if $tomcat::type == 'package' {
@@ -560,7 +600,7 @@ define tomcat::instance(
       installed => false,
       absent    => false,
     },
-    require => [File["/etc/init.d/tomcat-${name}"], $servicerequire],
+    require => [$servicerequire],
     pattern => "-Dcatalina.base=${tomcat::instance_basedir}/${name}",
   }
   # lint:endignore
