@@ -27,14 +27,15 @@ class tomcat::install {
     # Moved from Class[tomcat::service] to here so that we can create a
     # tomcat::service definition.
     file {"/etc/init.d/tomcat${tomcat::version}":
-      ensure => file,
-      mode   => '0644',
-    } ->
+      ensure  => file,
+      mode    => '0644',
+    }
     service {"tomcat${tomcat::version}":
       ensure => stopped,
       enable => false,
+      before => File["/etc/init.d/tomcat${tomcat::version}"],
+      require => Package["tomcat${tomcat::version}"],
     }
-
   } else {
     class {'tomcat::source': }
   }
