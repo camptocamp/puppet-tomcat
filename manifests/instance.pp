@@ -137,11 +137,11 @@ define tomcat::instance(
   validate_re("${server_port}", '^[0-9]+$')
   validate_re("${http_port}", '^[0-9]+$')
   validate_re("${ajp_port}", '^[0-9]+$')
+  # lint:endignore
   validate_array($setenv)
   validate_array($connector)
   validate_array($executor)
   validate_bool($manage)
-  # lint:endignore
 
   $_basedir = $instance_basedir? {
     false   => $tomcat::instance_basedir,
