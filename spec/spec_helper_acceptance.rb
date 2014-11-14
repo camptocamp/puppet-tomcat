@@ -3,7 +3,11 @@ require 'pry'
 
 hosts.each do |host|
   # Install puppet
-  install_puppet()
+  if host['platform'] =~ /debian-8/
+    install_package host, 'puppet'
+  else
+    install_puppet()
+  end
   # Install ruby-augeas
   case fact('osfamily')
   when 'Debian'
