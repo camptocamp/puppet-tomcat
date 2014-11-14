@@ -2,17 +2,8 @@ require 'beaker-rspec'
 require 'pry'
 
 hosts.each do |host|
-  # Install Ruby
-  install_package host, 'ruby'
-  # Install Puppet
-  on host, "ruby --version | cut -f2 -d ' ' | cut -f1 -d 'p'" do |version|
-    version = version.stdout.strip
-    if Gem::Version.new(version) < Gem::Version.new('1.9')
-      install_package host, 'rubygems'
-    end
-  end
-  on host, 'gem install puppet --no-ri --no-rdoc'
-  on host, "mkdir -p #{host['distmoduledir']}"
+  # Install puppet
+  install_puppet()
   # Install ruby-augeas
   case fact('osfamily')
   when 'Debian'
