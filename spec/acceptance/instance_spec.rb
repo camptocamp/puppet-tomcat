@@ -6,7 +6,9 @@ describe 'tomcat::instance' do
     it 'should idempotently run' do
       pp = <<-EOS
         class { 'tomcat': }
-        tomcat::instance { 'foo': }
+        tomcat::instance { 'foo':
+          manage => true,
+        }
       EOS
 
       apply_manifest(pp, :catch_failures => true)
@@ -32,6 +34,7 @@ describe 'tomcat::instance' do
         class { 'tomcat': }
         tomcat::instance { 'foo':
           http_port => '8081',
+          manage    => true,
         }
       EOS
 
@@ -61,6 +64,7 @@ describe 'tomcat::instance' do
       pp = <<-EOS
         class { 'tomcat': }
         tomcat::instance { 'foo':
+          manage => true,
           setenv => ['USE_IMAGEMAGICK="true"',],
         }
       EOS
