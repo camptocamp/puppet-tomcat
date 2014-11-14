@@ -1,7 +1,10 @@
 class tomcat::params {
 
   $version = $::osfamily? {
-    Debian => '6',
+    Debian => $::operatingsystemmajrelease ? {
+      '8'     => '8',
+      default => '6',
+    },
     RedHat => $::operatingsystemmajrelease ? {
       '5' => '5',
       '6' => '6',
