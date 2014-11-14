@@ -117,7 +117,7 @@ define tomcat::instance(
   $selrole            = 'object_r',
   $seltype            = 'initrc_exec_t',
   $instance_basedir   = $tomcat::instance_basedir,
-  $tomcat_version     = false,
+  $tomcat_version     = $tomcat::version,
   $catalina_logrotate = true,
 ) {
 
@@ -145,10 +145,7 @@ define tomcat::instance(
 
   validate_absolute_path($instance_basedir)
 
-  $version = $tomcat_version? {
-    false   => $tomcat::version,
-    default => $tomcat_version,
-  }
+  $version = $tomcat_version
   validate_re($version, '^[5-7]([\.0-9]+)?$')
 
   $tomcat_name = $name
