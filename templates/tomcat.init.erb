@@ -38,7 +38,7 @@ start() {
   # Remove pidfile if still around
   test -f $CATALINA_PID && rm -f $CATALINA_PID
 
-  $SU <%= @owner %> -c "umask 0002; $CATALINA_HOME/bin/catalina.sh start" > /dev/null
+  $SU <%= @owner %> -c "umask 0002; export JAVA_HOME=$JAVA_HOME; $CATALINA_HOME/bin/catalina.sh start" > /dev/null
 }
 
 stop() {
