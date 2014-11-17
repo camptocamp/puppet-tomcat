@@ -116,8 +116,8 @@ define tomcat::instance(
   $seluser            = 'system_u',
   $selrole            = 'object_r',
   $seltype            = 'initrc_exec_t',
-  $instance_basedir   = false,
-  $tomcat_version     = false,
+  $instance_basedir   = $tomcat::instance_basedir,
+  $tomcat_version     = $tomcat::version,
   $catalina_logrotate = true,
 ) {
 
@@ -143,20 +143,13 @@ define tomcat::instance(
   validate_array($executor)
   validate_bool($manage)
 
-  $_basedir = $instance_basedir? {
-    false   => $tomcat::instance_basedir,
-    default => $instance_basedir,
-  }
-  validate_absolute_path($_basedir)
+  validate_absolute_path($instance_basedir)
 
-  $version = $tomcat_version? {
-    false   => $tomcat::version,
-    default => $tomcat_version,
-  }
+  $version = $tomcat_version
   validate_re($version, '^[5-7]([\.0-9]+)?$')
 
   $tomcat_name = $name
-  $basedir = "${_basedir}/${name}"
+  $basedir = "${instance_basedir}/${name}"
 
   if $owner == 'tomcat' {
     $dirmode  = $webapp_mode ? {

@@ -63,14 +63,10 @@ define tomcat::executor(
   $min_spare_threads = 25,
   $max_idle_time     = 60000,
   $manage            = false,
-  $instance_basedir  = false,
+  $instance_basedir  = $tomcat::instance_basedir,
 ) {
 
-  $_basedir = $instance_basedir? {
-    false   => $tomcat::instance_basedir,
-    default => $instance_basedir,
-  }
-  validate_absolute_path($_basedir)
+  validate_absolute_path($instance_basedir)
 
   if $owner == 'tomcat' {
     $filemode = '0460'
@@ -89,7 +85,7 @@ define tomcat::executor(
   validate_bool($manage)
 
 
-  file {"${_basedir}/${instance}/conf/executor-${name}.xml":
+  file {"${instance_basedir}/${instance}/conf/executor-${name}.xml":
     ensure  => $ensure,
     owner   => $owner,
     group   => $group,

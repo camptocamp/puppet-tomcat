@@ -61,7 +61,7 @@ define tomcat::connector(
   $executor           = false,
   $options            = [],
   $manage             = false,
-  $instance_basedir   = false,
+  $instance_basedir   = $tomcat::instance_basedir,
   $server             = regsubst($name, '^([^:]+):[^:]+:[^:]+$', '\1') ? {
     $name   => undef,
     default => regsubst($name, '^([^:]+):[^:]+:[^:]+$', '\1'),
@@ -98,11 +98,7 @@ define tomcat::connector(
   } else {
     validate_string($instance)
 
-    $_basedir = $instance_basedir? {
-      false   => $tomcat::instance_basedir,
-      default => $instance_basedir,
-    }
-    validate_absolute_path($_basedir)
+    validate_absolute_path($instance_basedir)
 
     if $owner == 'tomcat' {
       $filemode = '0460'
@@ -116,7 +112,7 @@ define tomcat::connector(
     }
 
     concat_build { "connector_${name}": } ->
-    file {"${_basedir}/${instance}/conf/connector-${name}.xml":
+    file {"${instance_basedir}/${instance}/conf/connector-${name}.xml":
       ensure  => $ensure,
       owner   => $owner,
       group   => $group,
