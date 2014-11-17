@@ -9,7 +9,7 @@ class tomcat (
   $ulimits          = {},
 ) inherits ::tomcat::params {
 
-  validate_re($version, '^[5-7]([\.0-9]+)?$')
+  validate_re($version, '^[5-8]([\.0-9]+)?$')
   validate_bool($sources)
   validate_absolute_path($instance_basedir)
   validate_hash($ulimits)
@@ -27,6 +27,7 @@ class tomcat (
       5 => '5.5.27',
       6 => '6.0.26',
       7 => '7.0.42',
+      8 => '8.0.15',
     }
   }
 
