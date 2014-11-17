@@ -16,4 +16,10 @@ class tomcat::params {
   $instance_basedir = '/srv/tomcat'
   $sources_src = 'http://archive.apache.org/dist/tomcat/'
 
+  if ($::osfamily == 'Debian' and ($::operatingsystemmajrelease =~ /sid/ or $::operatingsystemmajrelease >= 8)) or ($::osfamily == 'RedHat' and $::operatingsystemmajrelease >= 7) {
+    $distro_way = true
+  } else {
+    $distro_way = false
+  }
+
 }

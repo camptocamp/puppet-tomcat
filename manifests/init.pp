@@ -7,6 +7,7 @@ class tomcat (
   $tomcat_uid       = undef,
   $tomcat_gid       = undef,
   $ulimits          = {},
+  $distro_way       = $::tomcat::params::distro_way,
 ) inherits ::tomcat::params {
 
   validate_re($version, '^[5-8]([\.0-9]+)?$')

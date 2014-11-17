@@ -7,6 +7,7 @@ define tomcat::instance::install(
   $group              = getparam(Tomcat::Instance[$title], 'group')
   $logs_mode          = getparam(Tomcat::Instance[$title], 'logs_mode')
   $owner              = getparam(Tomcat::Instance[$title], 'owner')
+  $version            = getparam(Tomcat::Instance[$title], 'tomcat_version')
   $webapp_mode        = getparam(Tomcat::Instance[$title], 'webapp_mode')
 
   if defined(File[$tomcat::instance_basedir]) {
@@ -19,6 +20,32 @@ define tomcat::instance::install(
 
   case $ensure {
     present,installed,running,stopped: {
+
+      if $::tomcat::distro_way and $::osfamily == 'Debian' {
+        package { "tomcat${version}-user":
+          ensure => present,
+        }
+        ->
+        exec { "tomcat${version}-instance-create ${catalina_base}":
+          creates => $catalina_base,
+          path    => $::path,
+          before  => File[$catalina_base],
+        }
+
+        # Debian's init script requires at least one policy file
+        file { "${catalina_base}/conf/policy.d":
+          ensure => directory,
+          owner  => $owner,
+          group  => $group,
+          mode   => '2770',
+        }
+        file { "${catalina_base}/conf/policy.d/empty.policy":
+          ensure => file,
+          owner  => $owner,
+          group  => $group,
+          mode   => '0644',
+        }
+      }
 
       if $owner == 'tomcat' {
         $dirmode  = $webapp_mode ? {
