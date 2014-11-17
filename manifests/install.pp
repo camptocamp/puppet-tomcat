@@ -32,7 +32,7 @@ class tomcat::install {
       enable => false,
     }
 
-    if $::osfamily != 'RedHat' or $::operatingsystemmajrelease != 7 {
+    if ! $::tomcat::distro_way {
       Package['tomcat'] ->
       class {'::tomcat::juli': } ->
       class {'::tomcat::logging': }
