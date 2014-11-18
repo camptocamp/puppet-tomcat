@@ -247,6 +247,14 @@ define tomcat::instance::config(
       variable  => 'CATALINA_BASE',
       value     => $catalina_base,
       uncomment => true,
+    } ->
+    augeas { "setenv.sh_${name}":
+      lens    => 'Shellvars.lns',
+      incl    => "/etc/sysconfig/tomcat-${name}",
+      changes => [
+        "rm .source[.='${catalina_base}/bin/setenv.sh']",
+        "set .source[.='${catalina_base}/bin/setenv.sh'] '${catalina_base}/bin/setenv.sh'",
+      ],
     }
   } else {
     # Variables used in tomcat.init.erb
