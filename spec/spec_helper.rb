@@ -17,6 +17,10 @@ RSpec.configure do |c|
     if Gem::Version.new(`puppet --version`) >= Gem::Version.new('3.5')
       Puppet.settings[:strict_variables]=true
     end
+
+    if ENV['PUPPET_PARSER'] == 'future'
+      Puppet.settings[:parser]='future'
+    end
   end
 
   c.after :each do

@@ -11,6 +11,11 @@ matrix:
     env: PUPPET_GEM_VERSION="~> 3.0"
   - rvm: 2.0.0
     env: PUPPET_GEM_VERSION="~> 3.0"
+  - rvm: 2.0.0
+    env: PUPPET_GEM_VERSION="~> 3.0" PUPPET_PARSER="future"
+  allow_failures:
+    - rvm: 2.0.0
+      env: PUPPET_GEM_VERSION="~> 3.0" PUPPET_PARSER="future"
 notifications:
   email: false
 deploy:
