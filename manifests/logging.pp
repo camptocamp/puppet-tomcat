@@ -15,8 +15,8 @@ class tomcat::logging {
   }
 
   $log4j_packages = $::osfamily? {
-    Debian => ['liblog4j1.2-java', 'libcommons-logging-java'],
-    RedHat => ['log4j', 'jakarta-commons-logging'],
+    'Debian' => ['liblog4j1.2-java', 'libcommons-logging-java'],
+    'RedHat' => ['log4j', 'jakarta-commons-logging'],
   }
 
   package {$log4j_packages:
@@ -24,8 +24,8 @@ class tomcat::logging {
   }
 
   $log4j = $::osfamily? {
-    Debian => '/usr/share/java/log4j-1.2.jar',
-    RedHat => '/usr/share/java/log4j.jar',
+    'Debian' => '/usr/share/java/log4j-1.2.jar',
+    'RedHat' => '/usr/share/java/log4j.jar',
   }
 
   # The source class need (and define) this directory before logging
