@@ -263,8 +263,8 @@ define tomcat::instance::config(
     if $tomcat::type == 'package' {
       $catalinahome = $version? {
         5        => $::osfamily? {
-          RedHat => '/usr/share/tomcat5',
-          Debian => '/usr/share/tomcat5.5',
+          'RedHat' => '/usr/share/tomcat5',
+          'Debian' => '/usr/share/tomcat5.5',
         },
         default  => "/usr/share/tomcat${version}",
       }
@@ -281,19 +281,19 @@ define tomcat::instance::config(
     # Define default JAVA_HOME used in tomcat.init.erb
     if $java_home == '' {
       case $::osfamily {
-        RedHat: {
+        'RedHat': {
           $javahome = '/usr/lib/jvm/java'
         }
-        Scientific: {
+        'Scientific': {
           $javahome = '/usr/lib/jvm/java'
         }
-        CentOS: {
+        'CentOS': {
           $javahome = '/etc/alternatives/jre'
         }
-        SLC: {
+        'SLC': {
           $javahome = '/usr/lib/jvm/jre'
         }
-        Debian,Ubuntu: {
+        'Debian','Ubuntu': {
           $javahome = '/usr'
         }
         default: {
