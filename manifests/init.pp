@@ -34,8 +34,8 @@ class tomcat (
   $home = $sources ? {
     true  => "/opt/apache-tomcat-${src_version}",
     false => $::osfamily? {
-      Debian => "/usr/share/tomcat${version}",
-      RedHat => "/var/lib/tomcat${version}",
+      'Debian' => "/usr/share/tomcat${version}",
+      'RedHat' => "/var/lib/tomcat${version}",
     }
   }
 
