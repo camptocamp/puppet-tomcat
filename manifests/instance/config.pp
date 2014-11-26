@@ -282,18 +282,13 @@ define tomcat::instance::config(
     if $java_home == '' {
       case $::osfamily {
         'RedHat': {
-          $javahome = '/usr/lib/jvm/java'
+          if $::operatingsystem == 'CentOS' {
+            $javahome = '/etc/alternatives/jre'
+          } else {
+            $javahome = '/usr/lib/jvm/java'
+          }
         }
-        'Scientific': {
-          $javahome = '/usr/lib/jvm/java'
-        }
-        'CentOS': {
-          $javahome = '/etc/alternatives/jre'
-        }
-        'SLC': {
-          $javahome = '/usr/lib/jvm/jre'
-        }
-        'Debian','Ubuntu': {
+        'Debian': {
           $javahome = '/usr'
         }
         default: {
