@@ -2,18 +2,18 @@ $concat_basedir = '/var/lib/puppet/concat'
 
 node default {
 }
-node default_include {
+node 'default_include' {
   class {'::tomcat': } ->
   tomcat::instance {'instance1':
   }
 }
-node managed_instance {
+node 'managed_instance' {
   class {'::tomcat': } ->
   tomcat::instance {'instance1':
     manage => true,
   }
 }
-node instance_with_connectors {
+node 'instance_with_connectors' {
   include ::tomcat
   ::tomcat::connector {'connector1':
     ensure   => present,
@@ -26,7 +26,7 @@ node instance_with_connectors {
     connector => ['connector1'],
   }
 }
-node instance_with_executor {
+node 'instance_with_executor' {
   include ::tomcat
   ::tomcat::executor {'executor1':
     instance => 'instance1',
