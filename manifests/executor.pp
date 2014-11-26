@@ -79,9 +79,11 @@ define tomcat::executor(
   validate_string($owner)
   validate_string($group)
   validate_bool($daemon)
-  validate_re($max_threads, '^[0-9]+$')
-  validate_re($min_spare_threads, '^[0-9]+$')
-  validate_re($max_idle_time, '^[0-9]+$')
+  # lint:ignore:only_variable_string
+  validate_re("${max_threads}", '^[0-9]+$')
+  validate_re("${min_spare_threads}", '^[0-9]+$')
+  validate_re("${max_idle_time}", '^[0-9]+$')
+  # lint:endignore
   validate_bool($manage)
 
 

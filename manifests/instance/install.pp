@@ -48,9 +48,11 @@ define tomcat::instance::install(
         }
       }
 
-      validate_re($dirmode, '^[0-9]+$')
-      validate_re($confmode, '^[0-9]+$')
-      validate_re($logsmode, '^[0-9]+$')
+      # lint:ignore:only_variable_string
+      validate_re("${dirmode}", '^[0-9]+$')
+      validate_re("${confmode}", '^[0-9]+$')
+      validate_re("${logsmode}", '^[0-9]+$')
+      # lint:endignore
 
       file {
         # Nobody usually write there
