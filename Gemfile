@@ -6,7 +6,7 @@ group :development, :test do
   gem 'puppetlabs_spec_helper',  :require => false
   gem 'puppet-lint',             :require => false
   gem 'metadata-json-lint',      :require => false
-  gem 'puppet_facts',            :require => false
+  gem 'puppet_facts',            :require => false, :git => 'https://github.com/camptocamp/puppet_facts.git'
   gem 'serverspec',              :require => false
   gem 'beaker',                  :require => false
   gem 'beaker-rspec',            :require => false
