@@ -23,7 +23,7 @@ RSpec.configure do |c|
       Puppet.settings[:strict_variables]=true
     end
 
-    if ENV['PUPPET_PARSER'] == 'future'
+    if ENV['FUTURE_PARSER'] == 'yes'
       c.parser='future'
     end
   end
