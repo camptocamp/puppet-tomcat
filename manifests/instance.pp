@@ -142,11 +142,15 @@ define tomcat::instance(
 
   tomcat::instance::install { $title:
     catalina_base => $basedir,
+    name          => $name,
   } ->
   tomcat::instance::config { $title:
     catalina_base => $basedir,
+    name          => $name,
   } ->
-  tomcat::instance::service { $title: }
+  tomcat::instance::service { $title:
+    name => $name,
+  }
 
   if $manage {
     Tomcat::Instance::Config[$title] ~> Tomcat::Instance::Service[$title]
