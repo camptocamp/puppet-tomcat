@@ -1,19 +1,20 @@
 require 'spec_helper'
-require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
 
-@parameters.each { |k, v|
-  describe 'tomcat::instance' do
-    context "when on #{k}" do
-      let(:pre_condition) { 'include tomcat' }
-      let (:title) {'fooBar'}
-      let (:facts) { {
-        :osfamily                  => v['osfamily'],
-        :operatingsystem           => v['operatingsystem'],
-        :operatingsystemmajrelease => v['operatingsystemmajrelease'],
-        :path                      => '/foo',
-        :lsbmajdistrelease         => v['lsbmajdistrelease'],
-        :puppet_vardir             => '/var/lib/puppet',
-      } }
+describe 'tomcat::instance' do
+
+  let (:title) {'fooBar'}
+
+  let(:pre_condition) do
+    "class { 'tomcat': }"
+  end
+
+  on_supported_os.each do |os, facts|
+    context "on #{os}" do
+      let(:facts) do
+        facts.merge({
+          :puppet_vardir => '/var/lib/puppet',
+        })
+      end
 
       context 'when using a wrong ensure value' do
         let (:params) {{
@@ -236,7 +237,7 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
       end
 
       describe "should create /srv/tomcat/fooBar/conf/server.xml" do
-        if k.include? 'RHEL5'
+        if facts[:osfamily] == 'RedHat' and facts[:operatingsystemmajrelease].to_i == 5
           it {
             should contain_file("/srv/tomcat/fooBar/conf/server.xml").with({
               'ensure'  => 'file',
@@ -298,7 +299,14 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
             'owner'  => 'root',
             'mode'   => '0755',
           })
-          should contain_file('/etc/init.d/tomcat-fooBar').with_content(/JAVA_HOME=#{v['java_home']}/)
+          case facts[:osfamily]
+          when 'Debian'
+            should contain_file('/etc/init.d/tomcat-fooBar').with_content(/JAVA_HOME=\/usr/)
+          when 'RedHat'
+            if facts[:operatingsystemmajrelease].to_i < 7
+              should contain_file('/etc/init.d/tomcat-fooBar').with_content(/JAVA_HOME=\/usr\/lib\/jvm\/java/)
+            end
+          end
         }
       end
 
@@ -347,6 +355,5 @@ require File.expand_path(File.dirname(__FILE__)) + '/parameters.rb'
         }
       end
     end
-
   end
-}
+end

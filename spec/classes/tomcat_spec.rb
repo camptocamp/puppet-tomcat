@@ -1,16 +1,12 @@
 require 'spec_helper'
-require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
 
-@parameters.each { |k,v|
-  describe "tomcat" do
-    context k do
-      let (:facts) { {
-        :path                      => '/foo',
-        :osfamily                  => v['osfamily'],
-        :operatingsystem           => v['operatingsystem'],
-        :operatingsystemmajrelease => v['operatingsystemmajrelease'],
-        :lsbmajdistrelease         => v['lsbmajdistrelease'],
-      } }
+describe 'tomcat' do
+
+  on_supported_os.each do |os, facts|
+    context "on #{os}" do
+      let(:facts) do
+        facts
+      end
 
       describe 'should include basic classes' do
         it {
@@ -20,23 +16,45 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
       end
 
       describe 'should install tomcat package' do
-        it {
-          should contain_package('tomcat').with_name(v['tomcat_package'])
-        }
+        case facts[:osfamily]
+        when 'Debian'
+          it { should contain_package('tomcat').with_name('tomcat6') }
+        when 'RedHat'
+          case facts[:operatingsystemmajrelease]
+          when '5'
+            it { should contain_package('tomcat').with_name('tomcat5') }
+          when '6'
+            it { should contain_package('tomcat').with_name('tomcat6') }
+          else
+            it { should contain_package('tomcat').with_name('tomcat') }
+          end
+        end
       end
 
       describe 'should include tomcat::logging and tomcat::juli' do
-        it {
-          should contain_class('tomcat::logging')
-          should contain_class('tomcat::juli')
-        }
+        if ! (facts[:osfamily] == 'RedHat' and facts[:operatingsystemmajrelease].to_i > 6)
+          it {
+            should contain_class('tomcat::logging')
+            should contain_class('tomcat::juli')
+          }
+        end
       end
 
-      describe "should install #{v['log4j']} and #{v['logging']}" do
-        it {
-          should contain_package(v['log4j'])
-          should contain_package(v['logging'])
-        }
+      describe 'should install log4j and logging' do
+        case facts[:osfamily]
+        when 'Debian'
+          it {
+            should contain_package('liblog4j1.2-java')
+            should contain_package('libcommons-logging-java')
+          }
+        when 'RedHat'
+          if facts[:operatingsystemmajrelease].to_i < 7
+            it {
+              should contain_package('log4j')
+              should contain_package('jakarta-commons-logging')
+            }
+          end
+        end
       end
 
       describe 'should create tomcat user' do
@@ -46,17 +64,55 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
       end
 
       describe 'should deactivate default tomcat service' do
-        it {
-          should contain_service('tomcat').with({
-            'ensure' => 'stopped',
-            'name'   => "tomcat#{v['tomcat_version']}",
-            'enable' => false,
-          })
-          should contain_file("/etc/init.d/tomcat#{v['tomcat_version']}").with({
-            'ensure' => 'file',
-            'mode'   => '0644',
-          })
-        }
+        case facts[:osfamily]
+        when 'Debian'
+          it {
+            should contain_service('tomcat').with({
+              'ensure' => 'stopped',
+              'name'   => 'tomcat6',
+              'enable' => false,
+            })
+            should contain_file('/etc/init.d/tomcat6').with({
+              'ensure' => 'file',
+              'mode'   => '0644',
+            })
+          }
+        when 'RedHat'
+          case facts[:operatingsystemmajrelease]
+          when '5'
+            it {
+              should contain_service('tomcat').with({
+                'ensure' => 'stopped',
+                'name'   => 'tomcat5',
+                'enable' => false,
+              })
+              should contain_file('/etc/init.d/tomcat5').with({
+                'ensure' => 'file',
+                'mode'   => '0644',
+              })
+            }
+          when '6'
+            it {
+              should contain_service('tomcat').with({
+                'ensure' => 'stopped',
+                'name'   => 'tomcat6',
+                'enable' => false,
+              })
+              should contain_file('/etc/init.d/tomcat6').with({
+                'ensure' => 'file',
+                'mode'   => '0644',
+              })
+            }
+          else
+            it {
+              should contain_service('tomcat').with({
+                'ensure' => 'stopped',
+                'name'   => 'tomcat',
+                'enable' => false,
+              })
+            }
+          end
+        end
       end
 
       {
@@ -99,4 +155,4 @@ require File.expand_path(File.dirname(__FILE__)) + '/../defines/parameters.rb'
 
     end
   end
-}
+end
