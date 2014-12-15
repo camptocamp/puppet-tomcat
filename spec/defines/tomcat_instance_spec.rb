@@ -294,16 +294,21 @@ describe 'tomcat::instance' do
 
       describe "should create init script" do
         it {
-          should contain_file('/etc/init.d/tomcat-fooBar').with({
-            'ensure' => 'file',
-            'owner'  => 'root',
-            'mode'   => '0755',
-          })
           case facts[:osfamily]
           when 'Debian'
+            should contain_file('/etc/init.d/tomcat-fooBar').with({
+              'ensure' => 'file',
+              'owner'  => 'root',
+              'mode'   => '0755',
+            })
             should contain_file('/etc/init.d/tomcat-fooBar').with_content(/JAVA_HOME=\/usr/)
           when 'RedHat'
             if facts[:operatingsystemmajrelease].to_i < 7
+              should contain_file('/etc/init.d/tomcat-fooBar').with({
+                'ensure' => 'file',
+                'owner'  => 'root',
+                'mode'   => '0755',
+              })
               should contain_file('/etc/init.d/tomcat-fooBar').with_content(/JAVA_HOME=\/usr\/lib\/jvm\/java/)
             end
           end
