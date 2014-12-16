@@ -310,6 +310,25 @@ describe 'tomcat::instance' do
                 'mode'   => '0755',
               })
               should contain_file('/etc/init.d/tomcat-fooBar').with_content(/JAVA_HOME=\/usr\/lib\/jvm\/java/)
+              should contain_file('/etc/init.d/tomcat-fooBar').with_content(/tomcat -c \"umask 0002;/)
+            else
+              should contain_file('/usr/lib/systemd/system/tomcat-fooBar.service').with({
+                'ensure' => 'file',
+                'owner'  => 'root',
+                'mode'   => '0644',
+              })
+              should contain_ini_setting('UMASK').with({
+                'section'              => 'Service',
+                'setting'              => 'UMask',
+                'key_val_separator'    => '=',
+                'value'                => '0002',
+              })
+              should contain_ini_setting('SERVICE_NAME').with({
+                'section'              => 'Service',
+                'setting'              => 'Environment',
+                'key_val_separator'    => '=',
+                'value'                => '"SERVICE_NAME=tomcat-fooBar"',
+              })
             end
           end
         }

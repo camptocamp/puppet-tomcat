@@ -31,6 +31,7 @@
 #   directories in any case.
 # - *group*: the group which will be allowed to edit the instance's
 #   configuration files and deploy webapps. Defaults to "adm".
+# - *umask*: controls the file mode creation mask, defaults to 0002
 # - *server_port*: tomcat's server port, defaults to 8005.
 # - *http_port*: tomcat's HTTP server port, defaults to 8080.
 # - *http_address*: define the IP address tomcat's HTTP server must listen on.
@@ -96,6 +97,7 @@ define tomcat::instance(
   $ensure             = present,
   $owner              = 'tomcat',
   $group              = 'adm',
+  $umask              = '0002',
   $server_port        = '8005',
   $http_port          = '8080',
   $http_address       = false,

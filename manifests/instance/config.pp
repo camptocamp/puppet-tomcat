@@ -8,6 +8,7 @@ define tomcat::instance::config(
   $ensure             = getparam(Tomcat::Instance[$title], 'ensure')
   $executor           = getparam(Tomcat::Instance[$title], 'executor')
   $group              = getparam(Tomcat::Instance[$title], 'group')
+  $umask              = getparam(Tomcat::Instance[$title], 'umask')
   $http_address       = getparam(Tomcat::Instance[$title], 'http_address')
   $http_port          = getparam(Tomcat::Instance[$title], 'http_port')
   $instance_basedir   = getparam(Tomcat::Instance[$title], 'instance_basedir')
@@ -221,6 +222,14 @@ define tomcat::instance::config(
       mode    => '0644',
       source  => '/usr/lib/systemd/system/tomcat.service',
       replace => false,
+    } ->
+    ini_setting { 'UMASK':
+      ensure            => present,
+      path              => "/usr/lib/systemd/system/tomcat-${name}.service",
+      section           => 'Service',
+      setting           => 'UMask',
+      key_val_separator => '=',
+      value             => $umask,
     } ->
     ini_setting { 'SERVICE_NAME':
       ensure            => present,
