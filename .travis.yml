@@ -1,9 +1,12 @@
 ---
 language: ruby
 sudo: false
-cache: bundler
+cache:
+  directories:
+    - vendor/bundle
+    - spec/fixtures/modules
 bundler_args: --without system_tests
-script: ["bundle exec rake validate", "bundle exec rake lint", "bundle exec fakeroot rake spec SPEC_OPTS='--format documentation'", "bundle exec rake metadata"]
+script: ["bundle exec rake validate", "bundle exec rake lint", "bundle exec rake spec_prep", "bundle exec fakeroot rake spec_standalone SPEC_OPTS='--format documentation'", "bundle exec rake metadata"]
 matrix:
   fast_finish: true
   include:
