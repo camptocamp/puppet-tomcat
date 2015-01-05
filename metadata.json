@@ -3,7 +3,7 @@
   "version": "0.8.1",
   "source": "https://github.com/camptocamp/puppet-tomcat",
   "author": "Camptocamp",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "summary": "Puppet Tomcat Module",
   "description": "Tomcat Module for Puppet",
   "project_page": "https://github.com/camptocamp/puppet-tomcat",
