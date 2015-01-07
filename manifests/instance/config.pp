@@ -41,7 +41,7 @@ define tomcat::instance::config(
     $connectors = ["http-${http_port}-${name}","ajp-${ajp_port}-${name}"]
 
     $connector_ensure = $ensure? {
-      absent  => absent,
+      'absent'  => absent,
       default => present,
     }
 
@@ -85,7 +85,7 @@ define tomcat::instance::config(
   }
 
   case $ensure {
-    present,installed,running,stopped: {
+    'present','installed','running','stopped': {
       if $version != 5 {
         concat_build { "server.xml_${name}": }
         concat_fragment { "server.xml_${name}+01_header":
@@ -156,7 +156,7 @@ define tomcat::instance::config(
       }
       # lint:endignore
     }
-    absent: {
+    'absent': {
       # do nothing
     }
     default: {
@@ -168,11 +168,11 @@ define tomcat::instance::config(
   # Configure setenv.sh and setenv-local.sh
   #
   $present = $ensure ? {
-    present   => 'file',
-    installed => 'file',
-    running   => 'file',
-    stopped   => 'file',
-    absent    => 'absent',
+    'present'   => 'file',
+    'installed' => 'file',
+    'running'   => 'file',
+    'stopped'   => 'file',
+    'absent'    => 'absent',
   }
 
   if $tomcat::type == 'package' and

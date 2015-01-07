@@ -1,7 +1,7 @@
 class tomcat::juli {
 
   case $::osfamily {
-    Debian: {
+    'Debian': {
       include ::tomcat::juli::debian
     }
     default: { }

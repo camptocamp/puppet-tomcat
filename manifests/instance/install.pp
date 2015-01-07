@@ -18,7 +18,7 @@ define tomcat::instance::install(
   }
 
   case $ensure {
-    present,installed,running,stopped: {
+    'present','installed','running','stopped': {
 
       if $owner == 'tomcat' {
         $dirmode  = $webapp_mode ? {
@@ -143,7 +143,7 @@ define tomcat::instance::install(
         }
       }
     }
-    absent: {
+    'absent': {
       file { $catalina_base:
         ensure  => absent,
         recurse => true,
@@ -156,11 +156,11 @@ define tomcat::instance::install(
   }
 
   $present = $ensure ? {
-    present   => 'file',
-    installed => 'file',
-    running   => 'file',
-    stopped   => 'file',
-    absent    => 'absent',
+    'present'   => 'file',
+    'installed' => 'file',
+    'running'   => 'file',
+    'stopped'   => 'file',
+    'absent'    => 'absent',
   }
 
   # Default rotation of catalina.out
