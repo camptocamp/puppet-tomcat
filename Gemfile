@@ -6,6 +6,7 @@ group :development, :unit_tests do
   gem 'puppetlabs_spec_helper',             :require => false
   gem 'puppet-lint', '< 1.1.0',             :require => false
   gem 'puppet-lint-unquoted_string-check',  :require => false
+  gem 'puppet-lint-empty_string-check',     :require => false
   gem 'simplecov',                          :require => false
   gem 'rspec-puppet-facts',                 :require => false
   gem 'json',                               :require => false
