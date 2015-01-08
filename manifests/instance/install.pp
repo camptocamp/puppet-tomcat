@@ -22,29 +22,29 @@ define tomcat::instance::install(
 
       if $owner == 'tomcat' {
         $dirmode  = $webapp_mode ? {
-          ''      => '2770',
+          undef   => '2770',
           default => $webapp_mode,
         }
         $confmode = $conf_mode ? {
-          ''      => '2570',
-          default => $conf_mode
+          undef   => '2570',
+          default => $conf_mode,
         }
         $logsmode = $logs_mode ? {
-          ''      => '2770',
-          default => $logs_mode
+          undef   => '2770',
+          default => $logs_mode,
         }
       } else {
         $dirmode  = $webapp_mode ? {
-          ''      => '2775',
+          undef   => '2775',
           default => $webapp_mode,
         }
         $confmode = $conf_mode ? {
-          ''      => $dirmode,
-          default => $conf_mode
+          undef   => $dirmode,
+          default => $conf_mode,
         }
         $logsmode = $logs_mode ? {
-          ''      => '2770',
-          default => $logs_mode
+          undef   => '2770',
+          default => $logs_mode,
         }
       }
 
