@@ -10,13 +10,32 @@
   "issues_url": "https://github.com/camptocamp/puppet-tomcat/issues",
   "dependencies": [
     {
-      "name": "camptocamp/archive"
+      "name": "herculesteam/augeasproviders_core",
+      "version_requirement": ">=2.0.0 <3.0.0"
     },
     {
-      "name": "theforeman/concat_native"
+      "name": "herculesteam/augeasproviders_shellvar",
+      "version_requirement": ">=2.0.0 <3.0.0"
     },
     {
-      "name": "puppetlabs/stdlib"
+      "name": "camptocamp/archive",
+      "version_requirement": ">=0.3.0 <2.0.0"
+    },
+    {
+      "name": "theforeman/concat_native",
+      "version_requirement": ">=1.0.0 <2.0.0"
+    },
+    {
+      "name": "puppetlabs/inifile",
+      "version_requirement": ">=1.0.0 <2.0.0"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">=4.0.0 <5.0.0"
+    },
+    {
+      "name": "camptocamp/systemd",
+      "version_requirement": ">=0.1.5 <2.0.0"
     }
   ],
   "requirements": [
