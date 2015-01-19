@@ -41,8 +41,8 @@ class tomcat (
 
   create_resources('tomcat::ulimit', $ulimits)
 
-  class {'tomcat::install': } ->
-  class {'tomcat::user': } ->
+  class {'::tomcat::install': } ->
+  class {'::tomcat::user': } ->
   Class['tomcat']
 
 }

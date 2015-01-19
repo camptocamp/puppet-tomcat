@@ -50,6 +50,6 @@ class tomcat::install {
     }
 
   } else {
-    class {'tomcat::source': }
+    class {'::tomcat::source': }
   }
 }
