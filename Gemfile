@@ -9,6 +9,7 @@ group :development, :unit_tests do
   gem 'puppet-lint-empty_string-check',                    :require => false
   gem 'puppet-lint-spaceship_operator_without_tag-check',  :require => false
   gem 'puppet-lint-variable_contains_upcase',              :require => false
+  gem 'puppet-lint-absolute_classname-check',              :require => false
   gem 'simplecov',                                         :require => false
   gem 'rspec-puppet-facts',                                :require => false
   gem 'json',                                              :require => false
