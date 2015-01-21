@@ -36,7 +36,7 @@ define tomcat::instance::config(
   ###
   # Configure connectors
   #
-  if $connector == [] and $server_xml_file == '' and $default_connectors {
+  if $connector == [] and !$server_xml_file and $default_connectors {
 
     $connectors = ["http-${http_port}-${name}","ajp-${ajp_port}-${name}"]
 
@@ -114,21 +114,21 @@ define tomcat::instance::config(
           group   => $group,
           mode    => $filemode,
           source  => $server_xml_file? {
-            ''      => $version ? {
+            undef   => $version ? {
               5       => undef,
               default => concat_output("server.xml_${name}"),
             },
             default => $server_xml_file,
           },
           content => $server_xml_file? {
-            ''      => $version ? {
+            undef   => $version ? {
               5       => template("${module_name}/${serverdotxml}"),
               default => undef,
             },
             default => undef,
           },
           require => $server_xml_file? {
-            ''      => $version ? {
+            undef   => $version ? {
               5       => undef,
               default => Concat_build["server.xml_${name}"],
             },
@@ -142,12 +142,9 @@ define tomcat::instance::config(
           owner   => $owner,
           group   => $group,
           mode    => $filemode,
-          source  => $web_xml_file? {
-            ''      => undef,
-            default => $web_xml_file,
-          },
+          source  => $web_xml_file,
           content => $web_xml_file? {
-            ''      => template("${module_name}/web.xml.erb"),
+            undef   => template("${module_name}/web.xml.erb"),
             default => undef,
           },
           replace => $manage,
@@ -288,7 +285,9 @@ define tomcat::instance::config(
     $tomcat_version_str = "${version}_${tomcat::type}"
 
     # Define default JAVA_HOME used in tomcat.init.erb
-    if $java_home == '' {
+    if $java_home {
+      $javahome = $java_home
+    } else {
       case $::osfamily {
         'RedHat': {
           if $::operatingsystem == 'CentOS' {
@@ -304,8 +303,6 @@ define tomcat::instance::config(
           err("java_home not defined for operatingsystem '${::operatingsystem}'.")
         }
       }
-    } else {
-      $javahome = $java_home
     }
     validate_absolute_path($javahome)
 
