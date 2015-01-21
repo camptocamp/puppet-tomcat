@@ -1,13 +1,16 @@
 define tomcat::instance::install(
   $catalina_base,
+  $catalina_logrotate,
+  $ensure,
+  $group,
+  $logs_mode,
+  $owner,
+  # FIXME: This is really weird, I have to initialise this parameters otherwise
+  # they are not found...
+  $conf_mode   = undef,
+  $sample      = undef,
+  $webapp_mode = undef,
 ) {
-  $catalina_logrotate = getparam(Tomcat::Instance[$title], 'catalina_logrotate')
-  $conf_mode          = getparam(Tomcat::Instance[$title], 'conf_mode')
-  $ensure             = getparam(Tomcat::Instance[$title], 'ensure')
-  $group              = getparam(Tomcat::Instance[$title], 'group')
-  $logs_mode          = getparam(Tomcat::Instance[$title], 'logs_mode')
-  $owner              = getparam(Tomcat::Instance[$title], 'owner')
-  $webapp_mode        = getparam(Tomcat::Instance[$title], 'webapp_mode')
 
   if defined(File[$tomcat::instance_basedir]) {
     debug "File[${tomcat::instance_basedir}] already defined"
@@ -121,7 +124,7 @@ define tomcat::instance::install(
           ;
       }
 
-      if getparam(Tomcat::Instance[$title], 'sample') {
+      if $sample {
 
         # Deploy a sample "Hello World" webapp available at:
         # http://localhost:8080/sample/

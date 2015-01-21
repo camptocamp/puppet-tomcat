@@ -1,29 +1,30 @@
 define tomcat::instance::config(
   $catalina_base,
+  $ajp_address,
+  $ajp_port,
+  $connector,
+  $default_connectors,
+  $ensure,
+  $executor,
+  $group,
+  $umask,
+  $http_address,
+  $http_port,
+  $instance_basedir,
+  $manage,
+  $owner,
+  $selrole,
+  $seltype,
+  $seluser,
+  $server_port,
+  $setenv,
+  $version,
+  # FIXME: This is really weird, I have to initialise this parameters otherwise
+  # they are not found...
+  $java_home       = undef,
+  $server_xml_file = undef,
+  $web_xml_file    = undef,
 ) {
-  $ajp_address        = getparam(Tomcat::Instance[$title], 'ajp_address')
-  $ajp_port           = getparam(Tomcat::Instance[$title], 'ajp_port')
-  $connector          = getparam(Tomcat::Instance[$title], 'connector')
-  $default_connectors = getparam(Tomcat::Instance[$title], 'default_connectors')
-  $ensure             = getparam(Tomcat::Instance[$title], 'ensure')
-  $executor           = getparam(Tomcat::Instance[$title], 'executor')
-  $group              = getparam(Tomcat::Instance[$title], 'group')
-  $umask              = getparam(Tomcat::Instance[$title], 'umask')
-  $http_address       = getparam(Tomcat::Instance[$title], 'http_address')
-  $http_port          = getparam(Tomcat::Instance[$title], 'http_port')
-  $instance_basedir   = getparam(Tomcat::Instance[$title], 'instance_basedir')
-  $java_home          = getparam(Tomcat::Instance[$title], 'java_home')
-  $manage             = str2bool(getparam(Tomcat::Instance[$title], 'manage'))
-  $owner              = getparam(Tomcat::Instance[$title], 'owner')
-  $selrole            = getparam(Tomcat::Instance[$title], 'selrole')
-  $seltype            = getparam(Tomcat::Instance[$title], 'seltype')
-  $seluser            = getparam(Tomcat::Instance[$title], 'seluser')
-  $server_port        = getparam(Tomcat::Instance[$title], 'server_port')
-  $server_xml_file    = getparam(Tomcat::Instance[$title], 'server_xml_file')
-  $setenv             = getparam(Tomcat::Instance[$title], 'setenv')
-  $version            = getparam(Tomcat::Instance[$title], 'tomcat_version')
-  $web_xml_file       = getparam(Tomcat::Instance[$title], 'web_xml_file')
-
   # lint:ignore:only_variable_string
   validate_re("${server_port}", '^[0-9]+$')
   validate_re("${http_port}", '^[0-9]+$')

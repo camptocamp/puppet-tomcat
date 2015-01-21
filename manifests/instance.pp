@@ -143,15 +143,46 @@ define tomcat::instance(
   $basedir = "${instance_basedir}/${name}"
 
   tomcat::instance::install { $title:
-    catalina_base => $basedir,
-    name          => $name,
+    ensure             => $ensure,
+    name               => $name,
+    catalina_base      => $basedir,
+    catalina_logrotate => $catalina_logrotate,
+    conf_mode          => $conf_mode,
+    group              => $group,
+    logs_mode          => $logs_mode,
+    owner              => $owner,
+    sample             => $sample,
+    webapp_mode        => $webapp_mode,
   } ->
   tomcat::instance::config { $title:
-    catalina_base => $basedir,
-    name          => $name,
+    ensure             => $ensure,
+    name               => $name,
+    catalina_base      => $basedir,
+    ajp_address        => $ajp_address,
+    ajp_port           => $ajp_port,
+    connector          => $connector,
+    default_connectors => $default_connectors,
+    executor           => $executor,
+    group              => $group,
+    umask              => $umask,
+    http_address       => $http_address,
+    http_port          => $http_port,
+    instance_basedir   => $instance_basedir,
+    java_home          => $java_home,
+    manage             => str2bool($manage),
+    owner              => $owner,
+    selrole            => $selrole,
+    seltype            => $seltype,
+    seluser            => $seluser,
+    server_port        => $server_port,
+    server_xml_file    => $server_xml_file,
+    setenv             => $setenv,
+    version            => $version,
+    web_xml_file       => $web_xml_file,
   } ->
   tomcat::instance::service { $title:
-    name => $name,
+    ensure => $ensure,
+    name   => $name,
   }
 
   if $manage {
