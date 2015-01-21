@@ -22,36 +22,28 @@ define tomcat::instance::install(
 
       if $owner == 'tomcat' {
         $dirmode  = $webapp_mode ? {
-          ''      => '2770',
+          undef   => '2770',
           default => $webapp_mode,
         }
         $confmode = $conf_mode ? {
-          ''      => '2570',
+          undef   => '2570',
           default => $conf_mode
-        }
-        $logsmode = $logs_mode ? {
-          ''      => '2770',
-          default => $logs_mode
         }
       } else {
         $dirmode  = $webapp_mode ? {
-          ''      => '2775',
+          undef   => '2775',
           default => $webapp_mode,
         }
         $confmode = $conf_mode ? {
-          ''      => $dirmode,
+          undef   => $dirmode,
           default => $conf_mode
-        }
-        $logsmode = $logs_mode ? {
-          ''      => '2770',
-          default => $logs_mode
         }
       }
 
       # lint:ignore:only_variable_string
       validate_re("${dirmode}", '^[0-9]+$')
       validate_re("${confmode}", '^[0-9]+$')
-      validate_re("${logsmode}", '^[0-9]+$')
+      validate_re("${logs_mode}", '^[0-9]+$')
       # lint:endignore
 
       file {
@@ -111,7 +103,7 @@ define tomcat::instance::install(
           ensure => directory,
           owner  => $owner,
           group  => $group,
-          mode   => $logsmode,
+          mode   => $logs_mode,
           ;
 
         "${catalina_base}/work":
