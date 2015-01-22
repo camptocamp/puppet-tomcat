@@ -1,13 +1,16 @@
 define tomcat::instance::install(
   $catalina_base,
+  $catalina_logrotate,
+  $ensure,
+  $group,
+  $logs_mode,
+  $owner,
+  # FIXME: This is really weird, I have to initialise this parameters otherwise
+  # they are not found...
+  $conf_mode   = undef,
+  $sample      = undef,
+  $webapp_mode = undef,
 ) {
-  $catalina_logrotate = getparam(Tomcat::Instance[$title], 'catalina_logrotate')
-  $conf_mode          = getparam(Tomcat::Instance[$title], 'conf_mode')
-  $ensure             = getparam(Tomcat::Instance[$title], 'ensure')
-  $group              = getparam(Tomcat::Instance[$title], 'group')
-  $logs_mode          = getparam(Tomcat::Instance[$title], 'logs_mode')
-  $owner              = getparam(Tomcat::Instance[$title], 'owner')
-  $webapp_mode        = getparam(Tomcat::Instance[$title], 'webapp_mode')
 
   if defined(File[$tomcat::instance_basedir]) {
     debug "File[${tomcat::instance_basedir}] already defined"
@@ -22,36 +25,28 @@ define tomcat::instance::install(
 
       if $owner == 'tomcat' {
         $dirmode  = $webapp_mode ? {
-          ''      => '2770',
+          undef   => '2770',
           default => $webapp_mode,
         }
         $confmode = $conf_mode ? {
-          ''      => '2570',
+          undef   => '2570',
           default => $conf_mode
-        }
-        $logsmode = $logs_mode ? {
-          ''      => '2770',
-          default => $logs_mode
         }
       } else {
         $dirmode  = $webapp_mode ? {
-          ''      => '2775',
+          undef   => '2775',
           default => $webapp_mode,
         }
         $confmode = $conf_mode ? {
-          ''      => $dirmode,
+          undef   => $dirmode,
           default => $conf_mode
-        }
-        $logsmode = $logs_mode ? {
-          ''      => '2770',
-          default => $logs_mode
         }
       }
 
       # lint:ignore:only_variable_string
       validate_re("${dirmode}", '^[0-9]+$')
       validate_re("${confmode}", '^[0-9]+$')
-      validate_re("${logsmode}", '^[0-9]+$')
+      validate_re("${logs_mode}", '^[0-9]+$')
       # lint:endignore
 
       file {
@@ -111,7 +106,7 @@ define tomcat::instance::install(
           ensure => directory,
           owner  => $owner,
           group  => $group,
-          mode   => $logsmode,
+          mode   => $logs_mode,
           ;
 
         "${catalina_base}/work":
@@ -129,7 +124,7 @@ define tomcat::instance::install(
           ;
       }
 
-      if getparam(Tomcat::Instance[$title], 'sample') {
+      if $sample {
 
         # Deploy a sample "Hello World" webapp available at:
         # http://localhost:8080/sample/

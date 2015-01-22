@@ -1,6 +1,8 @@
-define tomcat::instance::service {
+define tomcat::instance::service(
+  $ensure,
+) {
 
-  $ensure = getparam(Tomcat::Instance[$title], 'ensure') ? {
+  $_ensure = $ensure ? {
     'present'   => 'running',
     'running'   => 'running',
     'stopped'   => 'stopped',
@@ -8,7 +10,7 @@ define tomcat::instance::service {
     'absent'    => 'stopped',
   }
 
-  $enable = getparam(Tomcat::Instance[$title], 'ensure') ? {
+  $_enable = $ensure ? {
     'present'   => true,
     'running'   => true,
     'stopped'   => false,
@@ -17,8 +19,8 @@ define tomcat::instance::service {
   }
 
   service {"tomcat-${name}":
-    ensure  => $ensure,
-    enable  => $enable,
+    ensure  => $_ensure,
+    enable  => $_enable,
     # FIXME: is this still require ?
     pattern => "-Dcatalina.base=${tomcat::instance_basedir}/${name}",
   }
