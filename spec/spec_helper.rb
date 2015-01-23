@@ -24,6 +24,8 @@ RSpec.configure do |c|
     if ENV['FUTURE_PARSER'] == 'yes'
       c.parser='future'
     end
+
+    Puppet.features.stubs(:root?).returns(true)
   end
 
   c.after :each do
