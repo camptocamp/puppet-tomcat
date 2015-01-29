@@ -1,0 +1,11 @@
+HOSTS:
+  debian-7-amd64:
+    default_apply_opts:
+      strict_variables:
+    platform: debian-7-amd64
+    hypervisor : vagrant
+    box : debian-73-x64-virtualbox-nocm
+    box_url : http://puppet-vagrant-boxes.puppetlabs.com/debian-73-x64-virtualbox-nocm.box
+CONFIG:
+  type: foss
+  log_level: debug
