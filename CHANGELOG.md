@@ -1,3 +1,10 @@
+## 2015-01-29 - Release 0.8.4
+
+- Don't use fakeroot for unit tests
+- Fix future parser issues
+- Use absolute names in class inclusions
+- Use undef instead of empty strings
+
 ## 2015-01-07 - Release 0.8.3
 
 - Fix unquoted strings in cases
