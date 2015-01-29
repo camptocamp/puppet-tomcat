@@ -30,6 +30,7 @@ class tomcat::install::redhat {
         source => "puppet:///modules/${module_name}/catalina.sh-6.0.24",
       }
     }
+    '7': {}
     default: {
       fail "Don't know what to do for ${::operatingsystem}/${::operatingsystemmajrelease}"
     }

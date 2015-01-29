@@ -80,14 +80,14 @@ define tomcat::instance::config(
 
   # default server.xml is slightly different between tomcat5.5 and tomcat6 or 7
   $serverdotxml = $version? {
-    5 => 'server.xml.tomcat55.erb',
-    6 => 'server.xml.tomcat6.erb',
-    7 => 'server.xml.tomcat7.erb',
+    '5' => 'server.xml.tomcat55.erb',
+    '6' => 'server.xml.tomcat6.erb',
+    '7' => 'server.xml.tomcat7.erb',
   }
 
   case $ensure {
     'present','installed','running','stopped': {
-      if $version != 5 {
+      if $version != '5' {
         concat_build { "server.xml_${name}": }
         concat_fragment { "server.xml_${name}+01_header":
           content => '<?xml version=\'1.0\' encoding=\'utf-8\'?>
@@ -116,21 +116,21 @@ define tomcat::instance::config(
           mode    => $filemode,
           source  => $server_xml_file? {
             undef   => $version ? {
-              5       => undef,
+              '5'     => undef,
               default => concat_output("server.xml_${name}"),
             },
             default => $server_xml_file,
           },
           content => $server_xml_file? {
             undef   => $version ? {
-              5       => template("${module_name}/${serverdotxml}"),
+              '5'     => template("${module_name}/${serverdotxml}"),
               default => undef,
             },
             default => undef,
           },
           require => $server_xml_file? {
             undef   => $version ? {
-              5       => undef,
+              '5'     => undef,
               default => Concat_build["server.xml_${name}"],
             },
             default => Tomcat::Connector[$connectors],
@@ -210,7 +210,7 @@ define tomcat::instance::config(
   ###
   # Configure Init script
   #
-  if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == 7 {
+  if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '7' {
     include ::systemd
 
     file { "/usr/lib/systemd/system/tomcat-${name}.service":
