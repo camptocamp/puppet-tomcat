@@ -2,9 +2,9 @@ source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
 group :development, :unit_tests do
   gem 'rake',                                              :require => false
-  gem 'rspec-puppet',                                      :require => false, :git => 'https://github.com/camptocamp/rspec-puppet.git', :branch => 'rspec3'
+  gem 'rspec-puppet', '~> 2.0',                            :require => false
   gem 'puppetlabs_spec_helper',                            :require => false
-  gem 'puppet-lint', '~> 1.0.0',                           :require => false
+  gem 'puppet-lint',                                       :require => false
   gem 'puppet-lint-unquoted_string-check',                 :require => false
   gem 'puppet-lint-empty_string-check',                    :require => false
   gem 'puppet-lint-spaceship_operator_without_tag-check',  :require => false
