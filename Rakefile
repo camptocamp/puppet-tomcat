@@ -1,6 +1,7 @@
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 
+Rake::Task[:lint].clear
 PuppetLint.configuration.fail_on_warnings
 PuppetLint.configuration.send('relative')
 PuppetLint.configuration.send('disable_80chars')
