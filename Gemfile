@@ -12,14 +12,17 @@ group :development, :unit_tests do
   gem 'puppet-lint-absolute_classname-check',              :require => false
   gem 'puppet-lint-undef_in_function-check',               :require => false
   gem 'puppet-lint-leading_zero-check',                    :require => false
+  gem 'puppet-lint-trailing_comma-check',                  :require => false
+  gem 'puppet-lint-file_ensure-check',                     :require => false
   gem 'simplecov',                                         :require => false
   gem 'rspec-puppet-facts',                                :require => false
   gem 'json',                                              :require => false
   gem 'metadata-json-lint',                                :require => false
+  gem 'docker-api', '1.15.0',                              :require => false
 end
 
 group :system_tests do
-  gem 'beaker',        :require => false, :git => 'https://github.com/mcanevet/beaker', :branch => 'openstack'
+  gem 'beaker',        :require => false, :git => 'https://github.com/raphink/beaker', :branch => 'openstack'
   gem 'beaker-rspec',  :require => false
   gem 'serverspec',    :require => false
 end
