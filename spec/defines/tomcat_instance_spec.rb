@@ -358,7 +358,7 @@ describe 'tomcat::instance' do
         }}
         it {
           should contain_file("/srv/tomcat/fooBar/webapps/sample.war").with({
-            'ensure' => 'present',
+            'ensure' => 'file',
             'owner'  => 'tomcat',
             'group'  => 'adm',
             'mode'   => '0460'
