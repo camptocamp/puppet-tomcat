@@ -1,3 +1,7 @@
+## 2015-02-18 - Release 0.8.6
+
+- Revert fix
+
 ## 2015-02-18 - Release 0.8.5
 
 - Fix future parser issue
