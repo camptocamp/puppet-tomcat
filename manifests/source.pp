@@ -65,7 +65,7 @@ class tomcat::source {
     '6.0.18': {
       # Fix https://issues.apache.org/bugzilla/show_bug.cgi?id=45585
       file {"${::tomcat::home}/bin/catalina.sh":
-        ensure  => present,
+        ensure  => file,
         source  => 'puppet:///modules/tomcat/catalina.sh-6.0.18',
         require => Archive["apache-tomcat-${tomcat::version}"],
         mode    => '0755',

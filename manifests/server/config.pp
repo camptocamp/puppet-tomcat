@@ -76,7 +76,7 @@ define tomcat::server::config(
   }
 
   file { "${basedir}/conf/web.xml":
-    ensure  => present,
+    ensure  => file,
     owner   => $owner,
     group   => $group,
     mode    => '0460',
@@ -84,7 +84,7 @@ define tomcat::server::config(
   }
 
   file { "${basedir}/README":
-    ensure  => present,
+    ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0644',

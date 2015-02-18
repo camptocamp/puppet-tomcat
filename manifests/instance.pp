@@ -130,7 +130,7 @@ define tomcat::instance(
     'running',
     'stopped',
     'installed',
-    'absent'
+    'absent',
     ])
   validate_string($owner)
   validate_string($group)

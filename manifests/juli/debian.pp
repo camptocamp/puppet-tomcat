@@ -4,7 +4,7 @@ class tomcat::juli::debian {
     $tomcat::sources_src,
     "tomcat-${tomcat::version}",
     "v${tomcat::src_version}",
-    'bin'
+    'bin',
   ]
 
   $baseurl = inline_template('<%=@url.join("/")%>')

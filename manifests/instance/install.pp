@@ -88,7 +88,7 @@ define tomcat::instance::install(
           ;
 
         "${catalina_base}/README":
-          ensure  => present,
+          ensure  => file,
           owner   => 'root',
           group   => 'root',
           mode    => '0644',
@@ -130,7 +130,7 @@ define tomcat::instance::install(
         # http://localhost:8080/sample/
         #
         file { "${catalina_base}/webapps/sample.war":
-          ensure => present,
+          ensure => file,
           owner  => $owner,
           group  => $group,
           mode   => '0460',
