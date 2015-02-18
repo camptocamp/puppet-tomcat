@@ -1,3 +1,7 @@
+## 2015-02-18 - Release 0.8.5
+
+- Fix future parser issue
+
 ## 2015-01-29 - Release 0.8.4
 
 - Don't use fakeroot for unit tests
