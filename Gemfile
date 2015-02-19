@@ -3,7 +3,7 @@ source ENV['GEM_SOURCE'] || "https://rubygems.org"
 group :development, :unit_tests do
   gem 'rake',                                              :require => false
   gem 'rspec-puppet', '~> 2.0',                            :require => false
-  gem 'puppetlabs_spec_helper',                            :require => false
+  gem 'puppetlabs_spec_helper',                            :require => false, :git => 'https://github.com/puppetlabs/puppetlabs_spec_helper', :branch => 'master'
   gem 'puppet-lint',                                       :require => false
   gem 'puppet-lint-unquoted_string-check',                 :require => false
   gem 'puppet-lint-empty_string-check',                    :require => false
