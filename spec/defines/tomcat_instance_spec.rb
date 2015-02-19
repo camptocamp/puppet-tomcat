@@ -296,21 +296,21 @@ describe 'tomcat::instance' do
         it {
           case facts[:osfamily]
           when 'Debian'
-            should contain_file('/etc/init.d/tomcat-fooBar').with({
-              'ensure' => 'file',
-              'owner'  => 'root',
-              'mode'   => '0755',
-            })
-            should contain_file('/etc/init.d/tomcat-fooBar').with_content(/JAVA_HOME=\/usr/)
+            should contain_file('/etc/init.d/tomcat-fooBar').
+              with_ensure('file').
+              with_owner('root').
+              with_mode('0755').
+              with_content(/JAVA_HOME=\/usr/).
+              with_content(%r{^export CATALINA_BASE=/srv/tomcat/fooBar})
           when 'RedHat'
             if facts[:operatingsystemmajrelease].to_i < 7
-              should contain_file('/etc/init.d/tomcat-fooBar').with({
-                'ensure' => 'file',
-                'owner'  => 'root',
-                'mode'   => '0755',
-              })
-              should contain_file('/etc/init.d/tomcat-fooBar').with_content(/JAVA_HOME=\/usr\/lib\/jvm\/java/)
-              should contain_file('/etc/init.d/tomcat-fooBar').with_content(/tomcat -c \"umask 0002;/)
+              should contain_file('/etc/init.d/tomcat-fooBar').
+                with_ensure('file').
+                with_owner('root').
+                with_mode('0755').
+                with_content(/JAVA_HOME=\/usr\/lib\/jvm\/java/).
+                with_content(%r{^export CATALINA_BASE=/srv/tomcat/fooBar}).
+                with_content(/tomcat -c \"umask 0002;/)
             else
               should contain_file('/usr/lib/systemd/system/tomcat-fooBar.service').with({
                 'ensure' => 'file',
