@@ -9,8 +9,3 @@ PuppetLint::RakeTask.new :lint do |config|
 end
 
 PuppetSyntax.exclude_paths = ["spec/fixtures/**/*.pp", "vendor/**/*"]
-
-desc "Lint metadata.json file"
-task :metadata do
-  sh "metadata-json-lint metadata.json"
-end
