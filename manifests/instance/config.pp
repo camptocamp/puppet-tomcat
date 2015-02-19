@@ -266,6 +266,7 @@ define tomcat::instance::config(
   } else {
     # Variables used in tomcat.init.erb
     $tomcat_name = $name
+    $basedir     = $catalina_base
 
     if $tomcat::type == 'package' {
       $catalinahome = $version? {
