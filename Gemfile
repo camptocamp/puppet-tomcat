@@ -14,6 +14,7 @@ group :development, :unit_tests do
   gem 'puppet-lint-leading_zero-check',                    :require => false
   gem 'puppet-lint-trailing_comma-check',                  :require => false
   gem 'puppet-lint-file_ensure-check',                     :require => false
+  gem 'puppet-lint-version_comparison-check',              :require => false
   gem 'simplecov',                                         :require => false
   gem 'rspec-puppet-facts',                                :require => false
   gem 'json',                                              :require => false
