@@ -96,7 +96,7 @@ define tomcat::executor(
     replace => $manage,
   }
 
-  if $::tomcat::version != 5 {
+  if versioncmp($::tomcat::version, '5') != 0 {
     concat_fragment { "server.xml_${instance}+02_executor_${name}":
       content => "  <!ENTITY executor-${name} SYSTEM \"executor-${name}.xml\">\n",
     }

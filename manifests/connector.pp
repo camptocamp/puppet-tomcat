@@ -128,7 +128,7 @@ define tomcat::connector(
       content => template('tomcat/connector_footer.xml.erb'),
     }
 
-    if $::tomcat::version != 5 {
+    if versioncmp($::tomcat::version, '5') != 0 {
       concat_fragment { "server.xml_${instance}+03_connector_${name}":
         content => "  <!ENTITY connector-${name} SYSTEM \"connector-${name}.xml\">\n",
       }
