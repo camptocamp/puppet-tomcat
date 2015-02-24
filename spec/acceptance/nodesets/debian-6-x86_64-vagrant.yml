@@ -1,10 +1,10 @@
 HOSTS:
-  centos-7-x64:
+  debian-6-x64:
     default_apply_opts:
       strict_variables:
-    platform: el-7-x86_64
+    platform: debian-6-amd64
     hypervisor : vagrant
-    box : camptocamp/centos-7-x86_64
+    box : puppetlabs/debian-6.0.9-64-nocm
 CONFIG:
   type: foss
   log_level: debug
