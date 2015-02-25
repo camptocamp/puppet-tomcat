@@ -4,6 +4,7 @@ group :development, :unit_tests do
   gem 'rake',                                              :require => false
   gem 'rspec-puppet',                                      :require => false, :git => 'https://github.com/camptocamp/rspec-puppet', :branch => 'rspec3'
   gem 'puppetlabs_spec_helper',                            :require => false
+  gem 'metadata-json-lint',                                :require => false
   gem 'puppet-lint',                                       :require => false
   gem 'puppet-lint-unquoted_string-check',                 :require => false
   gem 'puppet-lint-empty_string-check',                    :require => false
