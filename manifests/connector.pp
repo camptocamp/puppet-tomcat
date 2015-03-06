@@ -140,4 +140,6 @@ define tomcat::connector(
     }
   }
 
+  Tomcat::Connector[$title] ~> Tomcat::Instance::Service[$instance]
+
 }
