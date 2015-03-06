@@ -24,8 +24,8 @@ describe 'tomcat::connector' do
         }}
         it 'should fail' do
           expect { 
-            should contain_tomcat__connector('ConnectBar')
-          }.to raise_error(Puppet::Error, /validate_re\(\):/)
+            is_expected.to compile.with_all_deps
+          }.to raise_error(/validate_re\(\):/)
         end
       end
 
@@ -37,8 +37,8 @@ describe 'tomcat::connector' do
         }}
         it 'should fail' do
           expect { 
-            should contain_tomcat__connector('ConnectBar')
-          }.to raise_error(Puppet::Error, /validate_re\(\):/)
+            is_expected.to compile.with_all_deps
+          }.to raise_error(/validate_re\(\):/)
         end
       end
 
@@ -50,8 +50,8 @@ describe 'tomcat::connector' do
         }}
         it 'should fail' do
           expect { 
-            should contain_tomcat__connector('ConnectBar')
-          }.to raise_error(Puppet::Error, /.+ is not a string/)
+            is_expected.to compile.with_all_deps
+          }.to raise_error(/.+ is not a string/)
         end
       end
 
@@ -64,8 +64,8 @@ describe 'tomcat::connector' do
         }}
         it 'should fail' do
           expect { 
-            should contain_tomcat__connector('ConnectBar')
-          }.to raise_error(Puppet::Error, /.+ is not a string/)
+            is_expected.to compile.with_all_deps
+          }.to raise_error(/.+ is not a string/)
         end
       end
 
@@ -78,8 +78,8 @@ describe 'tomcat::connector' do
         }}
         it 'should fail' do
           expect { 
-            should contain_tomcat__connector('ConnectBar')
-          }.to raise_error(Puppet::Error, /.+ is not a string/)
+            is_expected.to compile.with_all_deps
+          }.to raise_error(/.+ is not a string/)
         end
       end
 
@@ -92,8 +92,8 @@ describe 'tomcat::connector' do
         }}
         it 'should fail' do
           expect { 
-            should contain_tomcat__connector('ConnectBar')
-          }.to raise_error(Puppet::Error, /validate_re\(\)/)
+            is_expected.to compile.with_all_deps
+          }.to raise_error(/validate_re\(\)/)
         end
       end
 
@@ -106,8 +106,8 @@ describe 'tomcat::connector' do
         }}
         it 'should fail' do
           expect { 
-            should contain_tomcat__connector('ConnectBar')
-          }.to raise_error(Puppet::Error, /validate_re\(\)/)
+            is_expected.to compile.with_all_deps
+          }.to raise_error(/validate_re\(\)/)
         end
       end
 
@@ -120,8 +120,8 @@ describe 'tomcat::connector' do
         }}
         it 'should fail' do
           expect { 
-            should contain_tomcat__connector('ConnectBar')
-          }.to raise_error(Puppet::Error, /.+ is not an Array/)
+            is_expected.to compile.with_all_deps
+          }.to raise_error(/.+ is not an Array/)
         end
       end
 
@@ -134,8 +134,8 @@ describe 'tomcat::connector' do
         }}
         it 'should fail' do
           expect { 
-            should contain_tomcat__connector('ConnectBar')
-          }.to raise_error(Puppet::Error, /.+ is not a boolean/)
+            is_expected.to compile.with_all_deps
+          }.to raise_error(/.+ is not a boolean/)
         end
       end
 
@@ -148,23 +148,28 @@ describe 'tomcat::connector' do
         }}
         it 'should fail' do
           expect { 
-            should contain_tomcat__connector('ConnectBar')
-          }.to raise_error(Puppet::Error, /.+ is not an absolute path/)
+            is_expected.to compile.with_all_deps
+          }.to raise_error(/.+ is not an absolute path/)
         end
       end
 
-      let(:params) {{
-        :instance         => 'instance1',
-        :port             => '8442',
-        :instance_basedir => '/srv/tomcat',
-      }}
+      context 'with params' do
+        let(:params) {{
+          :instance         => 'instance1',
+          :port             => '8442',
+          :instance_basedir => '/srv/tomcat',
+        }}
+        let(:pre_condition) do
+          "class { 'tomcat': }
+          tomcat::instance { 'instance1': }"
+        end
 
-      describe 'should create /srv/tomcat/instance1/conf/connector-ConnectBar.xml' do
+        it { is_expected.to compile.with_all_deps }
         it {
-          should contain_concat_build('connector_ConnectBar')
-          should contain_concat_fragment('connector_ConnectBar+01').with_content(/port="8442"/)
-          should contain_concat_fragment('connector_ConnectBar+99').with_content(/protocol="HTTP\/1.1"/)
-          should contain_file('/srv/tomcat/instance1/conf/connector-ConnectBar.xml').with({
+          is_expected.to contain_concat_build('connector_ConnectBar')
+          is_expected.to contain_concat_fragment('connector_ConnectBar+01').with_content(/port="8442"/)
+          is_expected.to contain_concat_fragment('connector_ConnectBar+99').with_content(/protocol="HTTP\/1.1"/)
+          is_expected.to contain_file('/srv/tomcat/instance1/conf/connector-ConnectBar.xml').with({
             'ensure'  => 'present',
             'owner'   => 'tomcat',
             'group'   => 'adm',
