@@ -1,10 +1,10 @@
 HOSTS:
-  debian-6-x64:
+  ubuntu-14.04-x64:
     default_apply_opts:
       strict_variables:
-    platform: debian-6-amd64
+    platform: ubuntu-14.04-amd64
     hypervisor : vagrant
-    box : puppetlabs/debian-6.0.10-64-nocm
+    box : puppetlabs/ubuntu-14.04-64-nocm
 CONFIG:
   type: foss
   log_level: debug
