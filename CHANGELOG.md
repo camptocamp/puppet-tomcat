@@ -1,3 +1,7 @@
+## 2015-03-11 - Release 0.8.8
+
+- Fix: Tomcat::Connector should refresh Service
+
 ## 2015-02-19 - Release 0.8.7
 
 - Fix for future parser
