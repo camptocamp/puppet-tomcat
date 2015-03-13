@@ -316,18 +316,7 @@ describe 'tomcat::instance' do
                 'ensure' => 'file',
                 'owner'  => 'root',
                 'mode'   => '0644',
-              })
-              should contain_ini_setting('UMASK').with({
-                'section'              => 'Service',
-                'setting'              => 'UMask',
-                'key_val_separator'    => '=',
-                'value'                => '0002',
-              })
-              should contain_ini_setting('SERVICE_NAME').with({
-                'section'              => 'Service',
-                'setting'              => 'Environment',
-                'key_val_separator'    => '=',
-                'value'                => '"SERVICE_NAME=tomcat-fooBar"',
+                'content' => ".include /usr/lib/systemd/system/tomcat.service\n[Service]\nUMask=0002\nEnvironment=\"SERVICE_NAME=tomcat-fooBar\"\nEnvironmentFile=-/etc/sysconfig/tomcat-fooBar\n",
               })
             end
           end

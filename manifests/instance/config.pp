@@ -218,24 +218,12 @@ define tomcat::instance::config(
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      source  => '/usr/lib/systemd/system/tomcat.service',
-      replace => false,
-    } ->
-    ini_setting { 'UMASK':
-      ensure            => present,
-      path              => "/usr/lib/systemd/system/tomcat-${name}.service",
-      section           => 'Service',
-      setting           => 'UMask',
-      key_val_separator => '=',
-      value             => $umask,
-    } ->
-    ini_setting { 'SERVICE_NAME':
-      ensure            => present,
-      path              => "/usr/lib/systemd/system/tomcat-${name}.service",
-      section           => 'Service',
-      setting           => 'Environment',
-      key_val_separator => '=',
-      value             => "\"SERVICE_NAME=tomcat-${name}\"",
+      content => ".include /usr/lib/systemd/system/tomcat.service
+[Service]
+UMask=${umask}
+Environment=\"SERVICE_NAME=tomcat-${name}\"
+EnvironmentFile=-/etc/sysconfig/tomcat-${name}
+",
     } ~>
     Exec['systemctl-daemon-reload']
 
