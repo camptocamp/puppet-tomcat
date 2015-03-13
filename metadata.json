@@ -1,6 +1,6 @@
 {
   "name": "camptocamp-tomcat",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "source": "https://github.com/camptocamp/puppet-tomcat",
   "author": "Camptocamp",
   "license": "Apache-2.0",

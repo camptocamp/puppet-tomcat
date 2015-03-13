@@ -1,3 +1,7 @@
+## 2015-03-13 - Release 0.8.9
+
+- Fix a bug with systemd service file
+
 ## 2015-03-11 - Release 0.8.8
 
 - Fix: Tomcat::Connector should refresh Service
