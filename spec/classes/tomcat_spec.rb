@@ -18,7 +18,12 @@ describe 'tomcat' do
       describe 'should install tomcat package' do
         case facts[:osfamily]
         when 'Debian'
-          it { should contain_package('tomcat').with_name('tomcat6') }
+          case facts[:operatingsystemmajrelease]
+          when '8'
+            it { should contain_package('tomcat').with_name('tomcat7') }
+          else
+            it { should contain_package('tomcat').with_name('tomcat6') }
+          end
         when 'RedHat'
           case facts[:operatingsystemmajrelease]
           when '5'
@@ -66,17 +71,34 @@ describe 'tomcat' do
       describe 'should deactivate default tomcat service' do
         case facts[:osfamily]
         when 'Debian'
-          it {
-            should contain_service('tomcat').with({
-              'ensure' => 'stopped',
-              'name'   => 'tomcat6',
-              'enable' => false,
-            })
-            should contain_file('/etc/init.d/tomcat6').with({
-              'ensure' => 'file',
-              'mode'   => '0644',
-            })
-          }
+          case facts[:operatingsystemmajrelease]
+          when '8'
+            it {
+              should contain_service('tomcat').with({
+                'ensure' => 'stopped',
+                'name'   => 'tomcat7',
+                'enable' => false,
+              })
+
+              should contain_file('/etc/init.d/tomcat7').with({
+                'ensure' => 'file',
+                'mode'   => '0644',
+              })
+            }
+          else
+            it {
+              should contain_service('tomcat').with({
+                'ensure' => 'stopped',
+                'name'   => 'tomcat6',
+                'enable' => false,
+              })
+
+              should contain_file('/etc/init.d/tomcat6').with({
+                'ensure' => 'file',
+                'mode'   => '0644',
+              })
+            }
+          end
         when 'RedHat'
           case facts[:operatingsystemmajrelease]
           when '5'
