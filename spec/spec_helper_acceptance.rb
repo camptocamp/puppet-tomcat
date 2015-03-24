@@ -1,12 +1,8 @@
 require 'beaker-rspec'
 
 hosts.each do |host|
-  # Install puppet
-  if host['platform'] =~ /debian-8/
-    install_package host, 'puppet'
-  else
-    install_puppet()
-  end
+  # Install Puppet
+  install_puppet()
   # Install ruby-augeas
   case fact('osfamily')
   when 'Debian'
