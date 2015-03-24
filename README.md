@@ -1,8 +1,11 @@
 Tomcat Puppet module
 ====================
 
-[![Puppet Forge](http://img.shields.io/puppetforge/v/camptocamp/tomcat.svg)](https://forge.puppetlabs.com/camptocamp/tomcat)
-[![Build Status](https://travis-ci.org/camptocamp/puppet-tomcat.png?branch=master)](https://travis-ci.org/camptocamp/puppet-tomcat)
+[![Puppet Forge Version](http://img.shields.io/puppetforge/v/camptocamp/tomcat.svg)](https://forge.puppetlabs.com/camptocamp/tomcat)
+[![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/camptocamp/tomcat.svg)](https://forge.puppetlabs.com/camptocamp/tomcat)
+[![Build Status](https://img.shields.io/travis/camptocamp/puppet-tomcat/master.svg)](https://travis-ci.org/camptocamp/puppet-tomcat)
+[![Gemnasium](https://img.shields.io/gemnasium/camptocamp/puppet-tomcat.svg)](https://gemnasium.com/camptocamp/puppet-tomcat)
+[![By Camptocamp](https://img.shields.io/badge/by-camptocamp-fb7047.svg)](http://www.camptocamp.com)
 
 **Manages Tomcat configuration.**
 
