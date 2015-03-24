@@ -307,7 +307,7 @@ EnvironmentFile=-/etc/sysconfig/tomcat-${name}
       seltype => $seltype,
     }
 
-    if $::lsbdistcodename == 'jessie' {
+    if $::operatingsystem == 'Debian' and $::operatingsystemmajrelease == '8' {
       include ::systemd
       File["/etc/init.d/tomcat-${name}"] ~> Exec['systemctl-daemon-reload']
     }
