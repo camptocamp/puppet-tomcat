@@ -1,3 +1,8 @@
+## 2015-03-24 - Release 0.9.0
+
+- Support Debian Jessie (with tomcat7)
+- Add acceptance tests on Travis CI
+
 ## 2015-03-24 - Release 0.8.10
 
 - Update Gemfile
