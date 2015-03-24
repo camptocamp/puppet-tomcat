@@ -1,3 +1,7 @@
+## 2015-03-24 - Release 0.8.10
+
+- Update Gemfile
+
 ## 2015-03-13 - Release 0.8.9
 
 - Fix a bug with systemd service file
