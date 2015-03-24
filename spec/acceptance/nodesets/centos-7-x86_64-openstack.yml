@@ -4,7 +4,7 @@ HOSTS:
       strict_variables:
     platform: el-7-x86_64
     hypervisor : openstack
-    flavor: m1.small
+    flavor: m1.medium
     image: centos-7-x86_64-genericcloud-20140929_01
     user: centos
 CONFIG:

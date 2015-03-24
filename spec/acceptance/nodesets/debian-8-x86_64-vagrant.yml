@@ -3,11 +3,8 @@ HOSTS:
     default_apply_opts:
       strict_variables:
     platform: debian-8-amd64
-    hypervisor : openstack
-    flavor: m1.medium
-    image: debian-8-amd64-20141121
-    user: debian
+    hypervisor : vagrant
+    box : camptocamp/debian-8-amd64
 CONFIG:
   type: foss
   log_level: debug
-  openstack_network: default
