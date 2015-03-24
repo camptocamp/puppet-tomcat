@@ -210,7 +210,7 @@ define tomcat::instance::config(
   ###
   # Configure Init script
   #
-  if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '7' {
+  if $::osfamily == 'RedHat' and $::tomcat::params::systemd {
     include ::systemd
 
     file { "/usr/lib/systemd/system/tomcat-${name}.service":
@@ -307,7 +307,7 @@ EnvironmentFile=-/etc/sysconfig/tomcat-${name}
       seltype => $seltype,
     }
 
-    if $::operatingsystem == 'Debian' and $::operatingsystemmajrelease == '8' {
+    if $::operatingsystem == 'Debian' and $::tomcat::params::systemd {
       include ::systemd
       File["/etc/init.d/tomcat-${name}"] ~> Exec['systemctl-daemon-reload']
     }
