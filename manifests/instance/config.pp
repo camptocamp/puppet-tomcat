@@ -306,5 +306,10 @@ EnvironmentFile=-/etc/sysconfig/tomcat-${name}
       selrole => $selrole,
       seltype => $seltype,
     }
+
+    if $::lsbdistcodename == 'jessie' {
+      include ::systemd
+      File["/etc/init.d/tomcat-${name}"] ~> Exec['systemctl-daemon-reload']
+    }
   }
 }

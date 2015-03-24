@@ -3,6 +3,17 @@
 # description: Handle tomcat instance <%= @tomcat_name %>
 
 # file managed by puppet
+### BEGIN INIT INFO
+# Provides:          tomcat-<%= @tomcat_name %>
+# Required-Start:    $local_fs $remote_fs $network
+# Required-Stop:     $local_fs $remote_fs $network
+# Should-Start:      $named
+# Should-Stop:       $named
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start Tomcat Instance <%= @tomcat_name %>.
+# Description:       Start the Tomcat <%= @tomcat_name %> instance servlet engine.
+### END INIT INFO
 
 . /lib/lsb/init-functions
 
