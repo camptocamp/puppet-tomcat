@@ -15,18 +15,24 @@ matrix:
     env: PUPPET_GEM_VERSION="~> 3.0"
   - rvm: 2.0.0
     env: PUPPET_GEM_VERSION="~> 3.0" FUTURE_PARSER="yes"
-  - rvm: 2.0.0
-    env: BEAKER_set="debian-7-x86_64-openstack"
-    bundler_args: 
-    script: '[ -z "${OS_AUTH_URL}" -o -z "${OS_USERNAME}" -o -z "${OS_PASSWORD}" -o -z "${OS_TENANT_NAME}" ] || bundle exec rspec spec/acceptance'
-  - rvm: 2.0.0
-    env: BEAKER_set="debian-8-x86_64-openstack"
-    bundler_args: 
-    script: '[ -z "${OS_AUTH_URL}" -o -z "${OS_USERNAME}" -o -z "${OS_PASSWORD}" -o -z "${OS_TENANT_NAME}" ] || bundle exec rspec spec/acceptance'
-  - rvm: 2.0.0
-    env: BEAKER_set="centos-7-x86_64-openstack"
-    bundler_args: 
-    script: '[ -z "${OS_AUTH_URL}" -o -z "${OS_USERNAME}" -o -z "${OS_PASSWORD}" -o -z "${OS_TENANT_NAME}" ] || bundle exec rspec spec/acceptance'
+  - env: BEAKER_set="debian-6-x86_64-openstack"
+    bundler_args:
+    script: '[ -z "${OS_AUTH_URL}" -o -z "${OS_USERNAME}" -o -z "${OS_PASSWORD}" -o -z "${OS_TENANT_NAME}" ] || bundle exec rspec spec/acceptance/*_spec.rb'
+  - env: BEAKER_set="debian-7-x86_64-openstack"
+    bundler_args:
+    script: '[ -z "${OS_AUTH_URL}" -o -z "${OS_USERNAME}" -o -z "${OS_PASSWORD}" -o -z "${OS_TENANT_NAME}" ] || bundle exec rspec spec/acceptance/*_spec.rb'
+  - env: BEAKER_set="debian-8-x86_64-openstack"
+    bundler_args:
+    script: '[ -z "${OS_AUTH_URL}" -o -z "${OS_USERNAME}" -o -z "${OS_PASSWORD}" -o -z "${OS_TENANT_NAME}" ] || bundle exec rspec spec/acceptance/*_spec.rb'
+  - env: BEAKER_set="redhat-5-x86_64-openstack"
+    bundler_args:
+    script: '[ -z "${OS_AUTH_URL}" -o -z "${OS_USERNAME}" -o -z "${OS_PASSWORD}" -o -z "${OS_TENANT_NAME}" ] || bundle exec rspec spec/acceptance/*_spec.rb'
+  - env: BEAKER_set="redhat-6-x86_64-openstack"
+    bundler_args:
+    script: '[ -z "${OS_AUTH_URL}" -o -z "${OS_USERNAME}" -o -z "${OS_PASSWORD}" -o -z "${OS_TENANT_NAME}" ] || bundle exec rspec spec/acceptance/*_spec.rb'
+  - env: BEAKER_set="redhat-7-x86_64-openstack"
+    bundler_args:
+    script: '[ -z "${OS_AUTH_URL}" -o -z "${OS_USERNAME}" -o -z "${OS_PASSWORD}" -o -z "${OS_TENANT_NAME}" ] || bundle exec rspec spec/acceptance/*_spec.rb'
 notifications:
   email: false
 deploy:
