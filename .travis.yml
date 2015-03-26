@@ -24,13 +24,10 @@ matrix:
   - env: BEAKER_set="debian-8-x86_64-openstack"
     bundler_args:
     script: '[ -z "${OS_AUTH_URL}" -o -z "${OS_USERNAME}" -o -z "${OS_PASSWORD}" -o -z "${OS_TENANT_NAME}" ] || bundle exec rspec spec/acceptance/*_spec.rb'
-  - env: BEAKER_set="redhat-5-x86_64-openstack"
+  - env: BEAKER_set="centos-6-x86_64-openstack"
     bundler_args:
     script: '[ -z "${OS_AUTH_URL}" -o -z "${OS_USERNAME}" -o -z "${OS_PASSWORD}" -o -z "${OS_TENANT_NAME}" ] || bundle exec rspec spec/acceptance/*_spec.rb'
-  - env: BEAKER_set="redhat-6-x86_64-openstack"
-    bundler_args:
-    script: '[ -z "${OS_AUTH_URL}" -o -z "${OS_USERNAME}" -o -z "${OS_PASSWORD}" -o -z "${OS_TENANT_NAME}" ] || bundle exec rspec spec/acceptance/*_spec.rb'
-  - env: BEAKER_set="redhat-7-x86_64-openstack"
+  - env: BEAKER_set="centos-7-x86_64-openstack"
     bundler_args:
     script: '[ -z "${OS_AUTH_URL}" -o -z "${OS_USERNAME}" -o -z "${OS_PASSWORD}" -o -z "${OS_TENANT_NAME}" ] || bundle exec rspec spec/acceptance/*_spec.rb'
 notifications:
