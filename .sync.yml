@@ -1,18 +1,7 @@
 ---
 .travis.yml:
-  extras:
-    - rvm: 2.0.0
-      env: BEAKER_set="debian-7-x86_64-openstack"
-      bundler_args:
-      script: "'[ -z \"${OS_AUTH_URL}\" -o -z \"${OS_USERNAME}\" -o -z \"${OS_PASSWORD}\" -o -z \"${OS_TENANT_NAME}\" ] || bundle exec rspec spec/acceptance'"
-    - rvm: 2.0.0
-      env: BEAKER_set="debian-8-x86_64-openstack"
-      bundler_args:
-      script: "'[ -z \"${OS_AUTH_URL}\" -o -z \"${OS_USERNAME}\" -o -z \"${OS_PASSWORD}\" -o -z \"${OS_TENANT_NAME}\" ] || bundle exec rspec spec/acceptance'"
-    - rvm: 2.0.0
-      env: BEAKER_set="centos-7-x86_64-openstack"
-      bundler_args:
-      script: "'[ -z \"${OS_AUTH_URL}\" -o -z \"${OS_USERNAME}\" -o -z \"${OS_PASSWORD}\" -o -z \"${OS_TENANT_NAME}\" ] || bundle exec rspec spec/acceptance'"
+  acceptance:
+    - '*'
   forge_password: "PxFc4SYyoJEPwHxcBnkL2aMwbwHf8kyxPltQqbOQ+HjighHf9vXjJo1RAjpn3YqdR0nTzKuZm4bnwCzA7bFxn9MeZCuNt4qSriPbHfvEm+FXiLPGYniQGcb0BnP+GtT8ZjaJvz2fNDqHagqtjcAkk6bLCFyGTqKs8oJk8uRoh6U="
   globals:
     - secure: "c4o0esahrDd7/CpQc638/WN4GS5KGveuLkoyULXwAfIubOvt8eHV0BNH2yBxfheh6qorWjdne7PGducqsXi9Dxd9K1Himh3uy2a1YfdzRHPY/tlTWsgv8wR+bWcCm/up4SxbdZT3gUXkYsw6QwkD9LxUU/e175CNxrTyZ1CCeC4="
