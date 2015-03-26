@@ -3,7 +3,7 @@ class tomcat::params {
     'Debian': {
       case $::operatingsystemmajrelease {
         /sid|8/: {
-          $version = '7'
+          $version = '8'
           $systemd = true
         }
 
