@@ -20,7 +20,7 @@ describe 'tomcat' do
         when 'Debian'
           case facts[:operatingsystemmajrelease]
           when '8'
-            it { should contain_package('tomcat').with_name('tomcat7') }
+            it { should contain_package('tomcat').with_name('tomcat8') }
           else
             it { should contain_package('tomcat').with_name('tomcat6') }
           end
@@ -76,11 +76,11 @@ describe 'tomcat' do
             it {
               should contain_service('tomcat').with({
                 'ensure' => 'stopped',
-                'name'   => 'tomcat7',
+                'name'   => 'tomcat8',
                 'enable' => false,
               })
 
-              should contain_file('/etc/init.d/tomcat7').with({
+              should contain_file('/etc/init.d/tomcat8').with({
                 'ensure' => 'file',
                 'mode'   => '0644',
               })
