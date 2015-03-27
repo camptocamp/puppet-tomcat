@@ -1,12 +1,12 @@
 HOSTS:
-  debian-8-x64:
+  centos-6-x64:
     default_apply_opts:
       strict_variables:
-    platform: debian-8-amd64
+    platform: el-6-x86_64
     hypervisor : openstack
     flavor: m1.medium
-    image: debian-8-latest
-    user: debian
+    image: centos-6-latest
+    user: centos
 CONFIG:
   type: foss
   log_level: debug

@@ -5,7 +5,7 @@ HOSTS:
     platform: debian-7-amd64
     hypervisor : openstack
     flavor: m1.medium
-    image: debian-7-amd64-20141121
+    image: debian-7-latest
     user: debian
 CONFIG:
   type: foss
