@@ -4,7 +4,7 @@ HOSTS:
       strict_variables:
     platform: el-6-x86_64
     hypervisor : openstack
-    flavor: m1.medium
+    flavor: m1.small
     image: centos-6-latest
     user: root
 CONFIG:

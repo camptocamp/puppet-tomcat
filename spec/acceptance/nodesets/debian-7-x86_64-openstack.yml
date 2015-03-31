@@ -4,7 +4,7 @@ HOSTS:
       strict_variables:
     platform: debian-7-amd64
     hypervisor : openstack
-    flavor: m1.medium
+    flavor: m1.small
     image: debian-7-latest
     user: debian
 CONFIG:

@@ -4,7 +4,7 @@ HOSTS:
       strict_variables:
     platform: el-7-x86_64
     hypervisor : vagrant
-    box : puppetlabs/centos-7.0-64-nocm
+    box : camptocamp/centos-7-x86_64
 CONFIG:
   type: foss
   log_level: debug

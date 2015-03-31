@@ -4,7 +4,7 @@ HOSTS:
       strict_variables:
     platform: debian-7-amd64
     hypervisor : vagrant
-    box : puppetlabs/debian-7.8-64-nocm
+    box : camptocamp/debian-7-amd64
 CONFIG:
   type: foss
   log_level: debug
