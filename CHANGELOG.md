@@ -1,3 +1,9 @@
+## 2015-04-03 - Release 0.10.0
+
+- Add Debian 8 support
+- Add acceptance tests for debian6 and centos6 to travis matrix
+- Remove RedHat 5 support (may still work but untested)
+
 ## 2015-03-24 - Release 0.9.0
 
 - Support Debian Jessie (with tomcat7)
