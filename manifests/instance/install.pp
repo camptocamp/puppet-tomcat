@@ -4,6 +4,7 @@ define tomcat::instance::install(
   $ensure,
   $group,
   $logs_mode,
+  $catalina_base_mode,
   $owner,
   # FIXME: This is really weird, I have to initialise this parameters otherwise
   # they are not found...
@@ -55,7 +56,7 @@ define tomcat::instance::install(
           ensure  => directory,
           owner   => $owner,
           group   => $group,
-          mode    => '0555',
+          mode    => $catalina_base_mode,
           ;
 
         "${catalina_base}/bin":
