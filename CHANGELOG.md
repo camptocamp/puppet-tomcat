@@ -1,3 +1,7 @@
+## 2015-04-10 - Release 0.10.1
+
+- Fix init script when overriding JAVA_HOME in setenv-local.sh
+
 ## 2015-04-03 - Release 0.10.0
 
 - Add Debian 8 support
