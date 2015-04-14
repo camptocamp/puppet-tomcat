@@ -131,11 +131,11 @@ define tomcat::instance::install(
         # http://localhost:8080/sample/
         #
         file { "${catalina_base}/webapps/sample.war":
-          ensure => file,
-          owner  => $owner,
-          group  => $group,
-          mode   => '0460',
-          source => "puppet:///modules/${module_name}/sample.war",
+          ensure  => file,
+          owner   => $owner,
+          group   => $group,
+          mode    => '0460',
+          content => file(sprintf('%s/files/sample.war', get_module_path($module_name))),
         }
       }
     }

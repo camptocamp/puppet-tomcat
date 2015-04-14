@@ -19,15 +19,15 @@ class tomcat::install::redhat {
         owner   => root,
         group   => root,
         mode    => '0755',
-        source  => "puppet:///modules/${module_name}/setclasspath.sh-6.0.24",
+        content => file(sprintf('%s/files/setclasspath.sh-6.0.24', get_module_path($module_name))),
         require => Package['tomcat'],
       } ->
       file {"/usr/share/tomcat${tomcat::version}/bin/catalina.sh":
-        ensure => file,
-        owner  => root,
-        group  => root,
-        mode   => '0755',
-        source => "puppet:///modules/${module_name}/catalina.sh-6.0.24",
+        ensure  => file,
+        owner   => root,
+        group   => root,
+        mode    => '0755',
+        content => file(sprintf('%s/files/catalina.sh-6.0.24', get_module_path($module_name))),
       }
     }
     '7': {}
