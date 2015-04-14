@@ -1,3 +1,7 @@
+## 2015-04-14 - Release 0.10.2
+
+- add a parameter catalina_base_mode that sets rights on catalina_base
+
 ## 2015-04-10 - Release 0.10.1
 
 - Fix init script when overriding JAVA_HOME in setenv-local.sh
