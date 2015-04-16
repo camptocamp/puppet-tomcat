@@ -42,7 +42,7 @@ define tomcat::resource(
     "server.xml_${name}_globalnamingresources",
     {
       parent_build => "server.xml_${name}",
-      target       => "/var/lib/puppet/concat/fragments/server.xml_${name}/03",
+      target       => "/var/lib/puppet/concat_native/fragments/server.xml_${name}/03",
     }
   )
 

@@ -17,7 +17,7 @@ define tomcat::service(
 
   concat_build { "server.xml_${server}_service_${service}":
     parent_build => "server.xml_${server}",
-    target       => "/var/lib/puppet/concat/fragments/server.xml_${server}/10_${service}",
+    target       => "/var/lib/puppet/concat_native/fragments/server.xml_${server}/10_${service}",
   }
   concat_fragment { "server.xml_${server}_service_${service}+01":
     content => "  <Service name=\"${service}\">",
