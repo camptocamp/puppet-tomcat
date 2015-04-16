@@ -23,7 +23,7 @@
     },
     {
       "name": "theforeman/concat_native",
-      "version_requirement": ">=1.0.0 <2.0.0"
+      "version_requirement": ">=1.4.0 <2.0.0"
     },
     {
       "name": "puppetlabs/inifile",
