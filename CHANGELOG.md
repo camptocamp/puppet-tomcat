@@ -1,3 +1,9 @@
+## 2015-04-15 - Release 0.10.3
+
+- Use file() function instead of fileserver (much faster)
+- Fix for concat_native 1.4+
+- Requires concat_native 1.4+
+
 ## 2015-04-14 - Release 0.10.2
 
 - add a parameter catalina_base_mode that sets rights on catalina_base
