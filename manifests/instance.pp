@@ -155,7 +155,8 @@ define tomcat::instance(
     owner              => $owner,
     sample             => $sample,
     webapp_mode        => $webapp_mode,
-  } ->
+  }
+
   tomcat::instance::config { $title:
     ensure             => $ensure,
     name               => $name,
@@ -181,13 +182,23 @@ define tomcat::instance(
     setenv             => $setenv,
     version            => $version,
     web_xml_file       => $web_xml_file,
-  } ->
+  }
+
   tomcat::instance::service { $title:
     ensure => $ensure,
     name   => $name,
   }
 
-  if $manage {
-    Tomcat::Instance::Config[$title] ~> Tomcat::Instance::Service[$title]
+  if $ensure == 'absent' {
+    Tomcat::Instance::Service[$title] ->
+    Tomcat::Instance::Install[$title]
+  } else {
+    Tomcat::Instance::Install[$title] ->
+    Tomcat::Instance::Config[$title] ->
+    Tomcat::Instance::Service[$title]
+
+    if $manage {
+      Tomcat::Instance::Config[$title] ~> Tomcat::Instance::Service[$title]
+    }
   }
 }
