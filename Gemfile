@@ -22,9 +22,9 @@ group :development, :unit_tests do
 end
 
 group :system_tests do
-  gem 'beaker',        :require => false
-  gem 'beaker-rspec',  :require => false
-  gem 'serverspec',    :require => false
+  gem 'beaker', '< 2.10',  :require => false
+  gem 'beaker-rspec',      :require => false
+  gem 'serverspec',        :require => false
 end
 
 if facterversion = ENV['FACTER_GEM_VERSION']
