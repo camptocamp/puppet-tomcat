@@ -180,39 +180,3 @@ tomcat-instance:
       manage    => true,
       connector => ['http-8080','ajp-8081'],
     }
-
-Use new defines to manage server.xml (experimental)
----------------------------------------------------
-
-```puppet
-include tomcat
-
-tomcat::server { 'tomcat1':
-  basedir   = '/srv/tomcat/mytomcat',
-  port      = '8005',
-}
-
-```
-
-Add a new service
-
-```puppet
-tomcat::service { 'tomcat1:Catalina2':
-  connectors => {
-    'https-8443' => {
-      port => '8443',
-    }
-  },
-  engine     => {
-    name => 'Catalina2',
-  }
-}
-```
-
-Add a new Connector
-
-```puppet
-tomcat::connector { 'tomcat1:Catalina2:http-8080':
-  port => '8080',
-}
-```
