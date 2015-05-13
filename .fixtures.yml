@@ -1,11 +1,11 @@
 fixtures:
-  repositories:
-    augeasproviders_core: https://github.com/hercules-team/augeasproviders_core.git
-    augeasproviders_shellvar: https://github.com/hercules-team/augeasproviders_shellvar.git
-    archive: https://github.com/camptocamp/puppet-archive.git
-    concat_native: https://github.com/theforeman/puppet-concat.git
-    inifile: https://github.com/puppetlabs/puppetlabs-inifile.git
-    stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
-    systemd: https://github.com/camptocamp/puppet-systemd.git
+  forge_modules:
+    augeasproviders_core: 'herculesteam-augeasproviders_core'
+    augeasproviders_shellvar: 'herculesteam-augeasproviders_shellvar'
+    archive: 'camptocamp-archive'
+    concat_native: 'theforeman-concat_native'
+    inifile: 'puppetlabs-inifile'
+    stdlib: 'puppetlabs-stdlib'
+    systemd: 'camptocamp-systemd'
   symlinks:
     tomcat: "#{source_dir}"
