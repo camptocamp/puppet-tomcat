@@ -88,7 +88,33 @@ define tomcat::instance::config(
 
   case $ensure {
     'present','installed','running','stopped': {
-      if $version != '5' {
+      $filemode = $owner ? {
+        'tomcat' => '0460',
+        default  => '0664',
+      }
+
+      if $server_xml_file {
+        file { "${catalina_base}/conf/server.xml":
+          ensure  => file,
+          owner   => $owner,
+          group   => $group,
+          mode    => $filemode,
+          source  => $server_xml_file,
+          content => undef,
+          require => Tomcat::Connector[$connectors],
+          replace => $manage,
+        }
+      } elsif $version == '5' {
+        file { "${catalina_base}/conf/server.xml":
+          ensure  => file,
+          owner   => $owner,
+          group   => $group,
+          mode    => $filemode,
+          source  => undef,
+          content => template("${module_name}/${serverdotxml}"),
+          replace => $manage,
+        }
+      } else {
         concat_build { "server.xml_${name}": }
         concat_fragment { "server.xml_${name}+01_header":
           content => '<?xml version=\'1.0\' encoding=\'utf-8\'?>
@@ -101,43 +127,17 @@ define tomcat::instance::config(
         concat_fragment { "server.xml_${name}+07_body2":
           content => template("${module_name}/body2_${serverdotxml}"),
         }
+        file { "${catalina_base}/conf/server.xml":
+          ensure  => file,
+          owner   => $owner,
+          group   => $group,
+          mode    => $filemode,
+          source  => concat_output("server.xml_${name}"),
+          content => undef,
+          require => Concat_build["server.xml_${name}"],
+          replace => $manage,
+        }
       }
-
-      $filemode = $owner ? {
-        'tomcat' => '0460',
-        default  => '0664',
-      }
-
-      # lint:ignore:selector_inside_resource
-      file { "${catalina_base}/conf/server.xml":
-        ensure  => file,
-        owner   => $owner,
-        group   => $group,
-        mode    => $filemode,
-        source  => $server_xml_file? {
-          undef   => $version ? {
-            '5'     => undef,
-            default => concat_output("server.xml_${name}"),
-          },
-          default => $server_xml_file,
-        },
-        content => $server_xml_file? {
-          undef   => $version ? {
-            '5'     => template("${module_name}/${serverdotxml}"),
-            default => undef,
-          },
-          default => undef,
-        },
-        require => $server_xml_file? {
-          undef   => $version ? {
-            '5'     => undef,
-            default => Concat_build["server.xml_${name}"],
-          },
-          default => Tomcat::Connector[$connectors],
-        },
-        replace => $manage,
-      }
-      # lint:endignore
 
       $web_xml_content = $web_xml_file ? {
         undef   => template("${module_name}/web.xml.erb"),
