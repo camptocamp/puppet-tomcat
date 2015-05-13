@@ -97,13 +97,17 @@ define tomcat::executor(
   }
 
   if versioncmp($::tomcat::version, '5') != 0 {
-    concat_fragment { "server.xml_${instance}+02_executor_${name}":
+    concat::fragment { "server.xml_${instance}+02_executor_${name}":
+      target  => "${instance_basedir}/${instance}/conf/server.xml",
       content => "  <!ENTITY executor-${name} SYSTEM \"executor-${name}.xml\">\n",
+      order   => '02',
     }
 
-    concat_fragment { "server.xml_${instance}+05_executor_${name}":
+    concat::fragment { "server.xml_${instance}+05_executor_${name}":
+      target  => "${instance_basedir}/${instance}/conf/server.xml",
       content => "    <!-- See conf/executor-${name}.xml for this executor's config. -->
       &executor-${name};\n",
+      order   => '05',
     }
   }
 

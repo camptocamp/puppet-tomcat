@@ -249,12 +249,11 @@ describe 'tomcat::instance' do
           }
         else
           it {
-            should contain_file("/srv/tomcat/fooBar/conf/server.xml").with({
-              'ensure'  => 'file',
+            should contain_concat("/srv/tomcat/fooBar/conf/server.xml").with({
+              'ensure'  => 'present',
               'owner'   => 'tomcat',
               'group'   => 'adm',
               'mode'    => '0460',
-              'source'  => /server.xml_fooBar/,
             })
           }
 
@@ -263,8 +262,8 @@ describe 'tomcat::instance' do
 
       describe "should create bin/setenv.sh" do
         it {
-          should contain_file("/srv/tomcat/fooBar/bin/setenv.sh").with({
-            'ensure'  => 'file',
+          should contain_concat("/srv/tomcat/fooBar/bin/setenv.sh").with({
+            'ensure'  => 'present',
             'owner'   => 'root',
             'group'   => 'adm',
             'mode'    => '0754',
@@ -275,7 +274,7 @@ describe 'tomcat::instance' do
       describe "should create bin/setenv-local.sh" do
         it {
           should contain_file("/srv/tomcat/fooBar/bin/setenv-local.sh").with({
-            'ensure'  => 'file',
+            'ensure'  => 'present',
             'owner'   => 'root',
             'group'   => 'adm',
             'mode'    => '0574',
@@ -297,7 +296,7 @@ describe 'tomcat::instance' do
           case facts[:osfamily]
           when 'Debian'
             should contain_file('/etc/init.d/tomcat-fooBar').
-              with_ensure('file').
+              with_ensure('present').
               with_owner('root').
               with_mode('0755').
               with_content(/JAVA_HOME=\/usr/).
@@ -306,7 +305,7 @@ describe 'tomcat::instance' do
             if facts[:operatingsystemmajrelease].to_i < 7
               if facts[:operatingsystem] == 'CentOS'
                 should contain_file('/etc/init.d/tomcat-fooBar').
-                  with_ensure('file').
+                  with_ensure('present').
                   with_owner('root').
                   with_mode('0755').
                   with_content(%r{JAVA_HOME=/etc/alternatives/jre}).
@@ -314,7 +313,7 @@ describe 'tomcat::instance' do
                   with_content(/tomcat -c \"umask 0002;/)
               else
                 should contain_file('/etc/init.d/tomcat-fooBar').
-                  with_ensure('file').
+                  with_ensure('present').
                   with_owner('root').
                   with_mode('0755').
                   with_content(/JAVA_HOME=\/usr\/lib\/jvm\/java/).
@@ -338,16 +337,14 @@ describe 'tomcat::instance' do
           :setenv => ['JAVA_XMX="512m"', 'JAVA_XX_MAXPERMSIZE="512m"']
         }}
         it {
-          should contain_file('/srv/tomcat/fooBar/bin/setenv.sh').with({
-            'ensure'  => 'file',
+          should contain_concat('/srv/tomcat/fooBar/bin/setenv.sh').with({
+            'ensure'  => 'present',
             'owner'   => 'root',
             'group'   => 'adm',
             'mode'    => '0754',
           })
-          should contain_concat_build('setenv.sh_fooBar')
           should contain_concat_fragment('setenv.sh_fooBar+01_header').with_content(/JAVA_XMX=\"512m\"/)
           should contain_concat_fragment('setenv.sh_fooBar+01_header').with_content(/JAVA_XX_MAXPERMSIZE=\"512m\"/)
-          should contain_file('/srv/tomcat/fooBar/bin/setenv.sh')
         }
       end
 

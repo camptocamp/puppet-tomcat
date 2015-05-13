@@ -115,27 +115,28 @@ define tomcat::instance::config(
           replace => $manage,
         }
       } else {
-        concat_build { "server.xml_${name}": }
-        concat_fragment { "server.xml_${name}+01_header":
-          content => '<?xml version=\'1.0\' encoding=\'utf-8\'?>
-          <!DOCTYPE server-xml [
-            ',
-          }
-        concat_fragment { "server.xml_${name}+04_body1":
-          content => template("${module_name}/body1_${serverdotxml}"),
-        }
-        concat_fragment { "server.xml_${name}+07_body2":
-          content => template("${module_name}/body2_${serverdotxml}"),
-        }
-        file { "${catalina_base}/conf/server.xml":
-          ensure  => file,
+        concat { "${catalina_base}/conf/server.xml":
+          ensure  => present,
           owner   => $owner,
           group   => $group,
           mode    => $filemode,
-          source  => concat_output("server.xml_${name}"),
-          content => undef,
-          require => Concat_build["server.xml_${name}"],
           replace => $manage,
+        }
+        concat::fragment { "server.xml_${name}+01_header":
+          target  => "${catalina_base}/conf/server.xml",
+          content => "<?xml version='1.0' encoding='utf-8'?>
+          <!DOCTYPE server-xml [\n            \n",
+          order   => '01',
+        }
+        concat::fragment { "server.xml_${name}+04_body1":
+          target  => "${catalina_base}/conf/server.xml",
+          content => template("${module_name}/body1_${serverdotxml}"),
+          order   => '04',
+        }
+        concat::fragment { "server.xml_${name}+07_body2":
+          target  => "${catalina_base}/conf/server.xml",
+          content => template("${module_name}/body2_${serverdotxml}"),
+          order   => '07',
         }
       }
 
@@ -165,11 +166,8 @@ define tomcat::instance::config(
   # Configure setenv.sh and setenv-local.sh
   #
   $present = $ensure ? {
-    'present'   => 'file',
-    'installed' => 'file',
-    'running'   => 'file',
-    'stopped'   => 'file',
-    'absent'    => 'absent',
+    'absent' => 'absent',
+    default  => 'present',
   }
 
   if $tomcat::type == 'package' and
@@ -181,19 +179,21 @@ define tomcat::instance::config(
   }
 
   # Default JVM options
-  concat_build { "setenv.sh_${name}": } ->
-  file {"${catalina_base}/bin/setenv.sh":
+  concat {"${catalina_base}/bin/setenv.sh":
     ensure => $present,
-    source => concat_output("setenv.sh_${name}"),
     owner  => 'root',
     group  => $group,
     mode   => '0754',
   }
-  concat_fragment { "setenv.sh_${name}+01_header":
+  concat::fragment { "setenv.sh_${name}+01_header":
+    target  => "${catalina_base}/bin/setenv.sh",
     content => template('tomcat/setenv.sh.header.erb'),
+    order   => '01',
   }
-  concat_fragment { "setenv.sh_${name}+99_footer":
+  concat::fragment { "setenv.sh_${name}+99_footer":
+    target  => "${catalina_base}/bin/setenv.sh",
     content => template('tomcat/setenv.sh.footer.erb'),
+    order   => '99',
   }
 
   # User customized JVM options
@@ -300,7 +300,7 @@ EnvironmentFile=-/etc/sysconfig/tomcat-${name}
       content => template('tomcat/tomcat.init.erb'),
       owner   => 'root',
       mode    => '0755',
-      require => File["${catalina_base}/bin/setenv.sh"],
+      require => Concat["${catalina_base}/bin/setenv.sh"],
       seluser => $seluser,
       selrole => $selrole,
       seltype => $seltype,

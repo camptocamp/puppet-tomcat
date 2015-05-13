@@ -3,7 +3,7 @@ fixtures:
     augeasproviders_core: 'herculesteam-augeasproviders_core'
     augeasproviders_shellvar: 'herculesteam-augeasproviders_shellvar'
     archive: 'camptocamp-archive'
-    concat_native: 'theforeman-concat_native'
+    concat: 'puppetlabs-concat'
     inifile: 'puppetlabs-inifile'
     stdlib: 'puppetlabs-stdlib'
     systemd: 'camptocamp-systemd'
