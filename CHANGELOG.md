@@ -1,3 +1,7 @@
+## 2015-05-13 - Release 0.11.1
+
+Add puppet-lint-file_source_rights-check gem
+
 ## 2015-05-13 - Release 0.11.0
 
 Remove experimental implementation
