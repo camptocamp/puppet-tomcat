@@ -109,51 +109,49 @@ define tomcat::instance::config(
       }
 
       # lint:ignore:selector_inside_resource
-      file {
-        "${catalina_base}/conf/server.xml":
-          ensure  => file,
-          owner   => $owner,
-          group   => $group,
-          mode    => $filemode,
-          source  => $server_xml_file? {
-            undef   => $version ? {
-              '5'     => undef,
-              default => concat_output("server.xml_${name}"),
-            },
-            default => $server_xml_file,
+      file { "${catalina_base}/conf/server.xml":
+        ensure  => file,
+        owner   => $owner,
+        group   => $group,
+        mode    => $filemode,
+        source  => $server_xml_file? {
+          undef   => $version ? {
+            '5'     => undef,
+            default => concat_output("server.xml_${name}"),
           },
-          content => $server_xml_file? {
-            undef   => $version ? {
-              '5'     => template("${module_name}/${serverdotxml}"),
-              default => undef,
-            },
+          default => $server_xml_file,
+        },
+        content => $server_xml_file? {
+          undef   => $version ? {
+            '5'     => template("${module_name}/${serverdotxml}"),
             default => undef,
           },
-          require => $server_xml_file? {
-            undef   => $version ? {
-              '5'     => undef,
-              default => Concat_build["server.xml_${name}"],
-            },
-            default => Tomcat::Connector[$connectors],
+          default => undef,
+        },
+        require => $server_xml_file? {
+          undef   => $version ? {
+            '5'     => undef,
+            default => Concat_build["server.xml_${name}"],
           },
-          replace => $manage,
-          ;
-
-        "${catalina_base}/conf/web.xml":
-          ensure  => present,
-          owner   => $owner,
-          group   => $group,
-          mode    => $filemode,
-          source  => $web_xml_file,
-          content => $web_xml_file? {
-            undef   => template("${module_name}/web.xml.erb"),
-            default => undef,
-          },
-          replace => $manage,
-          ;
-
+          default => Tomcat::Connector[$connectors],
+        },
+        replace => $manage,
       }
       # lint:endignore
+
+      $web_xml_content = $web_xml_file ? {
+        undef   => template("${module_name}/web.xml.erb"),
+        default => undef,
+      }
+      file { "${catalina_base}/conf/web.xml":
+        ensure  => present,
+        owner   => $owner,
+        group   => $group,
+        mode    => $filemode,
+        source  => $web_xml_file,
+        content => $web_xml_content,
+        replace => $manage,
+      }
     }
     'absent': {
       # do nothing
