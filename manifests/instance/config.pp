@@ -144,7 +144,7 @@ define tomcat::instance::config(
         default => undef,
       }
       file { "${catalina_base}/conf/web.xml":
-        ensure  => present,
+        ensure  => 'file',
         owner   => $owner,
         group   => $group,
         mode    => $filemode,
