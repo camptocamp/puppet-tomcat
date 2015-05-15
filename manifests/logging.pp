@@ -58,6 +58,9 @@ class tomcat::logging {
   file {'log4j.properties':
     path    => "${base_path}/log4j.properties",
     source  => $conffile,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
     require => Package[$log4j_packages],
   }
 

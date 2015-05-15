@@ -58,6 +58,9 @@ define tomcat::probe($ensure='present', $version='2.0.4') {
   file { "/srv/tomcat/${name}/webapps/probe.war":
     ensure  => $ensure,
     source  => "file:///usr/src/psi-probe-${version}/probe.war",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
     require => Archive["psi-probe-${version}"],
     notify  => Service["tomcat-${name}"],
   }
