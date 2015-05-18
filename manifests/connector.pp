@@ -117,6 +117,7 @@ define tomcat::connector(
     }
   }
 
-  Tomcat::Connector[$title] ~> Tomcat::Instance::Service[$instance]
-
+  if $ensure != absent {
+    Tomcat::Connector[$title] ~> Tomcat::Instance::Service[$instance]
+  }
 }
