@@ -1,3 +1,7 @@
+## 2015-05-18 - Release 0.12.0
+
+Add dynamic dependency between install and service
+
 ## 2015-05-15 - Release 0.11.2
 
 Fix missing ownerships
