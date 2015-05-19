@@ -1,3 +1,7 @@
+## 2015-05-19 - Release 0.13.0
+
+Use puppetlabs-concat instead of theforeman-concat_native
+
 ## 2015-05-18 - Release 0.12.0
 
 Add dynamic dependency between install and service
