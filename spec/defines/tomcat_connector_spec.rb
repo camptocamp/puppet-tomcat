@@ -176,6 +176,41 @@ describe 'tomcat::connector' do
             'replace' => false,
           })
         }
+        it {
+          is_expected.to contain_concat__fragment('server.xml_instance1+03_connector_ConnectBar')
+          is_expected.to contain_concat__fragment('server.xml_instance1+06_connector_ConnectBar')
+        }
+      end
+
+      context 'when using a server.xml file' do
+        let(:params) {{
+          :instance         => 'instance1',
+          :port             => '8442',
+          :instance_basedir => '/srv/tomcat',
+        }}
+        let(:pre_condition) do
+          "class { 'tomcat': }
+          tomcat::instance { 'instance1':
+            server_xml_file => 'file:///foo/bar',
+          }"
+        end
+
+        it { is_expected.to compile.with_all_deps }
+        it {
+          is_expected.to contain_concat_fragment('connector_ConnectBar+01').with_content(/port="8442"/)
+          is_expected.to contain_concat_fragment('connector_ConnectBar+99').with_content(/protocol="HTTP\/1.1"/)
+          is_expected.to contain_concat('/srv/tomcat/instance1/conf/connector-ConnectBar.xml').with({
+            'ensure'  => 'present',
+            'owner'   => 'tomcat',
+            'group'   => 'adm',
+            'mode'    => '0460',
+            'replace' => false,
+          })
+        }
+        it {
+          is_expected.not_to contain_concat__fragment('server.xml_instance1+03_connector_ConnectBar')
+          is_expected.not_to contain_concat__fragment('server.xml_instance1+06_connector_ConnectBar')
+        }
       end
     end
   end

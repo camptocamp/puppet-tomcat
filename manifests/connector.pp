@@ -109,17 +109,23 @@ define tomcat::connector(
   }
 
   if versioncmp($::tomcat::version, '5') != 0 {
-    concat::fragment { "server.xml_${instance}+03_connector_${name}":
-      target  => "${instance_basedir}/${instance}/conf/server.xml",
-      content => "  <!ENTITY connector-${name} SYSTEM \"connector-${name}.xml\">\n",
-      order   => '03',
+    if !defined(Tomcat::Instance[$instance]) {
+      fail "Tomcat::Instance[${instance}] not defined"
     }
+    $server_xml_file = getparam(Tomcat::Instance[$instance], 'server_xml_file')
+    if $server_xml_file == undef or $server_xml_file == '' {
+      concat::fragment { "server.xml_${instance}+03_connector_${name}":
+        target  => "${instance_basedir}/${instance}/conf/server.xml",
+        content => "  <!ENTITY connector-${name} SYSTEM \"connector-${name}.xml\">\n",
+        order   => '03',
+      }
 
-    concat::fragment { "server.xml_${instance}+06_connector_${name}":
-      target  => "${instance_basedir}/${instance}/conf/server.xml",
-      content => "    <!-- See conf/connector-${name}.xml for this connector's config. -->
+      concat::fragment { "server.xml_${instance}+06_connector_${name}":
+        target  => "${instance_basedir}/${instance}/conf/server.xml",
+        content => "    <!-- See conf/connector-${name}.xml for this connector's config. -->
       &connector-${name};\n",
-      order   => '06',
+        order   => '06',
+      }
     }
   }
 
