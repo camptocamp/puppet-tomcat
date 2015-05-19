@@ -1,3 +1,7 @@
+## 2015-05-19 - Release 0.13.1
+
+Fix when using a server_xml_file
+
 ## 2015-05-19 - Release 0.13.0
 
 Use puppetlabs-concat instead of theforeman-concat_native
