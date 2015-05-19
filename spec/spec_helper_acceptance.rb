@@ -36,9 +36,9 @@ RSpec.configure do |c|
       on host, puppet('module','install','camptocamp-systemd'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','herculesteam-augeasproviders_core'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','herculesteam-augeasproviders_shellvar'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module','install','puppetlabs-concat'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-inifile'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','puppetlabs-stdlib'), { :acceptable_exit_codes => [0,1] }
-      on host, puppet('module','install','theforeman-concat_native'), { :acceptable_exit_codes => [0,1] }
     end
   end
 end
