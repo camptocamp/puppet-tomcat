@@ -166,10 +166,9 @@ describe 'tomcat::connector' do
 
         it { is_expected.to compile.with_all_deps }
         it {
-          is_expected.to contain_concat_build('connector_ConnectBar')
           is_expected.to contain_concat_fragment('connector_ConnectBar+01').with_content(/port="8442"/)
           is_expected.to contain_concat_fragment('connector_ConnectBar+99').with_content(/protocol="HTTP\/1.1"/)
-          is_expected.to contain_file('/srv/tomcat/instance1/conf/connector-ConnectBar.xml').with({
+          is_expected.to contain_concat('/srv/tomcat/instance1/conf/connector-ConnectBar.xml').with({
             'ensure'  => 'present',
             'owner'   => 'tomcat',
             'group'   => 'adm',

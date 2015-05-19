@@ -89,31 +89,37 @@ define tomcat::connector(
     default => Tomcat::Executor[$executor],
   }
 
-  concat_build { "connector_${name}": } ->
-  file {"${instance_basedir}/${instance}/conf/connector-${name}.xml":
+  concat { "${instance_basedir}/${instance}/conf/connector-${name}.xml":
     ensure  => $ensure,
     owner   => $owner,
     group   => $group,
     mode    => $filemode,
-    source  => concat_output("connector_${name}"),
     replace => $manage,
     require => $require,
   }
-  concat_fragment { "connector_${name}+01":
+  concat::fragment { "connector_${name}+01":
+    target  => "${instance_basedir}/${instance}/conf/connector-${name}.xml",
     content => template('tomcat/connector_header.xml.erb'),
+    order   => '01',
   }
-  concat_fragment { "connector_${name}+99":
+  concat::fragment { "connector_${name}+99":
+    target  => "${instance_basedir}/${instance}/conf/connector-${name}.xml",
     content => template('tomcat/connector_footer.xml.erb'),
+    order   => '99',
   }
 
   if versioncmp($::tomcat::version, '5') != 0 {
-    concat_fragment { "server.xml_${instance}+03_connector_${name}":
+    concat::fragment { "server.xml_${instance}+03_connector_${name}":
+      target  => "${instance_basedir}/${instance}/conf/server.xml",
       content => "  <!ENTITY connector-${name} SYSTEM \"connector-${name}.xml\">\n",
+      order   => '03',
     }
 
-    concat_fragment { "server.xml_${instance}+06_connector_${name}":
+    concat::fragment { "server.xml_${instance}+06_connector_${name}":
+      target  => "${instance_basedir}/${instance}/conf/server.xml",
       content => "    <!-- See conf/connector-${name}.xml for this connector's config. -->
       &connector-${name};\n",
+      order   => '06',
     }
   }
 
