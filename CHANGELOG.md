@@ -1,3 +1,7 @@
+## 2015-05-25 - Release 0.13.2
+
+Don't allow failure on Puppet 4
+
 ## 2015-05-19 - Release 0.13.1
 
 Fix when using a server_xml_file
