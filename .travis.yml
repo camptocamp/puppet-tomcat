@@ -32,9 +32,6 @@ matrix:
   - env: BEAKER_set="centos-7-x86_64-openstack"
     bundler_args:
     script: '[ -z "${OS_AUTH_URL}" -o -z "${OS_USERNAME}" -o -z "${OS_PASSWORD}" -o -z "${OS_TENANT_NAME}" ] || bundle exec rspec spec/acceptance/*_spec.rb'
-  allow_failures:
-    - rvm: 2.1.0
-      env: PUPPET_GEM_VERSION="~> 4.0"
 notifications:
   email: false
 deploy:
