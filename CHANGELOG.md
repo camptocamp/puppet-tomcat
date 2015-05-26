@@ -1,3 +1,7 @@
+## 2015-05-26 - Release 0.13.3
+
+add utopic & vivid nodesets
+
 ## 2015-05-25 - Release 0.13.2
 
 Don't allow failure on Puppet 4
