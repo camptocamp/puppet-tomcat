@@ -1,3 +1,7 @@
+## 2015-05-28 - Release 0.13.6
+
+Add beaker_spec_helper to Gemfile
+
 ## 2015-05-27 - Release 0.13.5
 
 Fix unscoped variable in template
