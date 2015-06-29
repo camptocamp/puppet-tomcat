@@ -12,6 +12,7 @@ describe 'tomcat::executor' do
     context "on #{os}" do
       let(:facts) do
         facts.merge({
+          :concat_basedir => '/foo',
           :puppet_vardir => '/var/lib/puppet',
         })
       end

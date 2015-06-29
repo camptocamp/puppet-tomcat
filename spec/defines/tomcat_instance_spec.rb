@@ -12,6 +12,7 @@ describe 'tomcat::instance' do
     context "on #{os}" do
       let(:facts) do
         facts.merge({
+          :concat_basedir => '/foo',
           :puppet_vardir => '/var/lib/puppet',
         })
       end
@@ -343,8 +344,8 @@ describe 'tomcat::instance' do
             'group'   => 'adm',
             'mode'    => '0754',
           })
-          should contain_concat_fragment('setenv.sh_fooBar+01_header').with_content(/JAVA_XMX=\"512m\"/)
-          should contain_concat_fragment('setenv.sh_fooBar+01_header').with_content(/JAVA_XX_MAXPERMSIZE=\"512m\"/)
+          should contain_concat__fragment('setenv.sh_fooBar+01_header').with_content(/JAVA_XMX=\"512m\"/)
+          should contain_concat__fragment('setenv.sh_fooBar+01_header').with_content(/JAVA_XX_MAXPERMSIZE=\"512m\"/)
         }
       end
 
