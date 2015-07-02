@@ -19,16 +19,19 @@ class tomcat::params {
         '5': {
           $version = '5'
           $systemd = false
+          $commons_logging_package = 'jakarta-commons-logging'
         }
 
         '6': {
           $version = '6'
           $systemd = false
+          $commons_logging_package = 'jakarta-commons-logging'
         }
 
         '7': {
           $version = '7'
           $systemd = true
+          $commons_logging_package = 'apache-commons-logging'
         }
 
         default: {
