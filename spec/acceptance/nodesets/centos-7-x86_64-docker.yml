@@ -6,8 +6,10 @@ HOSTS:
     platform: el-7-x86_64
     hypervisor : docker
     image: centos:7
-    # This stops the image from being deleted on completion, speeding up the process.
     docker_preserve_image: true
+    docker_cmd: '["/usr/sbin/init"]'
+    docker_image_commands:
+      - 'yum install -y crontabs tar wget'
 CONFIG:
   type: foss
   log_level: debug

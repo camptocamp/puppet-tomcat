@@ -6,8 +6,10 @@ HOSTS:
     platform: debian-7-amd64
     hypervisor : docker
     image: debian:7
-    # This stops the image from being deleted on completion, speeding up the process.
     docker_preserve_image: true
+    docker_cmd: '["/sbin/init"]'
+    docker_image_commands:
+      - 'apt-get install -y cron wget'
 CONFIG:
   type: foss
   log_level: debug
