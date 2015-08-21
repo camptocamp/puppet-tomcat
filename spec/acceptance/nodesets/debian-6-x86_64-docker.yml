@@ -9,7 +9,7 @@ HOSTS:
     docker_preserve_image: true
     docker_cmd: '["/sbin/init"]'
     docker_image_commands:
-      - 'apt-get install -y wget'
+      - 'apt-get install -y cron locales-all net-tools wget'
 CONFIG:
   type: foss
   log_level: debug
