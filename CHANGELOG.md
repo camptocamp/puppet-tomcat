@@ -1,3 +1,7 @@
+## 2015-08-21 - Release 0.13.9
+
+Use docker for acceptance tests
+
 ## 2015-06-30 - Release 0.13.8
 
 Fix unit tests
