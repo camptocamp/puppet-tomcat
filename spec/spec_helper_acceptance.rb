@@ -9,6 +9,7 @@ hosts.each do |host|
     install_package host, 'libaugeas-ruby'
   when 'RedHat'
     install_package host, 'net-tools'
+    install_package host, 'make'
     install_package host, 'gcc'
     install_package host, 'ruby-devel'
     install_package host, 'augeas-devel'
