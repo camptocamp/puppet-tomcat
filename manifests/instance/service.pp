@@ -18,9 +18,17 @@ define tomcat::instance::service(
     'absent'    => false,
   }
 
+  # Workaround to avoid puppet restarting tomcat
+  # when the service is notified
+  $_restart = $ensure ? {
+    'installed' => '/bin/true',
+    default     => undef,
+  }
+
   service {"tomcat-${name}":
     ensure  => $_ensure,
     enable  => $_enable,
+    restart => $_restart,
     # FIXME: is this still require ?
     pattern => "-Dcatalina.base=${tomcat::instance_basedir}/${name}",
   }
