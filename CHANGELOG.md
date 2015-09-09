@@ -1,3 +1,8 @@
+## 2015-08-21 - Release 0.14.0
+
+Prevent puppet restarting tomcat when it shouldn't
+Install make to build ruby-augeas
+
 ## 2015-08-21 - Release 0.13.9
 
 Use docker for acceptance tests
