@@ -5,11 +5,11 @@ HOSTS:
       strict_variables:
     platform: el-5-x86_64
     hypervisor : docker
-    image: centos:5
+    image: tianon/centos:5.10
     docker_preserve_image: true
     docker_cmd: '["/sbin/init"]'
     docker_image_commands:
-      - 'yum install -y crontabs tar wget'
+      - 'yum install -y crontabs tar wget which'
 CONFIG:
   type: foss
   log_level: debug

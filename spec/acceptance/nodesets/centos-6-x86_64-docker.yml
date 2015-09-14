@@ -9,6 +9,7 @@ HOSTS:
     docker_preserve_image: true
     docker_cmd: '["/sbin/init"]'
     docker_image_commands:
+      - 'rm -rf /var/run/network/*'
       - 'yum install -y crontabs tar wget'
 CONFIG:
   type: foss

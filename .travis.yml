@@ -1,6 +1,10 @@
 ---
 language: ruby
 sudo: false
+addons:
+  apt:
+    packages:
+      - libaugeas-dev
 cache: bundler
 bundler_args: --without system_tests
 script: ["bundle exec rake validate", "bundle exec rake lint", "bundle exec rake spec SPEC_OPTS='--format documentation'", "bundle exec rake metadata"]
