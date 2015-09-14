@@ -10,6 +10,7 @@ HOSTS:
     docker_cmd: '["/sbin/init"]'
     docker_image_commands:
       - 'apt-get install -y cron locales-all net-tools wget'
+      - 'rm /usr/sbin/policy-rc.d || true'
 CONFIG:
   type: foss
   log_level: debug
