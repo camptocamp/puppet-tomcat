@@ -16,7 +16,7 @@ class tomcat::logging {
 
   $log4j_packages = $::osfamily? {
     'Debian' => ['liblog4j1.2-java', 'libcommons-logging-java'],
-    'RedHat' => ['log4j', 'jakarta-commons-logging'],
+    'RedHat' => ['log4j', $::tomcat::params::commons_logging_package],
   }
 
   package {$log4j_packages:
