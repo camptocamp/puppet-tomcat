@@ -51,6 +51,12 @@ matrix:
     env: BEAKER_set="centos-7-x86_64-docker"
     bundler_args:
     script: bundle exec rspec spec/acceptance/*_spec.rb
+  - rvm: default
+    sudo: required
+    services: docker
+    env: BEAKER_set="ubuntu-14.04-x86_64-docker"
+    bundler_args:
+    script: bundle exec rspec spec/acceptance/*_spec.rb
 notifications:
   email: false
 deploy:
