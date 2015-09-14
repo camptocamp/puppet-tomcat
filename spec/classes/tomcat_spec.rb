@@ -18,9 +18,11 @@ describe 'tomcat' do
       describe 'should install tomcat package' do
         case facts[:osfamily]
         when 'Debian'
-          case facts[:operatingsystemmajrelease]
-          when '8'
+          case facts[:lsbdistcodename]
+          when 'jessie'
             it { should contain_package('tomcat').with_name('tomcat8') }
+          when 'trusty'
+            it { should contain_package('tomcat').with_name('tomcat7') }
           else
             it { should contain_package('tomcat').with_name('tomcat6') }
           end
@@ -71,8 +73,8 @@ describe 'tomcat' do
       describe 'should deactivate default tomcat service' do
         case facts[:osfamily]
         when 'Debian'
-          case facts[:operatingsystemmajrelease]
-          when '8'
+          case facts[:lsbdistcodename]
+          when 'jessie'
             it {
               should contain_service('tomcat').with({
                 'ensure' => 'stopped',
@@ -81,6 +83,19 @@ describe 'tomcat' do
               })
 
               should contain_file('/etc/init.d/tomcat8').with({
+                'ensure' => 'file',
+                'mode'   => '0644',
+              })
+            }
+          when 'trusty'
+            it {
+              should contain_service('tomcat').with({
+                'ensure' => 'stopped',
+                'name'   => 'tomcat7',
+                'enable' => false,
+              })
+
+              should contain_file('/etc/init.d/tomcat7').with({
                 'ensure' => 'file',
                 'mode'   => '0644',
               })

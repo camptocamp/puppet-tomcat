@@ -1,16 +1,17 @@
 class tomcat::params {
   case $::osfamily {
     'Debian': {
-      case $::operatingsystemmajrelease {
-        /sid|8/: {
+      if $::operatingsystem == 'Debian' {
+        if versioncmp($::operatingsystemmajrelease, '8') < 0 {
+          $version = '6'
+          $systemd = false
+        } else {
           $version = '8'
           $systemd = true
         }
-
-        default: {
-          $version = '6'
-          $systemd = false
-        }
+      } elsif $::operatingsystem == 'Ubuntu' {
+        $version = '7'
+        $systemd = false
       }
     }
 
