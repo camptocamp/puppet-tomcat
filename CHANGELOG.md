@@ -1,3 +1,9 @@
+## 2015-09-15 - Release 0.14.1
+
+Fix for RHEL 7
+Add Ubuntu 14.04 support
+Fix acceptance tests
+
 ## 2015-08-21 - Release 0.14.0
 
 Prevent puppet restarting tomcat when it shouldn't
