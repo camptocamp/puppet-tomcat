@@ -224,7 +224,8 @@ Environment=\"SERVICE_NAME=tomcat-${name}\"
 EnvironmentFile=-/etc/sysconfig/tomcat-${name}
 ",
     } ~>
-    Exec['systemctl-daemon-reload']
+    Exec['systemctl-daemon-reload'] ~>
+    Tomcat::Instance::Service[$title]
 
     file { "/etc/sysconfig/tomcat-${name}":
       ensure  => file,
@@ -308,7 +309,9 @@ EnvironmentFile=-/etc/sysconfig/tomcat-${name}
 
     if $::operatingsystem == 'Debian' and $::tomcat::params::systemd {
       include ::systemd
-      File["/etc/init.d/tomcat-${name}"] ~> Exec['systemctl-daemon-reload']
+      File["/etc/init.d/tomcat-${name}"] ~>
+      Exec['systemctl-daemon-reload'] ~>
+      Tomcat::Instance::Service[$title]
     }
   }
 }
