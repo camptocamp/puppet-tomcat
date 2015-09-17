@@ -1,3 +1,7 @@
+## 2015-09-17 - Release 0.14.2
+
+Fix: Service resource sometimes refresh before Exec systemd reload
+
 ## 2015-09-15 - Release 0.14.1
 
 Fix for RHEL 7
