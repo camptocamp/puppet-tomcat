@@ -24,6 +24,7 @@ define tomcat::instance::config(
   $java_home       = undef,
   $server_xml_file = undef,
   $web_xml_file    = undef,
+  $java_opts       = undef,
 ) {
   # lint:ignore:only_variable_string
   validate_re("${server_port}", '^[0-9]+$')
@@ -210,6 +211,9 @@ define tomcat::instance::config(
   # Configure Init script
   #
   if $::osfamily == 'RedHat' and $::tomcat::params::systemd {
+    if !empty($setenv) {
+      warning "\$setenv is deprecated (current value: ${setenv}, please use \$java_opts instead"
+    }
     include ::systemd
 
     file { "/usr/lib/systemd/system/tomcat-${name}.service":
@@ -242,14 +246,16 @@ EnvironmentFile=-/etc/sysconfig/tomcat-${name}
       variable  => 'CATALINA_BASE',
       value     => $catalina_base,
       uncomment => true,
-    } ->
-    augeas { "setenv.sh_${name}":
-      lens    => 'Shellvars.lns',
-      incl    => "/etc/sysconfig/tomcat-${name}",
-      changes => [
-        "rm .source[.='${catalina_base}/bin/setenv.sh']",
-        "set .source[.='${catalina_base}/bin/setenv.sh'] '${catalina_base}/bin/setenv.sh'",
-      ],
+    }
+    if $java_opts {
+      shellvar { "JAVA_OPTS_${name}":
+        ensure    => present,
+        target    => "/etc/sysconfig/tomcat-${name}",
+        variable  => 'JAVA_OPTS',
+        value     => $java_opts,
+        uncomment => true,
+        require   => File["/etc/sysconfig/tomcat-${name}"],
+      }
     }
   } else {
     # Variables used in tomcat.init.erb
