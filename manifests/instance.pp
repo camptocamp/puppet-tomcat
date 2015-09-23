@@ -122,6 +122,7 @@ define tomcat::instance(
   $instance_basedir   = $tomcat::instance_basedir,
   $tomcat_version     = $tomcat::version,
   $catalina_logrotate = true,
+  $java_opts          = undef,
 ) {
 
   Class['tomcat::install'] -> Tomcat::Instance[$title]
@@ -182,6 +183,7 @@ define tomcat::instance(
     setenv             => $setenv,
     version            => $version,
     web_xml_file       => $web_xml_file,
+    java_opts          => $java_opts,
   }
 
   tomcat::instance::service { $title:
