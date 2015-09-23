@@ -1,3 +1,7 @@
+## 2015-09-23 - Release 0.15.0
+
+Add java_opts params to tomcat::instance for setting JAVA_OPTS on RedHat7 only for the moment (deprecating $setenv)
+
 ## 2015-09-17 - Release 0.14.2
 
 Fix: Service resource sometimes refresh before Exec systemd reload
