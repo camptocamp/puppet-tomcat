@@ -11,6 +11,8 @@ define tomcat::instance::install(
   $conf_mode   = undef,
   $sample      = undef,
   $webapp_mode = undef,
+  $hostmanager = undef,
+  $manager     = undef,
 ) {
 
   if defined(File[$tomcat::instance_basedir]) {
@@ -136,6 +138,17 @@ define tomcat::instance::install(
           group   => $group,
           mode    => '0460',
           content => file(sprintf('%s/files/sample.war', get_module_path($module_name))),
+        }
+      }
+      if ($manager or $hostmanager) {
+        if !$tomcat::sources {
+          $packageweb_name = $::osfamily ? {
+            'RedHat' => $::operatingsystemmajrelease ? {
+              '7'     => 'tomcat-admin-webapps',
+              default => "tomcat${tomcat::version}-admin-webapps",
+            },
+            'Debian' => "tomcat${tomcat::version}-admin",
+          }
         }
       }
     }
