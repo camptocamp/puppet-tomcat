@@ -28,7 +28,7 @@ class tomcat::source {
     package {'redhat-lsb-core':
       ensure => installed,
       name   => 'redhat-lsb-core',
-    } 
+    }
   }
 
   $version     = $tomcat::src_version

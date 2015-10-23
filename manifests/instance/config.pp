@@ -226,8 +226,8 @@ define tomcat::instance::config(
       },
       'Debian' => "/usr/share/tomcat${tomcat::version}-admin",
     }
-  } else {
-     $webapps_base = "/opt/apache-tomcat/webapps"
+  }else {
+    $webapps_base = '/opt/apache-tomcat/webapps'
   }
   
       
@@ -261,7 +261,7 @@ define tomcat::instance::config(
       ensure  => file,
       owner   => $owner,
       group   => $group,
-      mode    => $filemode,
+      mode    => '0664',
       source  => undef,
       content => template("${module_name}/tomcat-users.xml.erb"),
       replace => $manage,
