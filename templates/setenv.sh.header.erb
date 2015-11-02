@@ -13,6 +13,13 @@
 # this is required to run tomcat on RHEL6 (Santiago)
 export CLASSPATH=<%= @classpath %>
 <% end %>
+<% if @_jmxremote -%>
+export JAVA_JMX_OPTS="-Dcom.sun.management.jmxremote"
+<%   @_jmxremote.each do |k,v| -%>
+export JAVA_JMX_OPTS="${JAVA_JMX_OPTS} -Dcom.sun.management.jmxremote.<%= k %>=<%= v %>"
+<%   end
+  end
+-%>
 
 export DSUN_JAVA2D_OPENGL="false"
 export DJAVA_AWT_HEADLESS="true"

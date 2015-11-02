@@ -19,6 +19,7 @@ define tomcat::instance::config(
   $server_port,
   $setenv,
   $version,
+  $jmxremote_params,
   # FIXME: This is really weird, I have to initialise this parameters otherwise
   # they are not found...
   $java_home       = undef,
@@ -34,6 +35,7 @@ define tomcat::instance::config(
   validate_array($setenv)
   validate_array($connector)
   validate_array($executor)
+  validate_hash($jmxremote_params)
 
   ###
   # Configure connectors
@@ -161,6 +163,19 @@ define tomcat::instance::config(
     default: {
       fail "Unknown ensure value : ${ensure}"
     }
+  }
+
+  # configure JMX
+
+  $jmxremote_defaults = {
+    'port'         => '9010',
+    'local.only'   => true,
+    'authenticate' => false,
+    'ssl'          => false,
+  }
+
+  if ($jmxremote_params != {}) {
+    $_jmxremote = merge ($jmxremote_defaults, $jmxremote_params)
   }
 
   ###
