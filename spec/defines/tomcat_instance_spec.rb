@@ -22,7 +22,7 @@ describe 'tomcat::instance' do
           :ensure => 'foobar',
         }}
         it 'should fail' do
-          expect { 
+          expect {
             should contain_tomcat__instance('fooBar')
           }.to raise_error(Puppet::Error, /validate_re\(\):/)
         end
@@ -346,6 +346,19 @@ describe 'tomcat::instance' do
           })
           should contain_concat__fragment('setenv.sh_fooBar+01_header').with_content(/JAVA_XMX=\"512m\"/)
           should contain_concat__fragment('setenv.sh_fooBar+01_header').with_content(/JAVA_XX_MAXPERMSIZE=\"512m\"/)
+        }
+      end
+
+      context 'add JMX parameters' do
+        let(:params) {{
+          :jmxremote_params => {'port' => '1234', 'local.only' => 'false'}
+        }}
+        it {
+          should contain_concat__fragment('setenv.sh_fooBar+01_header').with_content(/JAVA_JMX_OPTS=\"-Dcom.sun.management.jmxremote\"/)
+          should contain_concat__fragment('setenv.sh_fooBar+01_header').with_content(/-Dcom.sun.management.jmxremote.port=1234/)
+          should contain_concat__fragment('setenv.sh_fooBar+01_header').with_content(/-Dcom.sun.management.jmxremote.local.only=false/)
+          should contain_concat__fragment('setenv.sh_fooBar+01_header').with_content(/-Dcom.sun.management.jmxremote.authenticate=false/)
+          should contain_concat__fragment('setenv.sh_fooBar+01_header').with_content(/-Dcom.sun.management.jmxremote.ssl=false/)
         }
       end
 

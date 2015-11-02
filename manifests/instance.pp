@@ -65,6 +65,8 @@
 #   server.xml
 # - *catalina_logrotate*: install an UNMANAGED logrotate configuration file,
 #   to handle the catalina.out file of the instance. Default to true.
+# - *jmxremote_params*: a hash of parameters passed down to
+#   "-Dcom.sun.management.jmxremote"
 #
 # Requires:
 # - one of the tomcat classes which installs tomcat binaries.
@@ -123,6 +125,7 @@ define tomcat::instance(
   $tomcat_version     = $tomcat::version,
   $catalina_logrotate = true,
   $java_opts          = undef,
+  $jmxremote_params   = {},
 ) {
 
   Class['tomcat::install'] -> Tomcat::Instance[$title]
@@ -184,6 +187,7 @@ define tomcat::instance(
     version            => $version,
     web_xml_file       => $web_xml_file,
     java_opts          => $java_opts,
+    jmxremote_params   => $jmxremote_params,
   }
 
   tomcat::instance::service { $title:

@@ -5,4 +5,7 @@ export JAVA_OPTS="-Dsun.java2d.opengl=${DSUN_JAVA2D_OPENGL} \
                   -Djava.awt.headless=${DJAVA_AWT_HEADLESS} \
                   -Xmx${JAVA_XMX} \
                   -XX:MaxPermSize=${JAVA_XX_MAXPERMSIZE} \
+<% if @_jmxremote -%>
+                  ${JAVA_JMX_OPTS} \
+<% end -%>
                   ${ADD_JAVA_OPTS}"
