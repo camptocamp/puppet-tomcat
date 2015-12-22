@@ -165,7 +165,6 @@ define tomcat::instance::install(
   if $catalina_logrotate {
     file{ "/etc/logrotate.d/catalina-${name}":
       ensure  => $present,
-      replace => false,
       content => template( 'tomcat/logrotate.catalina.erb' ),
     }
   }
