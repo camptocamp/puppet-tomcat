@@ -261,26 +261,28 @@ describe 'tomcat::instance' do
         end
       end
 
-      describe "should create bin/setenv.sh" do
-        it {
-          should contain_concat("/srv/tomcat/fooBar/bin/setenv.sh").with({
-            'ensure'  => 'present',
-            'owner'   => 'root',
-            'group'   => 'adm',
-            'mode'    => '0754',
-          })
-        }
-      end
+      if facts[:osfamily] != 'RedHat' or facts[:operatingsystemmajrelease].to_i < 7
+        describe "should create bin/setenv.sh" do
+          it {
+            should contain_concat("/srv/tomcat/fooBar/bin/setenv.sh").with({
+              'ensure'  => 'present',
+              'owner'   => 'root',
+              'group'   => 'adm',
+              'mode'    => '0754',
+            })
+          }
+        end
 
-      describe "should create bin/setenv-local.sh" do
-        it {
-          should contain_file("/srv/tomcat/fooBar/bin/setenv-local.sh").with({
-            'ensure'  => 'present',
-            'owner'   => 'root',
-            'group'   => 'adm',
-            'mode'    => '0574',
-          })
-        }
+        describe "should create bin/setenv-local.sh" do
+          it {
+            should contain_file("/srv/tomcat/fooBar/bin/setenv-local.sh").with({
+              'ensure'  => 'present',
+              'owner'   => 'root',
+              'group'   => 'adm',
+              'mode'    => '0574',
+            })
+          }
+        end
       end
 
       describe "should have tomcat-fooBar server" do
@@ -338,14 +340,27 @@ describe 'tomcat::instance' do
           :setenv => ['JAVA_XMX="512m"', 'JAVA_XX_MAXPERMSIZE="512m"']
         }}
         it {
-          should contain_concat('/srv/tomcat/fooBar/bin/setenv.sh').with({
-            'ensure'  => 'present',
-            'owner'   => 'root',
-            'group'   => 'adm',
-            'mode'    => '0754',
-          })
-          should contain_concat__fragment('setenv.sh_fooBar+01_header').with_content(/JAVA_XMX=\"512m\"/)
-          should contain_concat__fragment('setenv.sh_fooBar+01_header').with_content(/JAVA_XX_MAXPERMSIZE=\"512m\"/)
+          if facts[:osfamily] != 'RedHat' or facts[:operatingsystemmajrelease].to_i < 7
+            should contain_concat('/srv/tomcat/fooBar/bin/setenv.sh').with({
+              'ensure'  => 'present',
+              'owner'   => 'root',
+              'group'   => 'adm',
+              'mode'    => '0754',
+            })
+            should contain_concat__fragment('setenv.sh_fooBar+01_header').with_content(/JAVA_XMX=\"512m\"/)
+            should contain_concat__fragment('setenv.sh_fooBar+01_header').with_content(/JAVA_XX_MAXPERMSIZE=\"512m\"/)
+          else
+            should contain_shellvar('JAVA_XMX_fooBar').with({
+              'target'   => '/etc/sysconfig/tomcat-fooBar',
+              'variable' => 'JAVA_XMX',
+              'value'    => '512m',
+            })
+            should contain_shellvar('JAVA_XX_MAXPERMSIZE_fooBar').with({
+              'target'   => '/etc/sysconfig/tomcat-fooBar',
+              'variable' => 'JAVA_XX_MAXPERMSIZE',
+              'value'    => '512m',
+            })
+          end
         }
       end
 
