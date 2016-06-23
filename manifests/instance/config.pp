@@ -163,14 +163,6 @@ define tomcat::instance::config(
     }
   }
 
-  ###
-  # Configure setenv.sh and setenv-local.sh
-  #
-  $present = $ensure ? {
-    'absent' => 'absent',
-    default  => 'present',
-  }
-
   if $tomcat::type == 'package' and
       $::osfamily == 'RedHat' and
       versioncmp($::operatingsystemmajrelease, '6') == 0 {
@@ -183,9 +175,6 @@ define tomcat::instance::config(
   # Configure Init script
   #
   if $::osfamily == 'RedHat' and $::tomcat::params::systemd {
-    if !empty($setenv) {
-      warning "\$setenv is deprecated (current value: ${setenv}, please use \$java_opts instead"
-    }
     include ::systemd
 
     file {"${catalina_base}/bin/setenv.sh":
@@ -236,7 +225,21 @@ EnvironmentFile=-/etc/sysconfig/tomcat-${name}
         require   => File["/etc/sysconfig/tomcat-${name}"],
       }
     }
+    if $setenv {
+      tomcat::instance::config::systemd_env {$setenv:
+        instance => $name,
+        target   => "/etc/sysconfig/tomcat-${name}",
+      }
+    }
   } else {
+    ###
+    # Configure setenv.sh and setenv-local.sh
+    #
+    $present = $ensure ? {
+      'absent' => 'absent',
+      default  => 'present',
+    }
+
     # Default JVM options
     concat {"${catalina_base}/bin/setenv.sh":
       ensure => $present,
