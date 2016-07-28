@@ -1,3 +1,7 @@
+## 2016-07-28 - Release 0.16.0
+
+Fix tomcat instance settings on RHEL 7 ($setenv is not deprecated anymore)
+
 ## 2015-09-23 - Release 0.15.0
 
 Add java_opts params to tomcat::instance for setting JAVA_OPTS on RedHat7 only for the moment (deprecating $setenv)
