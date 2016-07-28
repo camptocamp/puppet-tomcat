@@ -1,3 +1,7 @@
+## 2016-07-28 - Release 0.16.1
+
+Fix unit tests (and deploy to puppetforge)
+
 ## 2016-07-28 - Release 0.16.0
 
 Fix tomcat instance settings on RHEL 7 ($setenv is not deprecated anymore)
