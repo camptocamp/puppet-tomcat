@@ -4,7 +4,7 @@ require 'puppet-lint/tasks/puppet-lint'
 Rake::Task[:lint].clear
 PuppetLint::RakeTask.new :lint do |config|
   config.ignore_paths = ["spec/**/*.pp", "pkg/**/*.pp", "vendor/**/*.pp"]
-  config.disable_checks = ['80chars']
+  config.disable_checks = ['140chars']
   config.fail_on_warnings = true
 end
 

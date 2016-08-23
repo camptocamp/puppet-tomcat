@@ -5,6 +5,8 @@ addons:
   apt:
     packages:
       - libaugeas-dev
+    sources:
+      - augeas
 cache: bundler
 bundler_args: --without system_tests
 script: ["bundle exec rake validate", "bundle exec rake lint", "bundle exec rake spec SPEC_OPTS='--format documentation'"]
@@ -17,8 +19,8 @@ matrix:
     env: PUPPET_GEM_VERSION="~> 3.0"
   - rvm: 2.0.0
     env: PUPPET_GEM_VERSION="~> 3.0" FUTURE_PARSER="yes"
-  - rvm: 2.1.7
-    env: PUPPET_GEM_VERSION="~> 4.0"
+  - rvm: 2.1.9
+    env: PUPPET_GEM_VERSION="~> 4.5.0"
   - rvm: default
     sudo: required
     dist: trusty
@@ -73,7 +75,7 @@ deploy:
     # all_branches is required to use tags
     all_branches: true
     # Only publish if our main Ruby target builds
-    rvm: 2.1.7
+    rvm: 2.1.9
 env:
   global:
     - secure: c4o0esahrDd7/CpQc638/WN4GS5KGveuLkoyULXwAfIubOvt8eHV0BNH2yBxfheh6qorWjdne7PGducqsXi9Dxd9K1Himh3uy2a1YfdzRHPY/tlTWsgv8wR+bWcCm/up4SxbdZT3gUXkYsw6QwkD9LxUU/e175CNxrTyZ1CCeC4=
