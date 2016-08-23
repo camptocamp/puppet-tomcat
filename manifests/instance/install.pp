@@ -53,10 +53,10 @@ define tomcat::instance::install(
       file {
         # Nobody usually write there
         $catalina_base:
-          ensure  => directory,
-          owner   => $owner,
-          group   => $group,
-          mode    => $catalina_base_mode,
+          ensure => directory,
+          owner  => $owner,
+          group  => $group,
+          mode   => $catalina_base_mode,
           ;
 
         "${catalina_base}/bin":
