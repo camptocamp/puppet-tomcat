@@ -9,7 +9,7 @@ HOSTS:
     docker_preserve_image: true
     docker_cmd: '["/usr/sbin/init"]'
     docker_image_commands:
-      - 'yum install -y crontabs tar wget'
+      - 'yum install -y crontabs tar wget iproute'
 CONFIG:
   type: aio
   log_level: debug
