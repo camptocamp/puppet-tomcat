@@ -1,25 +1,6 @@
 require 'beaker-rspec'
 
-hosts.each do |host|
-  # Install Puppet
-  install_puppet()
-  # Install ruby-augeas
-  case fact('osfamily')
-  when 'Debian'
-    install_package host, 'libaugeas-ruby'
-  when 'RedHat'
-    install_package host, 'net-tools'
-    install_package host, 'make'
-    install_package host, 'gcc'
-    install_package host, 'ruby-devel'
-    install_package host, 'augeas-devel'
-    on host, 'gem install ruby-augeas --no-ri --no-rdoc'
-    on host, 'yum makecache'
-  else
-    puts 'Sorry, this osfamily is not supported.'
-    exit
-  end
-end
+install_puppet_agent_on hosts, {}
 
 RSpec.configure do |c|
   # Project root
