@@ -86,7 +86,7 @@ stop() {
 
 findpid() {
   pid=""
-  pid=$(pgrep -U <%= @owner %> -f "^.*/bin/java.*catalina.base=<%= @basedir %>")
+  pid=$(pgrep -U <%= @owner %> -f "^.*/bin/java.*catalina.base=<%= @basedir %>\b")
 
   # validate output of pgrep
   if ! [ "$pid" = "" ] && ! [ "$pid" -gt 0 ]; then
