@@ -13,14 +13,10 @@ script: ["bundle exec rake validate", "bundle exec rake lint", "bundle exec rake
 matrix:
   fast_finish: true
   include:
-  - rvm: 1.9.3
-    env: PUPPET_GEM_VERSION="~> 3.0"
-  - rvm: 2.0.0
-    env: PUPPET_GEM_VERSION="~> 3.0"
-  - rvm: 2.0.0
-    env: PUPPET_GEM_VERSION="~> 3.0" FUTURE_PARSER="yes"
   - rvm: 2.1.9
     env: PUPPET_GEM_VERSION="~> 4.0"
+  - rvm: 2.3.1
+    env: PUPPET_GEM_VERSION="~> 4"
   - rvm: default
     sudo: required
     dist: trusty
