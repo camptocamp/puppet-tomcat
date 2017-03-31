@@ -192,12 +192,12 @@ define tomcat::instance(
   }
 
   if $ensure == 'absent' {
-    Tomcat::Instance::Service[$title] ->
-    Tomcat::Instance::Install[$title]
-  } else {
-    Tomcat::Instance::Install[$title] ->
-    Tomcat::Instance::Config[$title] ->
     Tomcat::Instance::Service[$title]
+    -> Tomcat::Instance::Install[$title]
+  } else {
+    Tomcat::Instance::Install[$title]
+    -> Tomcat::Instance::Config[$title]
+    -> Tomcat::Instance::Service[$title]
 
     if $manage {
       Tomcat::Instance::Config[$title] ~> Tomcat::Instance::Service[$title]

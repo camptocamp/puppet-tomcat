@@ -195,9 +195,9 @@ UMask=${umask}
 Environment=\"SERVICE_NAME=tomcat-${name}\"
 EnvironmentFile=-/etc/sysconfig/tomcat-${name}
 ",
-    } ~>
-    Exec['systemctl-daemon-reload'] ~>
-    Tomcat::Instance::Service[$title]
+    }
+    ~> Exec['systemctl-daemon-reload']
+    ~> Tomcat::Instance::Service[$title]
 
     file { "/etc/sysconfig/tomcat-${name}":
       ensure  => file,
@@ -207,8 +207,8 @@ EnvironmentFile=-/etc/sysconfig/tomcat-${name}
       source  => '/etc/sysconfig/tomcat',
       replace => false,
       notify  => Service["tomcat-${name}"],
-    } ->
-    shellvar { "CATALINA_BASE_${name}":
+    }
+    -> shellvar { "CATALINA_BASE_${name}":
       ensure    => present,
       target    => "/etc/sysconfig/tomcat-${name}",
       variable  => 'CATALINA_BASE',
@@ -325,9 +325,9 @@ EnvironmentFile=-/etc/sysconfig/tomcat-${name}
 
     if $::operatingsystem == 'Debian' and $::tomcat::params::systemd {
       include ::systemd
-      File["/etc/init.d/tomcat-${name}"] ~>
-      Exec['systemctl-daemon-reload'] ~>
-      Tomcat::Instance::Service[$title]
+      File["/etc/init.d/tomcat-${name}"]
+      ~> Exec['systemctl-daemon-reload']
+      ~> Tomcat::Instance::Service[$title]
     }
   }
 }

@@ -24,18 +24,18 @@ class tomcat::install {
     package {'tomcat':
       ensure => present,
       name   => $package_name,
-    } ->
+    }
     # Ensure default service is stopped
-    service { 'tomcat':
+    -> service { 'tomcat':
       ensure => stopped,
       name   => $service_name,
       enable => false,
     }
 
     if $::osfamily != 'RedHat' or versioncmp($::operatingsystemmajrelease, '7') != 0 {
-      Package['tomcat'] ->
-      class {'::tomcat::juli': } ->
-      class {'::tomcat::logging': }
+      Package['tomcat']
+      -> class {'::tomcat::juli': }
+      -> class {'::tomcat::logging': }
 
       if $::osfamily == 'RedHat' {
         class {'::tomcat::install::redhat': }

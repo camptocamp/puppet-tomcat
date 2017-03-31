@@ -21,8 +21,8 @@ class tomcat::install::redhat {
         mode    => '0755',
         content => file(sprintf('%s/files/setclasspath.sh-6.0.24', get_module_path($module_name))),
         require => Package['tomcat'],
-      } ->
-      file {"/usr/share/tomcat${tomcat::version}/bin/catalina.sh":
+      }
+      -> file {"/usr/share/tomcat${tomcat::version}/bin/catalina.sh":
         ensure  => file,
         owner   => root,
         group   => root,
