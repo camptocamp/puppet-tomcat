@@ -15,7 +15,10 @@
 # Description:       Start the Tomcat <%= @tomcat_name %> instance servlet engine.
 ### END INIT INFO
 
-. /lib/lsb/init-functions
+if test -f /lib/lsb/init-functions; then
+    . /lib/lsb/init-functions
+fi
+. /etc/init.d/functions
 
 SHUTDOWN_WAIT=30
 
