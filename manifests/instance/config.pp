@@ -194,6 +194,7 @@ define tomcat::instance::config(
 UMask=${umask}
 Environment=\"SERVICE_NAME=tomcat-${name}\"
 EnvironmentFile=-/etc/sysconfig/tomcat-${name}
+EnvironmentFile=-${catalina_base}/bin/setenv-local.sh
 ",
     }
     ~> Exec['systemctl-daemon-reload']
