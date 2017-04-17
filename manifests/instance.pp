@@ -65,6 +65,10 @@
 #   server.xml
 # - *catalina_logrotate*: install an UNMANAGED logrotate configuration file,
 #   to handle the catalina.out file of the instance. Default to true.
+# - *hostmanager*: if "true" it will enable deploy of hostmanager webapp.
+# - *manager*: if "true" it will enable deploy of manager webapp.
+# - *users*: Array of hashes containing structure like [ {username => "user", password => "secret", roles="manager-gui,admin"}  ], needed for hostmanager webapp.
+# - *roles*: Array of string containing roles to be placed in tomcat-users.xml, needed for hostmanager webapp.
 #
 # Requires:
 # - one of the tomcat classes which installs tomcat binaries.
@@ -91,6 +95,21 @@
 #       'JAVA_XMX="1200m"',
 #       'ADD_JAVA_OPTS="-Xms128m"'
 #     ],
+#   }
+#
+#   tomcat::instance { "bar":
+#     ensure      => present,
+#     server_port => 8006,
+#     http_port   => 8081,
+#     ajp_port    => 8010,
+#     users       => [ 
+#       { 
+#         username => "myuser"
+#         password => "mypassword"
+#         roles    => "manager-gui,admin"
+#       } 
+#     ]
+#     roles       => [ manager-gui, admin ]
 #   }
 #
 define tomcat::instance(
@@ -123,6 +142,10 @@ define tomcat::instance(
   $tomcat_version     = $tomcat::version,
   $catalina_logrotate = true,
   $java_opts          = undef,
+  $hostmanager        = false,
+  $manager            = false,
+  $users              = [],
+  $roles              = [],
 ) {
 
   Class['tomcat::install'] -> Tomcat::Instance[$title]
@@ -156,6 +179,8 @@ define tomcat::instance(
     owner              => $owner,
     sample             => $sample,
     webapp_mode        => $webapp_mode,
+    hostmanager        => $hostmanager,
+    manager            => $manager,
   }
 
   tomcat::instance::config { $title:
@@ -184,6 +209,10 @@ define tomcat::instance(
     version            => $version,
     web_xml_file       => $web_xml_file,
     java_opts          => $java_opts,
+    hostmanager        => $hostmanager,
+    manager            => $manager,
+    users              => $users,
+    roles              => $roles,
   }
 
   tomcat::instance::service { $title:
