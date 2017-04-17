@@ -25,6 +25,10 @@ define tomcat::instance::config(
   $server_xml_file = undef,
   $web_xml_file    = undef,
   $java_opts       = undef,
+  $hostmanager = false,
+  $manager = false,
+  $users = [],
+  $roles = [],
 ) {
   # lint:ignore:only_variable_string
   validate_re("${server_port}", '^[0-9]+$')
@@ -34,6 +38,9 @@ define tomcat::instance::config(
   validate_array($setenv)
   validate_array($connector)
   validate_array($executor)
+  validate_array($users)
+  validate_array($roles)
+
 
   ###
   # Configure connectors
@@ -169,6 +176,64 @@ define tomcat::instance::config(
     # force catalina.sh to use the common library
     # in CATALINA_HOME and not CATALINA_BASE
     $classpath = "/usr/share/tomcat${version}/bin/tomcat-juli.jar"
+  }
+
+  ###
+  # Configure hostmanager & manager webapps 
+  #
+  
+  if !$tomcat::sources {
+    $webapps_base = $::osfamily ? {
+      'RedHat' => $::operatingsystemmajrelease ? {
+        '7'     => '/var/lib/tomcat/server/webapps',
+        default => "/var/lib/tomcat${tomcat::version}/server/webapps",
+      },
+      'Debian' => "/usr/share/tomcat${tomcat::version}-admin",
+    }
+  }else {
+    $webapps_base = '/opt/apache-tomcat/webapps'
+  }
+  
+      
+  if $manager {
+    file { "${catalina_base}/webapps/manager":
+      ensure => link,
+      target => "${webapps_base}/manager",
+    }
+  }elsif ($manage){
+    file { "${catalina_base}/webapps/manager":
+      ensure => absent,
+    }
+  }
+  
+  if $hostmanager {
+    file { "${catalina_base}/webapps/host-manager":
+      ensure => link,
+      target => "${webapps_base}/host-manager",
+    }
+  }elsif ($manage){
+    file { "${catalina_base}/webapps/host-manager":
+      ensure => absent,
+    }
+  }
+  
+  ###
+  # Configure users auth 
+  #
+  if ($users or $roles){
+    file { "${catalina_base}/conf/tomcat-users.xml":
+      ensure  => file,
+      owner   => $owner,
+      group   => $group,
+      mode    => '0664',
+      source  => undef,
+      content => template("${module_name}/tomcat-users.xml.erb"),
+      replace => $manage,
+    }
+  }elsif (!$users and !$roles and $manage){
+    file { "${catalina_base}/conf/tomcat-users.xml":
+      ensure  => absent,
+    }
   }
 
   ###

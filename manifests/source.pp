@@ -24,6 +24,13 @@ class tomcat::source {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
 
+  if ( $::osfamily == 'RedHat' ){
+    package {'redhat-lsb-core':
+      ensure => installed,
+      name   => 'redhat-lsb-core',
+    }
+  }
+
   $version     = $tomcat::src_version
   $sources_src = $tomcat::sources_src
 
