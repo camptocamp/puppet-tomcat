@@ -25,6 +25,7 @@ define tomcat::instance::config(
   $server_xml_file = undef,
   $web_xml_file    = undef,
   $java_opts       = undef,
+  $systemd_nofile  = undef,
 ) {
   # lint:ignore:only_variable_string
   validate_re("${server_port}", '^[0-9]+$')
@@ -192,6 +193,7 @@ define tomcat::instance::config(
       content => ".include /usr/lib/systemd/system/tomcat.service
 [Service]
 UMask=${umask}
+LimitNOFILE=${systemd_nofile}
 Environment=\"SERVICE_NAME=tomcat-${name}\"
 EnvironmentFile=-/etc/sysconfig/tomcat-${name}
 ",
