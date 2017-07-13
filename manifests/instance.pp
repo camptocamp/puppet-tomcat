@@ -65,6 +65,8 @@
 #   server.xml
 # - *catalina_logrotate*: install an UNMANAGED logrotate configuration file,
 #   to handle the catalina.out file of the instance. Default to true.
+# - *systemd_nofile*: number of open files limit configuration in systemd unit.
+#   This has no effect on systems where tomcat is not managed by systemd.
 #
 # Requires:
 # - one of the tomcat classes which installs tomcat binaries.
@@ -123,6 +125,7 @@ define tomcat::instance(
   $tomcat_version     = $tomcat::version,
   $catalina_logrotate = true,
   $java_opts          = undef,
+  $systemd_nofile     = '4096',
 ) {
 
   Class['tomcat::install'] -> Tomcat::Instance[$title]
@@ -184,6 +187,7 @@ define tomcat::instance(
     version            => $version,
     web_xml_file       => $web_xml_file,
     java_opts          => $java_opts,
+    systemd_nofile     => $systemd_nofile,
   }
 
   tomcat::instance::service { $title:

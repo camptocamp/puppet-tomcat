@@ -328,7 +328,7 @@ describe 'tomcat::instance' do
                 'ensure' => 'file',
                 'owner'  => 'root',
                 'mode'   => '0644',
-                'content' => ".include /usr/lib/systemd/system/tomcat.service\n[Service]\nUMask=0002\nEnvironment=\"SERVICE_NAME=tomcat-fooBar\"\nEnvironmentFile=-/etc/sysconfig/tomcat-fooBar\n",
+                'content' => ".include /usr/lib/systemd/system/tomcat.service\n[Service]\nUMask=0002\nLimitNOFILE=4096\nEnvironment=\"SERVICE_NAME=tomcat-fooBar\"\nEnvironmentFile=-/etc/sysconfig/tomcat-fooBar\n",
               })
             end
           end
