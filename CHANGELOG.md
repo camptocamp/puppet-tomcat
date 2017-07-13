@@ -1,3 +1,7 @@
+## 2017-07-13 - Release 0.16.3
+
+Add support for systemd limit per instance
+
 ## 2016-07-28 - Release 0.16.1
 
 Fix unit tests (and deploy to puppetforge)
