@@ -1,12 +1,15 @@
 class tomcat (
-  $version          = $tomcat::params::version,
-  $srcversion       = undef,
-  $sources          = false,
-  $sources_src      = $tomcat::params::sources_src,
-  $instance_basedir = $tomcat::params::instance_basedir,
-  $tomcat_uid       = undef,
-  $tomcat_gid       = undef,
-  $ulimits          = {},
+  $version           = $tomcat::params::version,
+  $srcversion        = undef,
+  $sources           = false,
+  $sources_src       = $tomcat::params::sources_src,
+  $instance_basedir  = $tomcat::params::instance_basedir,
+  $tomcat_uid        = undef,
+  $tomcat_gid        = undef,
+  $ulimits           = {},
+  $system_conf_group = 'root',
+  $system_conf_mod   = '0664',
+  $system_conf_owner = 'root',
 ) inherits ::tomcat::params {
 
   validate_re($version, '^[5-8]([\.0-9]+)?$')

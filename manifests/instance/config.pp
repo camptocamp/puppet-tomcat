@@ -21,11 +21,14 @@ define tomcat::instance::config(
   $version,
   # FIXME: This is really weird, I have to initialise this parameters otherwise
   # they are not found...
-  $java_home       = undef,
-  $server_xml_file = undef,
-  $web_xml_file    = undef,
-  $java_opts       = undef,
-  $systemd_nofile  = undef,
+  $java_home         = undef,
+  $server_xml_file   = undef,
+  $web_xml_file      = undef,
+  $java_opts         = undef,
+  $systemd_nofile    = undef,
+  $system_conf_owner = $::tomcat::system_conf_owner,
+  $system_conf_group = $::tomcat::system_conf_group,
+  $system_conf_mod   = $::tomcat::system_conf_mod,
 ) {
   # lint:ignore:only_variable_string
   validate_re("${server_port}", '^[0-9]+$')
@@ -203,9 +206,9 @@ EnvironmentFile=-/etc/sysconfig/tomcat-${name}
 
     file { "/etc/sysconfig/tomcat-${name}":
       ensure  => file,
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0664',
+      owner   => $system_conf_owner,
+      group   => $system_conf_group,
+      mode    => $system_conf_mod,
       source  => '/etc/sysconfig/tomcat',
       replace => false,
       notify  => Service["tomcat-${name}"],
