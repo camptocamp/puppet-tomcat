@@ -1,3 +1,7 @@
+## 2017-07-13 - Release 0.16.5
+
+Add possibility to change owner and group of RHEL7 system config files.
+
 ## 2017-07-13 - Release 0.16.3
 
 Add support for systemd limit per instance
