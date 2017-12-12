@@ -1,4 +1,4 @@
-# file installed but NOT managed by Puppet
+# file managed by Puppet
 <%= @catalina_base %>/logs/catalina.out {
       copytruncate
       size 500M
@@ -7,5 +7,6 @@
       compress
       delaycompress
       missingok
-      create 644 tomcat tomcat-admin
+      create 644 <%= @owner %> <%= @group %>
+      su <%= @owner %> <%= @group %>
 }
