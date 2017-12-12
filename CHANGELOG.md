@@ -1,3 +1,8 @@
+## 2017-12-12 - Release 0.17.0
+
+tomcat::instance::install: manage logorate conf and use su for file rotation
+(GH #154)
+
 ## 2017-07-13 - Release 0.16.5
 
 Add possibility to change owner and group of RHEL7 system config files.
