@@ -6,6 +6,7 @@ class tomcat (
   $instance_basedir  = $tomcat::params::instance_basedir,
   $tomcat_uid        = undef,
   $tomcat_gid        = undef,
+  $tomcat_shell      = undef,
   $ulimits           = {},
   $system_conf_group = 'root',
   $system_conf_mod   = '0664',
