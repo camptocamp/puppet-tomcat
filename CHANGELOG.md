@@ -1,3 +1,7 @@
+## 2017-12-10 - Release 0.17.1
+
+  add paramater for setting tomcat user shell
+
 ## 2017-12-12 - Release 0.17.0
 
 tomcat::instance::install: manage logorate conf and use su for file rotation
