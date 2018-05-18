@@ -43,11 +43,11 @@ class tomcat::source {
   $tomcaturl = "${baseurl}/${tomcat_name}.tar.gz"
 
   archive{ "$tomcat_name":
-    source      => $tomcaturl,
-    path        => "/var/tmp/${tomcat_name}.tar.gz",
-    digest_url  => "${tomcaturl}.md5",
-    digest_type => 'md5',
-    target      => '/opt',
+    source       => $tomcaturl,
+    path         => "/var/tmp/${tomcat_name}.tar.gz",
+    digest_url   => "${tomcaturl}.md5",
+    digest_type  => 'md5',
+    extract_path => '/opt',
   }
 
   file { '/opt/apache-tomcat':

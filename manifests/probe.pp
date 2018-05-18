@@ -50,8 +50,9 @@ define tomcat::probe($ensure='present', $version='2.0.4') {
     path          => "/var/tmp/${probe_name}.zip",
     digest_string => $sha1sum,
     digest_type   => 'sha1',
+    extract       => true,
     #extension     => 'zip',
-    target        => "/usr/src/${probe_name}",
+    extract_path  => "/usr/src/${probe_name}",
     # hack to avoid the exec reexecuting always, as the zip file contains no
     # base directory.
     #root_dir      => 'probe.war',
