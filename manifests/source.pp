@@ -42,7 +42,7 @@ class tomcat::source {
   $tomcat_name = "apache-tomcat-${version}"
   $tomcaturl = "${baseurl}/${tomcat_name}.tar.gz"
 
-  archive{ "$tomcat_name":
+  archive{ $tomcat_name:
     source       => $tomcaturl,
     extract      => true,
     path         => "/var/tmp/${tomcat_name}.tar.gz",
