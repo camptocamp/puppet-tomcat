@@ -44,6 +44,7 @@ class tomcat::source {
 
   archive{ "$tomcat_name":
     source       => $tomcaturl,
+    extract      => true,
     path         => "/var/tmp/${tomcat_name}.tar.gz",
     digest_url   => "${tomcaturl}.md5",
     digest_type  => 'md5',
