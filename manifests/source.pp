@@ -49,6 +49,7 @@ class tomcat::source {
     digest_url   => "${tomcaturl}.md5",
     digest_type  => 'md5',
     extract_path => '/opt',
+    creates      => "/opt/${tomcat_name}/bin",
   }
 
   file { '/opt/apache-tomcat':
