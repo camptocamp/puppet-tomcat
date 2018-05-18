@@ -39,11 +39,12 @@ class tomcat::source {
   $maj_version = $a_version[0]
 
   $baseurl = "${sources_src}/tomcat-${maj_version}/v${version}/bin"
-  $tomcaturl = "${baseurl}/apache-tomcat-${version}.tar.gz"
+  $tomcat_name = "apache-tomcat-${version}"
+  $tomcaturl = "${baseurl}/${tomcat_name}.tar.gz"
 
-  archive{ "apache-tomcat-${version}":
+  archive{ "$tomcat_name":
     source      => $tomcaturl,
-    path        => "/var/tmp/${name}.tar.gz",
+    path        => "/var/tmp/${tomcat_name}.tar.gz",
     digest_url  => "${tomcaturl}.md5",
     digest_type => 'md5',
     target      => '/opt',
