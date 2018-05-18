@@ -45,7 +45,8 @@ define tomcat::probe($ensure='present', $version='2.0.4') {
   }
 
   archive { "psi-probe-${version}":
-    url           => $url,
+    source        => $url,
+    path          => "/var/tmp/${name}.zip",
     digest_string => $sha1sum,
     digest_type   => 'sha1',
     #extension     => 'zip',
