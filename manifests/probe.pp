@@ -38,7 +38,7 @@ define tomcat::probe($ensure='present', $version='2.0.4') {
 
   validate_re($ensure, ['present','absent'])
 
-  $url="http://psi-probe.googlecode.com/files/probe-${version}.zip"
+  $url="https://github.com/psi-probe/psi-probe/releases/download/${version}/probe-${version}.zip"
 
   $sha1sum = $version ? {
     '2.0.4' => '2207bbc4a45af7e3cff2dfbd9377848f1b807387',
@@ -53,6 +53,7 @@ define tomcat::probe($ensure='present', $version='2.0.4') {
     extract       => true,
     #extension     => 'zip',
     extract_path  => "/usr/src/${probe_name}",
+    creates       => "/usr/src/${probe_name}/probe.war",
     # hack to avoid the exec reexecuting always, as the zip file contains no
     # base directory.
     #root_dir      => 'probe.war',
