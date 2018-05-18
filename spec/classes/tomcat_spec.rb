@@ -170,7 +170,7 @@ describe 'tomcat' do
           describe 'should download tomcat' do
             it {
               should contain_archive("apache-tomcat-#{fullversion}").with({
-                'url' => /tomcat-#{version}\/v#{fullversion}\/bin/,
+                'source' => /tomcat-#{version}\/v#{fullversion}\/bin/,
               })
             }
           end
