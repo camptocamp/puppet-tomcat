@@ -2,7 +2,7 @@ fixtures:
   forge_modules:
     augeasproviders_core: 'herculesteam-augeasproviders_core'
     augeasproviders_shellvar: 'herculesteam-augeasproviders_shellvar'
-    archive: 'camptocamp-archive'
+    archive: 'puppet-archive'
     concat: 'puppetlabs-concat'
     inifile: 'puppetlabs-inifile'
     stdlib: 'puppetlabs-stdlib'
