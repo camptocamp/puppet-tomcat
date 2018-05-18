@@ -14,7 +14,7 @@ RSpec.configure do |c|
     # Install module and dependencies
     puppet_module_install(:source => proj_root, :module_name => 'tomcat')
     hosts.each do |host|
-      on host, puppet('module','install','camptocamp-archive'), { :acceptable_exit_codes => [0,1] }
+      on host, puppet('module','install','puppet-archive'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','camptocamp-systemd'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','herculesteam-augeasproviders_core'), { :acceptable_exit_codes => [0,1] }
       on host, puppet('module','install','herculesteam-augeasproviders_shellvar'), { :acceptable_exit_codes => [0,1] }
