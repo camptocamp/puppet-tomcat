@@ -25,7 +25,7 @@ describe 'tomcat::probe' do
       describe 'should create archive resource' do
         it {
           should contain_archive('psi-probe-2.0.4').with({
-            'url'           => 'http://psi-probe.googlecode.com/files/probe-2.0.4.zip',
+            'source'        => 'http://psi-probe.googlecode.com/files/probe-2.0.4.zip',
             'digest_string' => '2207bbc4a45af7e3cff2dfbd9377848f1b807387',
             'target'        => '/usr/src/psi-probe-2.0.4',
           })
