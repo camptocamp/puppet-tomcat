@@ -9,6 +9,11 @@ describe 'tomcat::probe' do
       let(:facts) do
         facts
       end
+      let(:pre_condition) do
+        "class { 'tomcat': }
+        tomcat::instance { 'probeBar': }"
+      end
+
 
       context 'when using a wrong ensure value' do
         let (:params) {{
