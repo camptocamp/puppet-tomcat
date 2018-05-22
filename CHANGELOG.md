@@ -1,3 +1,8 @@
+## 2018-05-22 - Release 1.0.0
+
+  Go away from camptocamp/archive and adopt puppet/archive.
+  Some fixes due to old-age of download urls used.
+
 ## 2017-12-10 - Release 0.17.1
 
   add paramater for setting tomcat user shell
