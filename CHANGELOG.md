@@ -1,3 +1,7 @@
+## 2018-06-25 - Release 1.1.0
+
+Remove logrotate 500M minimum limit
+
 ## 2018-05-22 - Release 1.0.0
 
   Go away from camptocamp/archive and adopt puppet/archive.
