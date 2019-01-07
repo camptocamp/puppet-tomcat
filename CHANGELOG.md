@@ -1,3 +1,8 @@
+## 2019-01-07 - Release 1.2.0
+
+* Update dependencies in metadata.json (GH #170)
+* Fix beaker version
+
 ## 2018-06-25 - Release 1.1.0
 
 Remove logrotate 500M minimum limit
