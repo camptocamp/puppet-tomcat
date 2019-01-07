@@ -66,7 +66,7 @@ deploy:
     # all_branches is required to use tags
     all_branches: true
     # Only publish if our main Ruby target builds
-    rvm: 2.1.9
+    rvm: 2.4
 env:
   global:
     - secure: c4o0esahrDd7/CpQc638/WN4GS5KGveuLkoyULXwAfIubOvt8eHV0BNH2yBxfheh6qorWjdne7PGducqsXi9Dxd9K1Himh3uy2a1YfdzRHPY/tlTWsgv8wR+bWcCm/up4SxbdZT3gUXkYsw6QwkD9LxUU/e175CNxrTyZ1CCeC4=
