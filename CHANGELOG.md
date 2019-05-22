@@ -1,3 +1,7 @@
+## 2019-05-22 - Release 1.2.1
+
+* Use source instead of content to distribute binary files
+
 ## 2019-01-07 - Release 1.2.0
 
 * Update dependencies in metadata.json (GH #170)
