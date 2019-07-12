@@ -328,11 +328,16 @@ EnvironmentFile=-/etc/sysconfig/tomcat-${name}
       seltype => $seltype,
     }
 
-    if $::operatingsystem == 'Debian' and $::tomcat::params::systemd {
-      include ::systemd
-      File["/etc/init.d/tomcat-${name}"]
-      ~> Exec['systemctl-daemon-reload']
-      ~> Tomcat::Instance::Service[$title]
+    if $::operatingsystem == 'Debian' {
+      if $::tomcat::params::systemd {
+        include ::systemd
+        File["/etc/init.d/tomcat-${name}"]
+        ~> Exec['systemctl-daemon-reload']
+        ~> Tomcat::Instance::Service[$title]
+      } else {
+        File["/etc/init.d/tomcat-${name}"]
+        ~> Tomcat::Instance::Service[$title]
+      }
     }
   }
 }
