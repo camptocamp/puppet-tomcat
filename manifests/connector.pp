@@ -58,6 +58,9 @@ define tomcat::connector(
   $connection_timeout = 20000,
   $redirect_port      = 8443,
   $scheme             = false,
+  $selrole            = undef,
+  $seltype            = undef,
+  $seluser            = undef,
   $executor           = false,
   $options            = [],
   $manage             = false,
@@ -96,6 +99,9 @@ define tomcat::connector(
     mode    => $filemode,
     replace => $manage,
     require => $require,
+    selrole => $selrole,
+    seluser => $seluser,
+    seltype => $seltype,
   }
   concat::fragment { "connector_${name}+01":
     target  => "${instance_basedir}/${instance}/conf/connector-${name}.xml",
