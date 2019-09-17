@@ -89,6 +89,7 @@ define tomcat::instance::config(
     '6' => 'server.xml.tomcat6.erb',
     '7' => 'server.xml.tomcat7.erb',
     '8' => 'server.xml.tomcat8.erb',
+    '9' => 'server.xml.tomcat9.erb',
   }
 
   case $ensure {

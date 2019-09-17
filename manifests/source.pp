@@ -19,7 +19,10 @@
 # - Debian Lenny/Squeeze
 # - Ubuntu Lucid
 #
-class tomcat::source {
+class tomcat::source(
+    # Keep the retrocompatibility.
+    $tomcat_digest_type = 'md5',
+  ) {
   if $caller_module_name != $module_name {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
@@ -46,8 +49,8 @@ class tomcat::source {
     source       => $tomcaturl,
     extract      => true,
     path         => "/var/tmp/${tomcat_name}.tar.gz",
-    digest_url   => "${tomcaturl}.md5",
-    digest_type  => 'md5',
+    digest_url   => "${tomcaturl}.${tomcat_digest_type}",
+    digest_type  => $tomcat_digest_type,
     extract_path => '/opt',
     creates      => "/opt/${tomcat_name}/bin",
   }
