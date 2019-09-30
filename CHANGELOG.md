@@ -1,3 +1,7 @@
+## 2019-09-30 - Release 1.2.2
+
+* Add SELinux support
+
 ## 2019-05-22 - Release 1.2.1
 
 * Use source instead of content to distribute binary files
