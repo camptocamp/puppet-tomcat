@@ -26,6 +26,10 @@ define tomcat::instance::config(
   $web_xml_file      = undef,
   $java_opts         = undef,
   $systemd_nofile    = undef,
+  $selrole_connector = undef,
+  $seltype_connector = undef,
+  $seluser_connector = undef,
+
   $system_conf_owner = $::tomcat::system_conf_owner,
   $system_conf_group = $::tomcat::system_conf_group,
   $system_conf_mod   = $::tomcat::system_conf_mod,
@@ -60,6 +64,9 @@ define tomcat::instance::config(
       address          => $http_address,
       group            => $group,
       owner            => $owner,
+      seltype          => $seltype_connector,
+      seluser          => $seluser_connector,
+      selrole          => $selrole_connector,
       instance_basedir => $instance_basedir,
     }
 
@@ -72,6 +79,9 @@ define tomcat::instance::config(
       address          => $ajp_address,
       group            => $group,
       owner            => $owner,
+      seltype          => $seltype_connector,
+      seluser          => $seluser_connector,
+      selrole          => $selrole_connector,
       instance_basedir => $instance_basedir,
     }
 
@@ -107,6 +117,9 @@ define tomcat::instance::config(
           source  => $server_xml_file,
           content => undef,
           require => Tomcat::Connector[$connectors],
+          seltype => $seltype_connector,
+          seluser => $seluser_connector,
+          selrole => $selrole_connector,
           replace => $manage,
         }
       } elsif $version == '5' {
@@ -118,6 +131,9 @@ define tomcat::instance::config(
           source  => undef,
           content => template("${module_name}/${serverdotxml}"),
           replace => $manage,
+          seltype => $seltype_connector,
+          seluser => $seluser_connector,
+          selrole => $selrole_connector,
         }
       } else {
         concat { "${catalina_base}/conf/server.xml":
@@ -126,6 +142,9 @@ define tomcat::instance::config(
           group   => $group,
           mode    => $filemode,
           replace => $manage,
+          seltype => $seltype_connector,
+          seluser => $seluser_connector,
+          selrole => $selrole_connector,
         }
         concat::fragment { "server.xml_${name}+01_header":
           target  => "${catalina_base}/conf/server.xml",

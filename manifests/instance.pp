@@ -121,6 +121,9 @@ define tomcat::instance(
   $seluser            = 'system_u',
   $selrole            = 'object_r',
   $seltype            = 'initrc_exec_t',
+  $selrole_connector  = undef,
+  $seltype_connector  = undef,
+  $seluser_connector  = undef,
   $instance_basedir   = $tomcat::instance_basedir,
   $tomcat_version     = $tomcat::version,
   $catalina_logrotate = true,
@@ -188,6 +191,10 @@ define tomcat::instance(
     web_xml_file       => $web_xml_file,
     java_opts          => $java_opts,
     systemd_nofile     => $systemd_nofile,
+    selrole_connector  => $selrole_connector,
+    seltype_connector  => $seltype_connector,
+    seluser_connector  => $seluser_connector,
+
   }
 
   tomcat::instance::service { $title:
