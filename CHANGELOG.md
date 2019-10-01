@@ -1,3 +1,7 @@
+## 2019-10-01 - Release 1.2.3
+
+* Fix selinux support for context file installation
+
 ## 2019-09-30 - Release 1.2.2
 
 * Add SELinux support
