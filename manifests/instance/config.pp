@@ -176,6 +176,9 @@ define tomcat::instance::config(
         source  => $web_xml_file,
         content => $web_xml_content,
         replace => $manage,
+        seltype => $seltype_connector,
+        seluser => $seluser_connector,
+        selrole => $selrole_connector,
       }
     }
     'absent': {
