@@ -24,9 +24,7 @@ describe 'tomcat::connector' do
           :port     => '8422',
         }}
         it 'should fail' do
-          expect { 
-            is_expected.to compile.with_all_deps
-          }.to raise_error(/validate_re\(\):/)
+          is_expected.to compile.with_all_deps.and_raise_error(%r{validate_re\(\):})
         end
       end
 
@@ -37,9 +35,7 @@ describe 'tomcat::connector' do
           :port     => 'aaa',
         }}
         it 'should fail' do
-          expect { 
-            is_expected.to compile.with_all_deps
-          }.to raise_error(/validate_re\(\):/)
+          is_expected.to compile.with_all_deps.and_raise_error(%r{validate_re\(\):})
         end
       end
 
@@ -50,9 +46,7 @@ describe 'tomcat::connector' do
           :port     => '8442',
         }}
         it 'should fail' do
-          expect { 
-            is_expected.to compile.with_all_deps
-          }.to raise_error(/.+ is not a string/)
+          is_expected.to compile.with_all_deps.and_raise_error(%r{.+ is not a string})
         end
       end
 
@@ -64,9 +58,7 @@ describe 'tomcat::connector' do
           :owner    => true
         }}
         it 'should fail' do
-          expect { 
-            is_expected.to compile.with_all_deps
-          }.to raise_error(/.+ is not a string/)
+          is_expected.to compile.with_all_deps.and_raise_error(%r{.+ is not a string})
         end
       end
 
@@ -78,9 +70,7 @@ describe 'tomcat::connector' do
           :group    => true
         }}
         it 'should fail' do
-          expect { 
-            is_expected.to compile.with_all_deps
-          }.to raise_error(/.+ is not a string/)
+          is_expected.to compile.with_all_deps.and_raise_error(%r{.+ is not a string})
         end
       end
 
@@ -92,9 +82,7 @@ describe 'tomcat::connector' do
           :connection_timeout    => 'bbbb'
         }}
         it 'should fail' do
-          expect { 
-            is_expected.to compile.with_all_deps
-          }.to raise_error(/validate_re\(\)/)
+          is_expected.to compile.with_all_deps.and_raise_error(%r{validate_re\(\)})
         end
       end
 
@@ -106,9 +94,7 @@ describe 'tomcat::connector' do
           :redirect_port    => 'bbbb'
         }}
         it 'should fail' do
-          expect { 
-            is_expected.to compile.with_all_deps
-          }.to raise_error(/validate_re\(\)/)
+          is_expected.to compile.with_all_deps.and_raise_error(%r{validate_re\(\)})
         end
       end
 
@@ -120,9 +106,7 @@ describe 'tomcat::connector' do
           :options  => 'not_array'
         }}
         it 'should fail' do
-          expect { 
-            is_expected.to compile.with_all_deps
-          }.to raise_error(/.+ is not an Array/)
+          is_expected.to compile.with_all_deps.and_raise_error(%r{.+ is not an Array})
         end
       end
 
@@ -134,9 +118,7 @@ describe 'tomcat::connector' do
           :manage   => 'bibi'
         }}
         it 'should fail' do
-          expect { 
-            is_expected.to compile.with_all_deps
-          }.to raise_error(/.+ is not a boolean/)
+          is_expected.to compile.with_all_deps.and_raise_error(%r{.+ is not a boolean})
         end
       end
 
@@ -148,9 +130,7 @@ describe 'tomcat::connector' do
           :instance_basedir => 'some/relative/path'
         }}
         it 'should fail' do
-          expect { 
-            is_expected.to compile.with_all_deps
-          }.to raise_error(/.+ is not an absolute path/)
+          is_expected.to compile.with_all_deps.and_raise_error(%r{.+ is not an absolute path})
         end
       end
 
