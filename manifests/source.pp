@@ -20,8 +20,7 @@
 # - Ubuntu Lucid
 #
 class tomcat::source(
-    # Keep the retrocompatibility.
-    $tomcat_digest_type = 'md5',
+    $tomcat_digest_type = 'md5', # Keep the retrocompatibility.
   ) {
   if $caller_module_name != $module_name {
     fail("Use of private class ${name} by ${caller_module_name}")
