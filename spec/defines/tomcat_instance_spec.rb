@@ -304,7 +304,7 @@ describe 'tomcat::instance' do
               .with_ensure('present')
               .with_owner('root')
               .with_mode('0755')
-              .with_content(/JAVA_HOME=\/usr/)
+              .with_content(%r{JAVA_HOME=/usr})
               .with_content(%r{^export CATALINA_BASE=/srv/tomcat/fooBar})
           when 'RedHat'
             if facts[:operatingsystemmajrelease].to_i < 7
@@ -321,7 +321,7 @@ describe 'tomcat::instance' do
                   .with_ensure('present')
                   .with_owner('root')
                   .with_mode('0755')
-                  .with_content(/JAVA_HOME=\/usr\/lib\/jvm\/java/)
+                  .with_content(%r{JAVA_HOME=/usr/lib/jvm/java})
                   .with_content(%r{^export CATALINA_BASE=/srv/tomcat/fooBar})
                   .with_content(%r{tomcat -c \"umask 0002;})
               end

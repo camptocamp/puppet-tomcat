@@ -149,7 +149,7 @@ describe 'tomcat' do
           end
           describe 'should download tomcat' do
             it {
-              is_expected.to contain_archive("apache-tomcat-#{fullversion}").with('source' => /tomcat-#{version}\/v#{fullversion}\/bin/)
+              is_expected.to contain_archive("apache-tomcat-#{fullversion}").with('source' => %r{tomcat-#{version}/v#{fullversion}/bin})
             }
           end
           describe 'should create tomcat home' do
