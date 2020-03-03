@@ -1,3 +1,4 @@
+# == Class: tomcat::juli
 class tomcat::juli {
 
   case $::osfamily {

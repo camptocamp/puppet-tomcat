@@ -1,3 +1,4 @@
+# == Class: tomcat::params
 class tomcat::params {
   case $::osfamily {
     'Debian': {

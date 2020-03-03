@@ -1,3 +1,4 @@
+# == Class: tomcat::instance::config::systemd_env
 define tomcat::instance::config::systemd_env (
   $instance,
   $target,

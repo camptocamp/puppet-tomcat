@@ -1,3 +1,4 @@
+# == Class: tomcat::user
 class tomcat::user {
   user {'tomcat':
     ensure => present,

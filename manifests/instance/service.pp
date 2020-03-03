@@ -1,3 +1,4 @@
+# == Class: tomcat::instance::service
 define tomcat::instance::service(
   $ensure,
 ) {

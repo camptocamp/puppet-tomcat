@@ -1,3 +1,4 @@
+# == Class: tomcat::instance::install
 define tomcat::instance::install(
   $catalina_base,
   $catalina_logrotate,

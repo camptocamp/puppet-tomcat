@@ -1,3 +1,4 @@
+# == Class: tomcat::instance::config
 define tomcat::instance::config(
   $catalina_base,
   $ajp_address,
