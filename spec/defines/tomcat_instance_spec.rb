@@ -326,10 +326,20 @@ describe 'tomcat::instance' do
                   .with_content(%r{tomcat -c \"umask 0002;})
               end
             else
-              is_expected.to contain_file('/usr/lib/systemd/system/tomcat-fooBar.service').with('ensure' => 'file',
-                                                                                                'owner'  => 'root',
-                                                                                                'mode'   => '0644',
-                                                                                                'content' => ".include /usr/lib/systemd/system/tomcat.service\n[Service]\nUMask=0002\nLimitNOFILE=4096\nEnvironment=\"SERVICE_NAME=tomcat-fooBar\"\nEnvironmentFile=-/etc/sysconfig/tomcat-fooBar\n")
+              is_expected.to contain_file('/usr/lib/systemd/system/tomcat-fooBar.service')
+                .with(
+                  'ensure' => 'file',
+                  'owner'  => 'root',
+                  'mode'   => '0644',
+                  'content' => <<~EOF
+                  .include /usr/lib/systemd/system/tomcat.service
+                  [Service]
+                  UMask=0002
+                  LimitNOFILE=4096
+                  Environment="SERVICE_NAME=tomcat-fooBar"
+                  EnvironmentFile=-/etc/sysconfig/tomcat-fooBar
+                  EOF
+                )
             end
           end
         }
