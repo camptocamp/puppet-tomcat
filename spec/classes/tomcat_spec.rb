@@ -15,25 +15,24 @@ describe 'tomcat' do
       end
 
       describe 'should install tomcat package' do
-        case facts[:osfamily]
-        when 'Debian'
-          case facts[:lsbdistcodename]
-          when 'jessie'
-            it { is_expected.to contain_package('tomcat').with_name('tomcat8') }
-          when 'trusty'
-            it { is_expected.to contain_package('tomcat').with_name('tomcat7') }
-          else
-            it { is_expected.to contain_package('tomcat').with_name('tomcat6') }
-          end
-        when 'RedHat'
-          case facts[:operatingsystemmajrelease]
-          when '5'
-            it { is_expected.to contain_package('tomcat').with_name('tomcat5') }
-          when '6'
-            it { is_expected.to contain_package('tomcat').with_name('tomcat6') }
-          else
-            it { is_expected.to contain_package('tomcat').with_name('tomcat') }
-          end
+        context 'on Debian jessie', if: (facts[:osfamily] == 'Debian' && facts[:lsbdistcodename] == 'jessie') do
+          it { is_expected.to contain_package('tomcat').with_name('tomcat8') }
+        end
+        context 'on Debian trusty', if: (facts[:osfamily] == 'Debian' && facts[:lsbdistcodename] == 'trusty') do
+          it { is_expected.to contain_package('tomcat').with_name('tomcat7') }
+        end
+        context 'on Debian other', if: (facts[:osfamily] == 'Debian' && facts[:lsbdistcodename] != 'jessie' && facts[:lsbdistcodename] != 'trusty') do
+          it { is_expected.to contain_package('tomcat').with_name('tomcat6') }
+        end
+
+        context 'on RedHat 5', if: (facts[:osfamily] == 'RedHat' && facts[:operatingsystemmajrelease] == '5') do
+          it { is_expected.to contain_package('tomcat').with_name('tomcat5') }
+        end
+        context 'on RedHat 6', if: (facts[:osfamily] == 'RedHat' && facts[:operatingsystemmajrelease] == '6') do
+          it { is_expected.to contain_package('tomcat').with_name('tomcat6') }
+        end
+        context 'on RedHat other', if: (facts[:osfamily] == 'RedHat' && facts[:operatingsystemmajrelease] != '5' && facts[:operatingsystemmajrelease] != '6') do
+          it { is_expected.to contain_package('tomcat').with_name('tomcat') }
         end
       end
 
@@ -70,62 +69,65 @@ describe 'tomcat' do
       end
 
       describe 'should deactivate default tomcat service' do
-        case facts[:osfamily]
-        when 'Debian'
-          case facts[:lsbdistcodename]
-          when 'jessie'
-            it {
-              is_expected.to contain_service('tomcat').with('ensure' => 'stopped',
-                                                            'name'   => 'tomcat8',
-                                                            'enable' => false)
+        context 'on Debian jessie', if: (facts[:osfamily] == 'Debian' && facts[:lsbdistcodename] == 'jessie') do
+          it {
+            is_expected.to contain_service('tomcat').with('ensure' => 'stopped',
+                                                          'name'   => 'tomcat8',
+                                                          'enable' => false)
 
-              is_expected.to contain_file('/etc/init.d/tomcat8').with('ensure' => 'file',
-                                                                      'mode'   => '0644')
-            }
-          when 'trusty'
-            it {
-              is_expected.to contain_service('tomcat').with('ensure' => 'stopped',
-                                                            'name'   => 'tomcat7',
-                                                            'enable' => false)
+            is_expected.to contain_file('/etc/init.d/tomcat8').with('ensure' => 'file',
+                                                                    'mode'   => '0644')
+          }
+        end
 
-              is_expected.to contain_file('/etc/init.d/tomcat7').with('ensure' => 'file',
-                                                                      'mode'   => '0644')
-            }
-          else
-            it {
-              is_expected.to contain_service('tomcat').with('ensure' => 'stopped',
-                                                            'name'   => 'tomcat6',
-                                                            'enable' => false)
+        context 'on Debian trusty', if: (facts[:osfamily] == 'Debian' && facts[:lsbdistcodename] == 'trusty') do
+          it {
+            is_expected.to contain_service('tomcat').with('ensure' => 'stopped',
+                                                          'name'   => 'tomcat7',
+                                                          'enable' => false)
 
-              is_expected.to contain_file('/etc/init.d/tomcat6').with('ensure' => 'file',
-                                                                      'mode'   => '0644')
-            }
-          end
-        when 'RedHat'
-          case facts[:operatingsystemmajrelease]
-          when '5'
-            it {
-              is_expected.to contain_service('tomcat').with('ensure' => 'stopped',
-                                                            'name'   => 'tomcat5',
-                                                            'enable' => false)
-              is_expected.to contain_file('/etc/init.d/tomcat5').with('ensure' => 'file',
-                                                                      'mode'   => '0644')
-            }
-          when '6'
-            it {
-              is_expected.to contain_service('tomcat').with('ensure' => 'stopped',
-                                                            'name'   => 'tomcat6',
-                                                            'enable' => false)
-              is_expected.to contain_file('/etc/init.d/tomcat6').with('ensure' => 'file',
-                                                                      'mode'   => '0644')
-            }
-          else
-            it {
-              is_expected.to contain_service('tomcat').with('ensure' => 'stopped',
-                                                            'name'   => 'tomcat',
-                                                            'enable' => false)
-            }
-          end
+            is_expected.to contain_file('/etc/init.d/tomcat7').with('ensure' => 'file',
+                                                                    'mode'   => '0644')
+          }
+        end
+
+        context 'on Debian other', if: (facts[:osfamily] == 'Debian' && facts[:lsbdistcodename] != 'jessie' && facts[:lsbdistcodename] != 'trusty') do
+          it {
+            is_expected.to contain_service('tomcat').with('ensure' => 'stopped',
+                                                          'name'   => 'tomcat6',
+                                                          'enable' => false)
+
+            is_expected.to contain_file('/etc/init.d/tomcat6').with('ensure' => 'file',
+                                                                    'mode'   => '0644')
+          }
+        end
+
+        context 'on RedHat 5', if: (facts[:osfamily] == 'RedHat' && facts[:operatingsystemmajrelease] == '5') do
+          it {
+            is_expected.to contain_service('tomcat').with('ensure' => 'stopped',
+                                                          'name'   => 'tomcat5',
+                                                          'enable' => false)
+            is_expected.to contain_file('/etc/init.d/tomcat5').with('ensure' => 'file',
+                                                                    'mode'   => '0644')
+          }
+        end
+
+        context 'on RedHat 6', if: (facts[:osfamily] == 'RedHat' && facts[:operatingsystemmajrelease] == '6') do
+          it {
+            is_expected.to contain_service('tomcat').with('ensure' => 'stopped',
+                                                          'name'   => 'tomcat6',
+                                                          'enable' => false)
+            is_expected.to contain_file('/etc/init.d/tomcat6').with('ensure' => 'file',
+                                                                    'mode'   => '0644')
+          }
+        end
+
+        context 'on RedHat other', if: (facts[:osfamily] == 'RedHat' && facts[:operatingsystemmajrelease] != '5' && facts[:operatingsystemmajrelease] != '6') do
+          it {
+            is_expected.to contain_service('tomcat').with('ensure' => 'stopped',
+                                                          'name'   => 'tomcat',
+                                                          'enable' => false)
+          }
         end
       end
 
