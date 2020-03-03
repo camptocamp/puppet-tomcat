@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'tomcat::connector' do
-  let (:title) { 'ConnectBar' }
+  let(:title) { 'ConnectBar' }
 
   let :pre_condition do
     "class { 'tomcat': }"
@@ -15,7 +15,7 @@ describe 'tomcat::connector' do
       end
 
       context 'when using a wrong ensure value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'foobar',
             instance: 'instance1',
@@ -31,7 +31,7 @@ describe 'tomcat::connector' do
       end
 
       context 'when using a wrong port value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'present',
             instance: 'instance1',
@@ -47,7 +47,7 @@ describe 'tomcat::connector' do
       end
 
       context 'when using a wrong instance value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'present',
             instance: true,
@@ -63,7 +63,7 @@ describe 'tomcat::connector' do
       end
 
       context 'when using a wrong owner value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'present',
             instance: 'instance1',
@@ -80,7 +80,7 @@ describe 'tomcat::connector' do
       end
 
       context 'when using a wrong group value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'present',
             instance: 'instance1',
@@ -97,7 +97,7 @@ describe 'tomcat::connector' do
       end
 
       context 'when using a wrong connection_timeout value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'present',
             instance: 'instance1',
@@ -114,7 +114,7 @@ describe 'tomcat::connector' do
       end
 
       context 'when using a wrong redirect_port value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'present',
             instance: 'instance1',
@@ -131,7 +131,7 @@ describe 'tomcat::connector' do
       end
 
       context 'when using a wrong options value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'present',
             instance: 'instance1',
@@ -148,7 +148,7 @@ describe 'tomcat::connector' do
       end
 
       context 'when using a wrong manage value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'present',
             instance: 'instance1',
@@ -165,7 +165,7 @@ describe 'tomcat::connector' do
       end
 
       context 'when using a wrong instance_basedir value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'present',
             instance: 'instance1',

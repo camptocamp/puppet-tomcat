@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'tomcat::instance' do
-  let (:title) { 'fooBar' }
+  let(:title) { 'fooBar' }
 
   let(:pre_condition) do
     "class { 'tomcat': }"
@@ -15,7 +15,7 @@ describe 'tomcat::instance' do
       end
 
       context 'when using a wrong ensure value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'foobar',
           }

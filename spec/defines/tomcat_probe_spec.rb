@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'tomcat::probe' do
-  let (:title) { 'probeBar' }
+  let(:title) { 'probeBar' }
 
   on_supported_os.each do |os, facts|
     context "on #{os}" do
@@ -14,7 +14,7 @@ describe 'tomcat::probe' do
       end
 
       context 'when using a wrong ensure value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'foobar',
             version: '2.0.4',

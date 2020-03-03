@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'tomcat::executor' do
-  let (:title) { 'executorBar' }
+  let(:title) { 'executorBar' }
 
   let :pre_condition do
     "class { 'tomcat': }"
@@ -15,7 +15,7 @@ describe 'tomcat::executor' do
       end
 
       context 'when using a wrong ensure value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'foobar',
             instance: 'instance',
@@ -31,7 +31,7 @@ describe 'tomcat::executor' do
       end
 
       context 'when using a wrong owner value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'present',
             instance: 'instance',
@@ -48,7 +48,7 @@ describe 'tomcat::executor' do
       end
 
       context 'when using a wrong group value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'present',
             instance: 'instance',
@@ -65,7 +65,7 @@ describe 'tomcat::executor' do
       end
 
       context 'when using a wrong daemon value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'present',
             instance: 'instance',
@@ -82,7 +82,7 @@ describe 'tomcat::executor' do
       end
 
       context 'when using a wrong max_threads value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'present',
             instance: 'instance',
@@ -99,7 +99,7 @@ describe 'tomcat::executor' do
       end
 
       context 'when using a wrong min_spare_threads value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'present',
             instance: 'instance',
@@ -116,7 +116,7 @@ describe 'tomcat::executor' do
       end
 
       context 'when using a wrong max_idle_time value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'present',
             instance: 'instance',
@@ -133,7 +133,7 @@ describe 'tomcat::executor' do
       end
 
       context 'when using a wrong manage value' do
-        let (:params) do
+        let(:params) do
           {
             ensure: 'present',
             instance: 'instance',
