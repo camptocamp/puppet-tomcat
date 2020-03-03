@@ -1,10 +1,16 @@
 ---
 .travis.yml:
-  acceptance:
-    - '*'
-  forge_password: "PxFc4SYyoJEPwHxcBnkL2aMwbwHf8kyxPltQqbOQ+HjighHf9vXjJo1RAjpn3YqdR0nTzKuZm4bnwCzA7bFxn9MeZCuNt4qSriPbHfvEm+FXiLPGYniQGcb0BnP+GtT8ZjaJvz2fNDqHagqtjcAkk6bLCFyGTqKs8oJk8uRoh6U="
-  globals:
-    - secure: "c4o0esahrDd7/CpQc638/WN4GS5KGveuLkoyULXwAfIubOvt8eHV0BNH2yBxfheh6qorWjdne7PGducqsXi9Dxd9K1Himh3uy2a1YfdzRHPY/tlTWsgv8wR+bWcCm/up4SxbdZT3gUXkYsw6QwkD9LxUU/e175CNxrTyZ1CCeC4="
-    - secure: "QKOe0hy+ZxqdNWvNKg8a2zIc12YPP+bsgTeDnP3bdml1snIkaJ/cPbZaV1gxNkyAXe1hV+TIaJ9rMT5LP27r3VzOMuX+3rk7B/Q66oIvpLF6DGplL0djY04OuTmeRICFStWryyO7+azbi2xBhAO/MwIRTVyzqr5qfJC+ks76cFQ="
-    - secure: "ZXFy+pqv1/PEQDLhQla4VHtMOZAgdH6wqgUCWZ/z8UWSM9JPTM+7/fMkyWqLcCI9WK3zrhbxM/DldsnxwsTfb5em4yTLjeKncb8nM/bl/YEejHYHXGEdU5OwOQLygdR0tm/wgtVS5LiFFdRXtp0OnxREIHK7zMadNxZJLLUtIf4="
-    - secure: "Ecoi/QfTn497ppXsg5ncTUkerxqONuheJAV4+VcZ29VyZBmRdpy14R7KMxTMnstE2qbJ6pcK9cw0d9KiMp3l5XP98UO2pkHEKHzTF+e34L+bgIWjHP2+lJ34AqPOLtC954DiIxYzix2t2eNu3SsfjwNysrsQ5vNohfxzGC0miNI="
+  user: camptocamp
+  secure: "PxFc4SYyoJEPwHxcBnkL2aMwbwHf8kyxPltQqbOQ+HjighHf9vXjJo1RAjpn3YqdR0nTzKuZm4bnwCzA7bFxn9MeZCuNt4qSriPbHfvEm+FXiLPGYniQGcb0BnP+GtT8ZjaJvz2fNDqHagqtjcAkk6bLCFyGTqKs8oJk8uRoh6U="
+  branches:
+    - master
+    - /^\d/
+  deploy_to_forge:
+    enabled: true
+    tag_regex: "^\\d"
+Gemfile:
+  optional:
+    ':development':
+      - gem: 'github_changelog_generator'
+Rakefile:
+  changelog_version_tag_pattern: '%s'
