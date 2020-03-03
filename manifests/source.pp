@@ -24,6 +24,13 @@ class tomcat::source {
     fail("Use of private class ${name} by ${caller_module_name}")
   }
 
+  if $tomcat::digest_type != undef and $tomcat::digest_type != '' {
+    $tomcat_digest_type = $tomcat::digest_type
+  } else {
+    # Keep the retrocompatibility.
+    $tomcat_digest_type = 'md5'
+  }
+
   $version     = $tomcat::src_version
   $sources_src = $tomcat::sources_src
 
@@ -46,8 +53,8 @@ class tomcat::source {
     source       => $tomcaturl,
     extract      => true,
     path         => "/var/tmp/${tomcat_name}.tar.gz",
-    digest_url   => "${tomcaturl}.md5",
-    digest_type  => 'md5',
+    digest_url   => "${tomcaturl}.${tomcat_digest_type}",
+    digest_type  => $tomcat_digest_type,
     extract_path => '/opt',
     creates      => "/opt/${tomcat_name}/bin",
   }

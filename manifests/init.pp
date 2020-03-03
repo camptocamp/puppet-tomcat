@@ -3,6 +3,7 @@ class tomcat (
   $srcversion        = undef,
   $sources           = false,
   $sources_src       = $tomcat::params::sources_src,
+  $digest_type       = undef,
   $instance_basedir  = $tomcat::params::instance_basedir,
   $tomcat_uid        = undef,
   $tomcat_gid        = undef,
@@ -13,7 +14,7 @@ class tomcat (
   $system_conf_owner = 'root',
 ) inherits ::tomcat::params {
 
-  validate_re($version, '^[5-8]([\.0-9]+)?$')
+  validate_re($version, '^[5-9]([\.0-9]+)?$')
   validate_bool($sources)
   validate_absolute_path($instance_basedir)
   validate_hash($ulimits)
@@ -32,6 +33,7 @@ class tomcat (
       '6' => '6.0.26',
       '7' => '7.0.42',
       '8' => '8.0.15',
+      '9' => '9.0.6',
     }
   }
 
