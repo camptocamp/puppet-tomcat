@@ -149,22 +149,24 @@ describe 'tomcat::executor' do
         end
       end
 
-      let(:params) do
-        {
-          instance: 'instance1',
-          instance_basedir: '/srv/tomcat',
-        }
-      end
+      context 'when creating an instance' do
+        let(:params) do
+          {
+            instance: 'instance1',
+            instance_basedir: '/srv/tomcat',
+          }
+        end
 
-      describe 'should create a file' do
-        it {
-          is_expected.to contain_file('/srv/tomcat/instance1/conf/executor-executorBar.xml').with('ensure' => 'present',
-                                                                                                  'owner'   => 'tomcat',
-                                                                                                  'group'   => 'adm',
-                                                                                                  'mode'    => '0460',
-                                                                                                  'replace' => false)
-          is_expected.to contain_file('/srv/tomcat/instance1/conf/executor-executorBar.xml').with_content(%r{name="executorBar"})
-        }
+        describe 'should create a file' do
+          it {
+            is_expected.to contain_file('/srv/tomcat/instance1/conf/executor-executorBar.xml').with('ensure' => 'present',
+                                                                                                    'owner'   => 'tomcat',
+                                                                                                    'group'   => 'adm',
+                                                                                                    'mode'    => '0460',
+                                                                                                    'replace' => false)
+            is_expected.to contain_file('/srv/tomcat/instance1/conf/executor-executorBar.xml').with_content(%r{name="executorBar"})
+          }
+        end
       end
     end
   end
