@@ -1,3 +1,4 @@
+# == Class: tomcat
 class tomcat (
   $version           = $tomcat::params::version,
   $srcversion        = undef,
