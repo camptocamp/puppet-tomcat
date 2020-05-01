@@ -1,3 +1,7 @@
+## 2020-05-01 - Release 1.3.0
+
+* Add tomcat 9 support
+
 ## 2019-10-01 - Release 1.2.3
 
 * Fix selinux support for context file installation
