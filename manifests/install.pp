@@ -33,9 +33,15 @@ class tomcat::install {
     }
 
     if $::osfamily != 'RedHat' or versioncmp($::operatingsystemmajrelease, '7') != 0 {
-      Package['tomcat']
-      -> class {'::tomcat::juli': }
-      -> class {'::tomcat::logging': }
+      if versioncmp($::tomcat::version, '9') < 0 {
+        class {'::tomcat::juli':
+          require => Package['tomcat'],
+        }
+      }
+
+      class {'::tomcat::logging':
+        require => Package['tomcat'],
+      }
 
       if $::osfamily == 'RedHat' {
         class {'::tomcat::install::redhat': }
