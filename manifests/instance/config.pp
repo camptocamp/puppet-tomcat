@@ -223,9 +223,10 @@ LimitNOFILE=${systemd_nofile}
 Environment=\"SERVICE_NAME=tomcat-${name}\"
 EnvironmentFile=-/etc/sysconfig/tomcat-${name}
 ",
+      notify  => Tomcat::Instance::Service[$title],
     }
     ~> Exec['systemctl-daemon-reload']
-    ~> Tomcat::Instance::Service[$title]
+    -> Tomcat::Instance::Service[$title]
 
     file { "/etc/sysconfig/tomcat-${name}":
       ensure  => file,
@@ -349,13 +350,14 @@ EnvironmentFile=-/etc/sysconfig/tomcat-${name}
       seluser => $seluser,
       selrole => $selrole,
       seltype => $seltype,
+      notify  => Tomcat::Instance::Service[$title],
     }
 
     if $::operatingsystem == 'Debian' and $::tomcat::params::systemd {
       include ::systemd
       File["/etc/init.d/tomcat-${name}"]
       ~> Exec['systemctl-daemon-reload']
-      ~> Tomcat::Instance::Service[$title]
+      -> Tomcat::Instance::Service[$title]
     }
   }
 }
