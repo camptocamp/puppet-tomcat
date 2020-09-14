@@ -1,3 +1,7 @@
+## 2020-09-14 - Release 1.3.1
+
+* Adapt dependencies to avoid unwanted server reload
+
 ## 2020-05-01 - Release 1.3.0
 
 * Add tomcat 9 support
