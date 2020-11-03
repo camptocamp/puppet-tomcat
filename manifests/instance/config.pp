@@ -19,6 +19,7 @@ define tomcat::instance::config(
   $server_port,
   $setenv,
   $version,
+  $apr_listener,
   # FIXME: This is really weird, I have to initialise this parameters otherwise
   # they are not found...
   $java_home         = undef,

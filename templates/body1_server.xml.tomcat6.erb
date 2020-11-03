@@ -27,7 +27,9 @@
 <Server port="<%= @server_port %>" shutdown="SHUTDOWN">
 
   <!--APR library loader. Documentation at /docs/apr.html -->
+<% if @apr_listener -%>
   <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+<% end -%>
   <!--Initialize Jasper prior to webapps are loaded. Documentation at /docs/jasper-howto.html -->
   <Listener className="org.apache.catalina.core.JasperListener" />
   <!-- JMX Support for the Tomcat server. Documentation at /docs/non-existent.html -->
@@ -54,4 +56,3 @@
        Documentation at /docs/config/service.html
    -->
   <Service name="Catalina">
-
