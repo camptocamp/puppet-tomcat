@@ -29,9 +29,9 @@
   <Listener className="org.apache.catalina.security.SecurityListener" />
   -->
   <!--APR library loader. Documentation at /docs/apr.html -->
-  <!--
+<% if @apr_listener -%>
   <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
-  -->
+<% end -%>
   <!--Initialize Jasper prior to webapps are loaded. Documentation at /docs/jasper-howto.html -->
   <Listener className="org.apache.catalina.core.JasperListener" />
   <!-- Prevent memory leaks due to use of particular java/javax APIs-->
@@ -59,4 +59,3 @@
        Documentation at /docs/config/service.html
    -->
   <Service name="Catalina">
-

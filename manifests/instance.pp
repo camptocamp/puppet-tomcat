@@ -67,6 +67,8 @@
 #   to handle the catalina.out file of the instance. Default to true.
 # - *systemd_nofile*: number of open files limit configuration in systemd unit.
 #   This has no effect on systems where tomcat is not managed by systemd.
+# - *apr_listener*: If true, turn on the AprLifecycleListener in server.xml.  Default
+#   is true for Tomcat > 6, false for all older versions of Tomcat.
 #
 # Requires:
 # - one of the tomcat classes which installs tomcat binaries.
@@ -129,6 +131,7 @@ define tomcat::instance(
   $catalina_logrotate = true,
   $java_opts          = undef,
   $systemd_nofile     = '4096',
+  $apr_listener       = undef,
 ) {
 
   Class['tomcat::install'] -> Tomcat::Instance[$title]
@@ -149,6 +152,17 @@ define tomcat::instance(
   validate_re($version, '^[5-9]([\.0-9]+)?$')
 
   $basedir = "${instance_basedir}/${name}"
+
+  if $apr_listener {
+    $final_apr_listener = $apr_listener
+  } else {
+    # AprLifecycleListener was not enabled by default before Tomcat 7
+    if versioncmp($version, '7') < 0 {
+      $final_apr_listener = false
+    } else {
+      $final_apr_listener = true
+    }
+  }
 
   tomcat::instance::install { $title:
     ensure             => $ensure,
@@ -194,7 +208,7 @@ define tomcat::instance(
     selrole_connector  => $selrole_connector,
     seltype_connector  => $seltype_connector,
     seluser_connector  => $seluser_connector,
-
+    apr_listener       => $final_apr_listener,
   }
 
   tomcat::instance::service { $title:

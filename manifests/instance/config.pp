@@ -19,6 +19,7 @@ define tomcat::instance::config(
   $server_port,
   $setenv,
   $version,
+  $apr_listener,
   # FIXME: This is really weird, I have to initialise this parameters otherwise
   # they are not found...
   $java_home         = undef,
@@ -225,7 +226,6 @@ EnvironmentFile=-/etc/sysconfig/tomcat-${name}
 ",
       notify  => Tomcat::Instance::Service[$title],
     }
-    ~> Exec['systemctl-daemon-reload']
     -> Tomcat::Instance::Service[$title]
 
     file { "/etc/sysconfig/tomcat-${name}":
