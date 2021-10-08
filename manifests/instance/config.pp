@@ -226,7 +226,6 @@ EnvironmentFile=-/etc/sysconfig/tomcat-${name}
 ",
       notify  => Tomcat::Instance::Service[$title],
     }
-    ~> Exec['systemctl-daemon-reload']
     -> Tomcat::Instance::Service[$title]
 
     file { "/etc/sysconfig/tomcat-${name}":
