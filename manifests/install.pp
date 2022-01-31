@@ -46,13 +46,6 @@ class tomcat::install {
       if $::osfamily == 'RedHat' {
         class {'::tomcat::install::redhat': }
       }
-
-      # Set the init script unexecutable
-      file {"/etc/init.d/tomcat${tomcat::version}":
-        ensure  => file,
-        mode    => '0644',
-        require => Service['tomcat'],
-      }
     }
 
   } else {
