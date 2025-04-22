@@ -96,11 +96,12 @@ define tomcat::instance::config(
 
   # default server.xml is slightly different between tomcat5.5 and tomcat6 or 7
   $serverdotxml = $version? {
-    '5' => 'server.xml.tomcat55.erb',
-    '6' => 'server.xml.tomcat6.erb',
-    '7' => 'server.xml.tomcat7.erb',
-    '8' => 'server.xml.tomcat8.erb',
-    '9' => 'server.xml.tomcat9.erb',
+    '5'  => 'server.xml.tomcat55.erb',
+    '6'  => 'server.xml.tomcat6.erb',
+    '7'  => 'server.xml.tomcat7.erb',
+    '8'  => 'server.xml.tomcat8.erb',
+    '9'  => 'server.xml.tomcat9.erb',
+    '10' => 'server.xml.tomcat10.erb',
   }
 
   case $ensure {

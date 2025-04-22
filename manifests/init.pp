@@ -14,7 +14,7 @@ class tomcat (
   $system_conf_owner = 'root',
 ) inherits ::tomcat::params {
 
-  validate_re($version, '^[5-9]([\.0-9]+)?$')
+  validate_numeric($version)
   validate_bool($sources)
   validate_absolute_path($instance_basedir)
   validate_hash($ulimits)
@@ -27,7 +27,7 @@ class tomcat (
   # Allow to choose the source version, without breaking backward compatibility
   if $srcversion != undef {
     $src_version = $srcversion
-  } else {
+  } elsif $sources {
     $src_version = $version? {
       '5' => '5.5.27',
       '6' => '6.0.26',

@@ -149,7 +149,7 @@ define tomcat::instance(
   validate_absolute_path($instance_basedir)
 
   $version = $tomcat_version
-  validate_re($version, '^[5-9]([\.0-9]+)?$')
+  validate_numeric($version)
 
   $basedir = "${instance_basedir}/${name}"
 
